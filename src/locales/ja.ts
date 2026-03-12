@@ -54,7 +54,7 @@ export default {
     emptyHint: '+ をタップしてスペースを作成し、録音を整理しましょう',
   },
   welcome: {
-    title: 'Matomeへようこそ',
+    title: 'CFFCへようこそ',
     signIn: 'サインイン',
     signUp: 'サインアップ',
   },

@@ -7,7 +7,7 @@ interface AuthState {
   isLoading: boolean;
   user: User | null;
   checkAuth: () => Promise<void>;
-  signIn: () => void;
+  signIn: (user: User) => void;
   signOut: () => Promise<void>;
   setAuthenticated: (value: boolean) => void;
 }
@@ -24,7 +24,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       } = await supabase.auth.getSession();
       set({
         isAuthenticated: !!session,
-        user: session?.user ?? null,
+        user: session?.user
+          ? {
+              id: session.user.id,
+              email: session.user.email ?? "",
+              name: (session.user.user_metadata?.name as string) ?? "",
+            }
+          : null,
         isLoading: false,
       });
     } catch (error) {
@@ -33,8 +39,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  signIn: () => {
-    set({ isAuthenticated: true });
+  signIn: (user: User) => {
+    set({ isAuthenticated: true, user });
   },
 
   signOut: async () => {

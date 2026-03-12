@@ -2,7 +2,7 @@ import { Button, Layout, Text } from "@ui-kitten/components";
 
 import { useAuthStore } from "@/stores/authStore";
 
-const Explore = () => {
+const Inbox = () => {
   const signOut = useAuthStore((state) => state.signOut);
 
   return (
@@ -15,4 +15,4 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default Inbox;

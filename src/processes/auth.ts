@@ -1,28 +1,26 @@
-// import { patientsApi } from "@/config/api";
-
+import { supabase } from "@/config/supabase";
 import { LoginResponse, SignupResponse } from "./types/authTypes";
 
-// Temporary fake login - always returns a fake token
 export const login = async (body: {
   email: string;
   password: string;
 }): Promise<LoginResponse> => {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: body.email,
+    password: body.password,
+  });
 
-  // Return fake token - any email/password will work
+  if (error) throw error;
+  if (!data.session || !data.user) throw new Error("Login failed");
+
   return {
-    token: "fake-token-" + Date.now(),
+    token: data.session.access_token,
     user: {
-      id: 1,
-      email: body.email,
-      name: "Fake User",
+      id: data.user.id,
+      email: data.user.email ?? "",
+      name: (data.user.user_metadata?.name as string) ?? "",
     },
-  } as LoginResponse;
-
-  // Original API call (commented out for temporary fake login)
-  // const response = await patientsApi.post<LoginResponse>('/auth/login', body);
-  // return response;
+  };
 };
 
 export const signup = async (body: {
@@ -30,18 +28,23 @@ export const signup = async (body: {
   password: string;
   name: string;
 }): Promise<SignupResponse> => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const { data, error } = await supabase.auth.signUp({
+    email: body.email,
+    password: body.password,
+    options: {
+      data: { name: body.name },
     },
-    body: JSON.stringify(body),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Signup response:", data);
-      return data;
-    });
+  });
 
-  return response;
+  if (error) throw error;
+  if (!data.user) throw new Error("Signup failed");
+
+  return {
+    token: data.session?.access_token ?? "",
+    user: {
+      id: data.user.id,
+      email: data.user.email ?? "",
+      name: body.name,
+    },
+  };
 };

@@ -12,9 +12,8 @@ const LoginContainer = () => {
 
     const loginMutation = useMutation({
         mutationFn: (body: { email: string; password: string }) => login(body),
-        onSuccess: async () => {
-            signIn();
-            // Redirect is handled automatically by the auth store in _layout.tsx
+        onSuccess: (data) => {
+            signIn(data.user);
         },
         onError: () => {
             Toast.show({
@@ -26,7 +25,15 @@ const LoginContainer = () => {
     });
 
     const onLoginPress = useCallback(async () => {
-        await loginMutation.mutateAsync({ email, password });
+        if (!email.trim() || !password) {
+            Toast.show({
+                type: 'error',
+                text1: 'Please enter your email and password.',
+                autoHide: true,
+            });
+            return;
+        }
+        await loginMutation.mutateAsync({ email: email.trim(), password });
     }, [email, password, loginMutation]);
 
     return (
