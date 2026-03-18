@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { styles } from "./Login.styles";
-import { LoginProps } from "./Login.types";
+import { useLogin } from "./useLogin";
 
 const LoadingIndicator = () => (
   <View style={styles.indicator}>
@@ -17,14 +17,9 @@ const LoadingIndicator = () => (
   </View>
 );
 
-const Login = ({
-  email,
-  password,
-  setEmail,
-  setPassword,
-  onLoginPress,
-  isLoading,
-}: LoginProps) => {
+const Login = () => {
+  const { email, password, setEmail, setPassword, onLoginPress, isLoading } =
+    useLogin();
   const theme = useTheme();
   const { t } = useTranslation();
 

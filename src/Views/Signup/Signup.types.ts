@@ -1,4 +1,4 @@
-export type SignupProps = {
+export type UseSignupReturn = {
   name: string;
   email: string;
   password: string;

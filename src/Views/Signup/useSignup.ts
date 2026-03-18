@@ -4,9 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
 import Toast from "react-native-toast-message";
-import Signup from "./Signup";
+import { UseSignupReturn } from "./Signup.types";
 
-const SignupContainer = () => {
+export const useSignup = (): UseSignupReturn => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,21 +56,17 @@ const SignupContainer = () => {
     router.push("/login");
   }, []);
 
-  return (
-    <Signup
-      name={name}
-      email={email}
-      password={password}
-      confirmPassword={confirmPassword}
-      setName={setName}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      setConfirmPassword={setConfirmPassword}
-      onSignupPress={onSignupPress}
-      onLoginPress={onLoginPress}
-      isLoading={signupMutation.isPending}
-    />
-  );
+  return {
+    name,
+    email,
+    password,
+    confirmPassword,
+    setName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    onSignupPress,
+    onLoginPress,
+    isLoading: signupMutation.isPending,
+  };
 };
-
-export default SignupContainer;

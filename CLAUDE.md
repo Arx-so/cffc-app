@@ -44,7 +44,7 @@ src/
   processes/    # Business logic layer (auth, API calls)
   stores/       # Zustand state stores
   utils/        # Utility functions
-  Views/        # UI components (feature-based, with Container pattern)
+  Views/        # UI components (feature-based, with hook pattern)
 ```
 
 ### State Management
@@ -71,6 +71,11 @@ Expo Router with nested structure:
 
 ### Key Patterns
 
-- **Container pattern**: Views use `<ViewName>Container.tsx` for business logic
+- **Hook pattern**: Views use `use<ViewName>.ts` custom hooks for business logic. Each View folder contains:
+  - `index.ts` - barrel export
+  - `use<ViewName>.ts` - custom hook with all business logic (state, mutations, handlers)
+  - `<ViewName>.tsx` - component that calls the hook and renders UI
+  - `<ViewName>.types.ts` - types used within the folder (hook return type, etc)
+  - `<ViewName>.styles.ts` - StyleSheet
 - **Path aliases**: Use `@/` for imports (configured in `tsconfig.json`)
 - **Type safety**: Strict TypeScript enabled

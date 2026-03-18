@@ -1,8 +1,8 @@
 import { router } from "expo-router";
 import { useCallback } from "react";
-import Welcome from "./Welcome";
+import { UseWelcomeReturn } from "./Welcome.types";
 
-const WelcomeContainer = () => {
+export const useWelcome = (): UseWelcomeReturn => {
   const onLoginPress = useCallback(() => {
     router.push("/login");
   }, []);
@@ -11,7 +11,5 @@ const WelcomeContainer = () => {
     router.push("/signup");
   }, []);
 
-  return <Welcome onLoginPress={onLoginPress} onSignupPress={onSignupPress} />;
+  return { onLoginPress, onSignupPress };
 };
-
-export default WelcomeContainer;

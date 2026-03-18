@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { styles } from "./Signup.styles";
-import { SignupProps } from "./Signup.types";
+import { useSignup } from "./useSignup";
 
 const LoadingIndicator = () => (
   <View style={styles.indicator}>
@@ -17,19 +17,20 @@ const LoadingIndicator = () => (
   </View>
 );
 
-const Signup = ({
-  name,
-  email,
-  password,
-  confirmPassword,
-  setName,
-  setEmail,
-  setPassword,
-  setConfirmPassword,
-  onSignupPress,
-  onLoginPress,
-  isLoading,
-}: SignupProps) => {
+const Signup = () => {
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    setName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    onSignupPress,
+    onLoginPress,
+    isLoading,
+  } = useSignup();
   const theme = useTheme();
   const { t } = useTranslation();
 

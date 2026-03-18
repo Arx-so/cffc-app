@@ -1,4 +1,4 @@
-export type WelcomeProps = {
+export type UseWelcomeReturn = {
   onLoginPress: () => void;
   onSignupPress: () => void;
-}
+};
