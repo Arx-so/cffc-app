@@ -6,18 +6,42 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="inbox"
     >
       <Tabs.Screen
-        name="inbox"
+        name="home/index"
         options={{
-          title: 'Inbox',
+          title: 'Início',
+          // Force the label shown in the bottom tab bar.
+          // This avoids fallback labels like "home/index".
+          tabBarLabel: 'Início',
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search/index"
         options={{
-          title: 'Spaces',
+          title: 'Buscar',
+          tabBarLabel: 'Buscar',
+        }}
+      />
+      <Tabs.Screen
+        name="add-videos/index"
+        options={{
+          title: 'Adicionar vídeos',
+          tabBarLabel: 'Adicionar vídeos',
+        }}
+      />
+      <Tabs.Screen
+        name="favorites/index"
+        options={{
+          title: 'Favoritos',
+          tabBarLabel: 'Favoritos',
+        }}
+      />
+      <Tabs.Screen
+        name="profile/index"
+        options={{
+          title: 'Perfil',
+          tabBarLabel: 'Perfil',
         }}
       />
     </Tabs>

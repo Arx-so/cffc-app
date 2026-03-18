@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import i18n from '@/config/i18n';
 
-export type Language = 'en' | 'ja';
+export type Language = 'en' | 'ja' | 'pt-br';
 
 interface LanguageState {
   language: Language;
