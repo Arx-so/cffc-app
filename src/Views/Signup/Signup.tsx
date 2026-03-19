@@ -1,122 +1,154 @@
+import { Brand } from '@/constants/theme';
+import { authStyles as A } from '@/styles/auth';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack } from 'expo-router';
+import { useState } from 'react';
 import {
-  Button,
-  Input,
-  Layout,
-  Spinner,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   Text,
-  useTheme,
-} from "@ui-kitten/components";
-import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
-import { styles } from "./Signup.styles";
-import { useSignup } from "./useSignup";
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { styles as S } from './Signup.styles';
+import { useSignup } from './useSignup';
 
-const LoadingIndicator = () => (
-  <View style={styles.indicator}>
-    <Spinner size="small" status="control" />
-  </View>
-);
+type ProfileKey = 'athlete' | 'pro' | 'club';
+
+const PROFILE_OPTIONS: { key: ProfileKey; label: string; icon: React.ComponentProps<typeof Ionicons>['name'] }[] = [
+  { key: 'athlete', label: 'Atleta',      icon: 'football-outline' },
+  { key: 'pro',     label: 'Profissional', icon: 'person-outline' },
+  { key: 'club',    label: 'Clube',        icon: 'shield-outline' },
+];
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Signup = () => {
   const {
-    name,
-    email,
-    password,
-    confirmPassword,
-    setName,
-    setEmail,
-    setPassword,
-    setConfirmPassword,
-    onSignupPress,
-    onLoginPress,
-    isLoading,
+    fullName, email, password, confirmPassword,
+    selectedRole, birthDateText, guardianEmail,
+    acceptedTerms, acceptedPrivacy, isMinor,
+    setFullName, setEmail, setPassword, setConfirmPassword,
+    setSelectedRole, onBirthDateChange, setGuardianEmail,
+    setAcceptedTerms, setAcceptedPrivacy,
+    onSignupPress, onLoginPress, isLoading,
   } = useSignup();
-  const theme = useTheme();
-  const { t } = useTranslation();
+
+  const [emailTouched, setEmailTouched] = useState(false);
+  const emailError = emailTouched && email.length > 0 && !EMAIL_REGEX.test(email);
 
   return (
-    <Layout
-      style={[styles.container, { backgroundColor: theme["color-basic-200"] }]}
-    >
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <KeyboardAvoidingView style={A.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <Stack.Screen
+        options={{
+          title: 'CRIAR CONTA',
+          headerStyle: { backgroundColor: Brand.bg },
+          headerTintColor: Brand.green,
+          headerTitleStyle: { color: Brand.white, fontWeight: 'bold', letterSpacing: 1.5, fontSize: 14 },
+          headerBackTitle: '',
+        }}
+      />
+
+      <ScrollView
+        style={A.container}
+        contentContainerStyle={S.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <Text
-            category="h1"
-            style={[styles.title, { color: theme["color-basic-800"] }]}
-          >
-            {t("welcome.title")}
+        {/* Hero */}
+        <Text style={A.heroSubtitle}>JUNTE-SE À ELITE</Text>
+        <Text style={[A.heroTitle, { marginBottom: 32 }]}>
+          ENTRE NO{'\n'}
+          <Text style={A.heroTitleGreen}>GRAMADO DIGITAL</Text>
+        </Text>
+
+        {/* ── Profile type ── */}
+        <Text style={[A.fieldLabel, { marginTop: 0 }]}>TIPO DE PERFIL</Text>
+        {PROFILE_OPTIONS.map((opt) => {
+          const selected = selectedRole === opt.key;
+          return (
+            <TouchableOpacity
+              key={opt.key}
+              style={[S.profileCard, selected && S.profileCardSelected]}
+              onPress={() => setSelectedRole(opt.key)}
+              activeOpacity={0.75}
+            >
+              <Ionicons name={opt.icon} size={26} color={selected ? Brand.green : '#666'} style={S.profileCardIcon} />
+              <Text style={[S.profileCardLabel, selected && S.profileCardLabelSelected]}>{opt.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
+
+        {/* ── Name ── */}
+        <Text style={A.fieldLabel}>NOME COMPLETO</Text>
+        <TextInput style={A.input} value={fullName} onChangeText={setFullName} placeholder="Seu nome de craque" placeholderTextColor="#444" autoCapitalize="words" editable={!isLoading} />
+
+        {/* ── Email ── */}
+        <Text style={A.fieldLabel}>EMAIL</Text>
+        <TextInput style={[A.input, emailError && A.inputError]} value={email} onChangeText={setEmail} onBlur={() => setEmailTouched(true)} placeholder="seu@email.com" placeholderTextColor="#444" autoCapitalize="none" keyboardType="email-address" editable={!isLoading} />
+        {emailError && <Text style={A.errorText}>EMAIL INVÁLIDO</Text>}
+
+        {/* ── Password ── */}
+        <Text style={A.fieldLabel}>SENHA</Text>
+        <TextInput style={A.input} value={password} onChangeText={setPassword} placeholder="••••••••" placeholderTextColor="#444" secureTextEntry autoCapitalize="none" editable={!isLoading} />
+
+        {/* ── Confirm password ── */}
+        <Text style={A.fieldLabel}>CONFIRMAR SENHA</Text>
+        <TextInput style={A.input} value={confirmPassword} onChangeText={setConfirmPassword} placeholder="••••••••" placeholderTextColor="#444" secureTextEntry autoCapitalize="none" editable={!isLoading} />
+
+        {/* ── Date of birth ── */}
+        <Text style={A.fieldLabel}>DATA DE NASCIMENTO</Text>
+        <View style={S.dateRow}>
+          <TextInput style={S.dateInput} value={birthDateText} onChangeText={onBirthDateChange} placeholder="DD/MM/AAAA" placeholderTextColor="#444" keyboardType="number-pad" maxLength={10} editable={!isLoading} />
+          <Ionicons name="calendar-outline" size={20} color="#555" style={S.dateIcon} />
+        </View>
+
+        {/* ── Minor protection ── */}
+        {isMinor && (
+          <>
+            <View style={S.minorBanner}>
+              <Ionicons name="shield-checkmark-outline" size={18} color={Brand.green} />
+              <Text style={S.minorBannerText}>PROTEÇÃO DE MENORES ATIVADA</Text>
+            </View>
+            <Text style={A.fieldLabel}>EMAIL DO RESPONSÁVEL</Text>
+            <TextInput style={A.input} value={guardianEmail} onChangeText={setGuardianEmail} placeholder="email@responsavel.com" placeholderTextColor="#444" autoCapitalize="none" keyboardType="email-address" editable={!isLoading} />
+          </>
+        )}
+
+        {/* ── Checkboxes ── */}
+        <TouchableOpacity style={S.checkboxRow} onPress={() => setAcceptedTerms(!acceptedTerms)} activeOpacity={0.7}>
+          <View style={[S.checkboxBox, acceptedTerms && S.checkboxBoxChecked]}>
+            {acceptedTerms && <Ionicons name="checkmark" size={13} color="#000" />}
+          </View>
+          <Text style={S.checkboxLabel}>
+            {'Aceito os '}<Text style={S.checkboxLink}>Termos de Uso</Text>{' da plataforma.'}
           </Text>
+        </TouchableOpacity>
 
-          <Input
-            style={styles.input}
-            label={t("auth.name")}
-            value={name}
-            onChangeText={setName}
-            placeholder={t("auth.namePlaceholder")}
-            autoCapitalize="words"
-            disabled={isLoading}
-          />
+        <TouchableOpacity style={S.checkboxRow} onPress={() => setAcceptedPrivacy(!acceptedPrivacy)} activeOpacity={0.7}>
+          <View style={[S.checkboxBox, acceptedPrivacy && S.checkboxBoxChecked]}>
+            {acceptedPrivacy && <Ionicons name="checkmark" size={13} color="#000" />}
+          </View>
+          <Text style={S.checkboxLabel}>
+            {'Aceito a '}<Text style={S.checkboxLink}>Política de Privacidade</Text>{' de dados.'}
+          </Text>
+        </TouchableOpacity>
 
-          <Input
-            style={styles.input}
-            label={t("auth.email")}
-            value={email}
-            onChangeText={setEmail}
-            placeholder={t("auth.emailPlaceholder")}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            disabled={isLoading}
-          />
+        {/* ── Submit ── */}
+        <TouchableOpacity style={[A.submitButton, isLoading && A.submitButtonDisabled]} onPress={onSignupPress} disabled={isLoading} activeOpacity={0.85}>
+          {isLoading ? <ActivityIndicator color="#000" /> : <Text style={A.submitButtonText}>CRIAR CONTA →</Text>}
+        </TouchableOpacity>
 
-          <Input
-            style={styles.input}
-            label={t("auth.password")}
-            value={password}
-            onChangeText={setPassword}
-            placeholder={t("auth.passwordPlaceholder")}
-            autoCapitalize="none"
-            secureTextEntry
-            disabled={isLoading}
-          />
-
-          <Input
-            style={styles.input}
-            label={t("auth.confirmPassword")}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder={t("auth.confirmPasswordPlaceholder")}
-            autoCapitalize="none"
-            secureTextEntry
-            disabled={isLoading}
-          />
-
-          <Button
-            onPress={onSignupPress}
-            accessoryLeft={isLoading ? LoadingIndicator : undefined}
-            disabled={isLoading}
-            style={styles.input}
-          >
-            {t("auth.createAccount")}
-          </Button>
-
-          <Button
-            appearance="ghost"
-            status="basic"
-            onPress={onLoginPress}
-            disabled={isLoading}
-          >
-            {t("auth.alreadyHaveAccount")}
-          </Button>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </Layout>
+        <TouchableOpacity style={A.bottomLink} onPress={onLoginPress} disabled={isLoading}>
+          <Text style={A.bottomLinkText}>
+            {'Já possui uma conta? '}<Text style={A.bottomLinkBold}>ENTRAR</Text>
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

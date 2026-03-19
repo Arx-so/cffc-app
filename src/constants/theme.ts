@@ -63,3 +63,14 @@ export const Spacing = {
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
+
+// Brand color palette used across auth screens and the custom dark theme.
+export const Brand = {
+  green:  '#39FF14',
+  bg:     '#0B0B0B',
+  card:   '#1A1A1A',
+  border: '#2A2A2A',
+  white:  '#FFFFFF',
+  gray:   '#777777',
+  error:  '#FF4444',
+} as const;

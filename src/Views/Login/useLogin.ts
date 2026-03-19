@@ -15,10 +15,16 @@ export const useLogin = (): UseLoginReturn => {
     onSuccess: (data) => {
       signIn(data.user);
     },
-    onError: () => {
+    onError: (error) => {
+      const message =
+        error instanceof Error ? error.message : 'Login failed. Please try again.';
+
+      // Show the real error message (helps with debugging auth issues).
+      console.error('Login error:', error);
+
       Toast.show({
         type: "error",
-        text1: "Login failed. Please try again.",
+        text1: message,
         autoHide: true,
       });
     },
@@ -33,7 +39,11 @@ export const useLogin = (): UseLoginReturn => {
       });
       return;
     }
-    await loginMutation.mutateAsync({ email: email.trim(), password });
+    await loginMutation.mutateAsync({
+      // Normalize email before sending to Supabase.
+      email: email.trim().toLowerCase(),
+      password,
+    });
   }, [email, password, loginMutation]);
 
   return {
