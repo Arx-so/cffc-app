@@ -1,10 +1,3 @@
-import { Layout, Text } from '@ui-kitten/components';
+import Profile from "@/Views/Profile";
 
-export default function ProfileTab() {
-  return (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Perfil (placeholder)</Text>
-    </Layout>
-  );
-}
-
+export default Profile;

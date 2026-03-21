@@ -60,10 +60,10 @@ const RootLayoutNav = () => {
   }
 
   return (
-    <Stack initialRouteName="index" screenOptions={{ headerBackTitle: '' }}>
-      <Stack.Screen name="index" options={{ headerShown: false, title: '' }} />
-      <Stack.Screen name="login" options={{ headerBackTitle: '' }} />
-      <Stack.Screen name="signup" options={{ headerBackTitle: '' }} />
+    <Stack initialRouteName="index" screenOptions={{ headerBackTitle: "" }}>
+      <Stack.Screen name="index" options={{ headerShown: false, title: "" }} />
+      <Stack.Screen name="login" options={{ headerBackTitle: "" }} />
+      <Stack.Screen name="signup" options={{ headerBackTitle: "" }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
@@ -76,7 +76,7 @@ const RootLayout = () => {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider mapping={eva.mapping} theme={theme}>
+      <ApplicationProvider mapping={eva.mapping} theme={appTheme}>
         <QueryClientProvider client={queryClient}>
           <RootLayoutNav />
           <StatusBar style={effectiveTheme === "dark" ? "light" : "dark"} />

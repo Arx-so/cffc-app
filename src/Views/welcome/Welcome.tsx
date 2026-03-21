@@ -1,12 +1,18 @@
-import { Brand } from '@/constants/theme';
-import { useGoogleAuth } from '@/hooks/useGoogleAuth';
-import { authStyles as A } from '@/styles/auth';
-import { Ionicons } from '@expo/vector-icons';
-import { Stack } from 'expo-router';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles as S } from './Welcome.styles';
-import { useWelcome } from './useWelcome';
+import { Brand } from "@/constants/theme";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { authStyles as A } from "@/styles/auth";
+import { Ionicons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { styles as S } from "./Welcome.styles";
+import { useWelcome } from "./useWelcome";
 
 const Welcome = () => {
   const { onLoginPress, onSignupPress } = useWelcome();
@@ -23,8 +29,8 @@ const Welcome = () => {
 
         <Text style={A.heroSubtitle}>JUNTE-SE À ELITE</Text>
         <Text style={A.heroTitle}>
-          ENTRE NO{'\n'}
-          <Text style={A.heroTitleGreen}>GRAMADO{'\n'}DIGITAL</Text>
+          ENTRE NO{"\n"}
+          <Text style={A.heroTitleGreen}>GRAMADO{"\n"}DIGITAL</Text>
         </Text>
 
         <Text style={S.tagline}>
@@ -39,7 +45,11 @@ const Welcome = () => {
       </View>
 
       <View style={S.bottom}>
-        <TouchableOpacity style={S.primaryButton} onPress={onLoginPress} activeOpacity={0.85}>
+        <TouchableOpacity
+          style={S.primaryButton}
+          onPress={onLoginPress}
+          activeOpacity={0.85}
+        >
           <Text style={S.primaryButtonText}>ENTRAR →</Text>
         </TouchableOpacity>
 
@@ -50,20 +60,28 @@ const Welcome = () => {
           disabled={googleLoading}
           activeOpacity={0.8}
         >
-          {googleLoading
-            ? <ActivityIndicator color="#fff" />
-            : (
-              <>
-                <Ionicons name="logo-google" size={18} color="#fff" style={{ marginRight: 10 }} />
-                <Text style={ls.googleButtonText}>Continuar com Google</Text>
-              </>
-            )
-          }
+          {googleLoading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Ionicons
+                name="logo-google"
+                size={18}
+                color="#fff"
+                style={{ marginRight: 10 }}
+              />
+              <Text style={ls.googleButtonText}>Continuar com Google</Text>
+            </>
+          )}
         </TouchableOpacity>
 
-        <TouchableOpacity style={S.secondaryButton} onPress={onSignupPress} activeOpacity={0.75}>
+        <TouchableOpacity
+          style={S.secondaryButton}
+          onPress={onSignupPress}
+          activeOpacity={0.75}
+        >
           <Text style={S.secondaryButtonText}>
-            Não tem conta?{' '}
+            Não tem conta?{" "}
             <Text style={S.secondaryButtonHighlight}>CRIAR CONTA</Text>
           </Text>
         </TouchableOpacity>
@@ -73,8 +91,16 @@ const Welcome = () => {
 };
 
 const ls = StyleSheet.create({
-  googleButton:     { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: '#2A2A2A', borderRadius: 12, paddingVertical: 15 },
-  googleButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '600' },
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1.5,
+    borderColor: "#2A2A2A",
+    borderRadius: 12,
+    paddingVertical: 15,
+  },
+  googleButtonText: { color: "#FFFFFF", fontSize: 15, fontWeight: "600" },
 });
 
 export default Welcome;

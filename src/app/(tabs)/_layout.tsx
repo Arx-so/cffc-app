@@ -1,6 +1,10 @@
-import { Tabs } from 'expo-router';
+import { HeaderBar } from "@/components/HeaderBar";
+import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -10,38 +14,42 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home/index"
         options={{
-          title: 'Início',
-          // Force the label shown in the bottom tab bar.
-          // This avoids fallback labels like "home/index".
-          tabBarLabel: 'Início',
+          title: "Início",
+          tabBarLabel: "Início",
         }}
       />
       <Tabs.Screen
         name="search/index"
         options={{
-          title: 'Buscar',
-          tabBarLabel: 'Buscar',
+          title: "Buscar",
+          tabBarLabel: "Buscar",
         }}
       />
       <Tabs.Screen
         name="add-videos/index"
         options={{
-          title: 'Adicionar vídeos',
-          tabBarLabel: 'Adicionar vídeos',
+          title: "Adicionar vídeos",
+          tabBarLabel: "Adicionar vídeos",
         }}
       />
       <Tabs.Screen
         name="favorites/index"
         options={{
-          title: 'Favoritos',
-          tabBarLabel: 'Favoritos',
+          title: "Favoritos",
+          tabBarLabel: "Favoritos",
         }}
       />
       <Tabs.Screen
         name="profile/index"
         options={{
-          title: 'Perfil',
-          tabBarLabel: 'Perfil',
+          headerShown: true,
+          header: () => (
+            <HeaderBar
+              title={t("profile.title")}
+              rightIcon="settings-2-outline"
+            />
+          ),
+          tabBarLabel: "Perfil",
         }}
       />
     </Tabs>
