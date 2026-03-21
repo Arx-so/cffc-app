@@ -76,7 +76,7 @@ const RootLayout = () => {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider mapping={eva.mapping} theme={appTheme}>
+      <ApplicationProvider mapping={eva.mapping} theme={theme}>
         <QueryClientProvider client={queryClient}>
           <RootLayoutNav />
           <StatusBar style={effectiveTheme === "dark" ? "light" : "dark"} />
