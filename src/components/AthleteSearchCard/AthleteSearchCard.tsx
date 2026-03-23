@@ -1,0 +1,69 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./AthleteSearchCard.styles";
+import { AthleteSearchCardProps } from "./AthleteSearchCard.types";
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
+
+export function AthleteSearchCard({ athlete }: AthleteSearchCardProps) {
+  const { t } = useTranslation();
+  const position = athlete.positions[0] ?? "";
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <View style={styles.avatarContainer}>
+          {athlete.avatarUrl ? (
+            <Image
+              source={{ uri: athlete.avatarUrl }}
+              style={styles.avatarImage}
+            />
+          ) : (
+            <Text style={styles.avatarInitials}>
+              {getInitials(athlete.name)}
+            </Text>
+          )}
+        </View>
+        <View style={styles.cardInfo}>
+          <View style={styles.cardNameRow}>
+            <Text style={styles.athleteName}>{athlete.name}</Text>
+            {athlete.verified && (
+              <View style={styles.verifiedBadge}>
+                <Text style={styles.verifiedText}>{t("search.verified")}</Text>
+              </View>
+            )}
+          </View>
+          {!!position && <Text style={styles.positionText}>{position}</Text>}
+          <View style={styles.statsRow}>
+            <View>
+              <Text style={styles.statLabel}>{t("search.stats.videos")}</Text>
+              <Text style={styles.statValue}>{athlete.videoCount}</Text>
+            </View>
+            <View>
+              <Text style={styles.statLabel}>{t("search.stats.contacts")}</Text>
+              <Text style={styles.statValue}>{athlete.contactCount}</Text>
+            </View>
+            <View>
+              <Text style={styles.statLabel}>
+                {t("search.stats.validations")}
+              </Text>
+              <Text style={styles.statValue}>{athlete.validationCount}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.viewProfileButton} activeOpacity={0.8}>
+        <Text style={styles.viewProfileText}>{t("search.viewProfile")}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}

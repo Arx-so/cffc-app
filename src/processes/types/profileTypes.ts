@@ -58,3 +58,24 @@ export interface ProfileData {
   birth_date: string | null;
   phone: string | null;
 }
+
+export interface AthleteSearchResult {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+  verified: boolean;
+  positions: string[];
+  validationCount: number;
+  videoCount: number;
+  contactCount: number;
+}
+
+export interface SearchFilters {
+  positions: string[];
+  ageMin: number | null;
+  ageMax: number | null;
+  dominantFoot: string | null;
+  minHeight: number | null;
+  maxWeight: number | null;
+  strengths: string[];
+}

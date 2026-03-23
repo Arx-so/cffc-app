@@ -3,9 +3,11 @@ import { getSignedUrl } from "@/utils/supabaseStorage";
 import {
   AthleteProfile,
   AthleteProfileHeader,
+  AthleteSearchResult,
   ClubHistoryEntry,
   ProfileData,
   ProfileVideo,
+  SearchFilters,
 } from "./types/profileTypes";
 
 const MEDIA_BUCKET = "media";
@@ -231,6 +233,136 @@ export const createMediaRecord = async (
 
   if (error) throw error;
 };
+
+const DEFAULT_FILTERS: SearchFilters = {
+  positions: [],
+  ageMin: null,
+  ageMax: null,
+  dominantFoot: null,
+  minHeight: null,
+  maxWeight: null,
+  strengths: [],
+};
+
+export async function searchAthletes(
+  query: string,
+  filters: SearchFilters = DEFAULT_FILTERS
+): Promise<AthleteSearchResult[]> {
+  let profileQuery = supabase
+    .from("profile")
+    .select("id, name, avatar_url, verified")
+    .eq("role", "athlete");
+
+  if (query.length >= 3) {
+    profileQuery = profileQuery.ilike("name", `%${query}%`);
+  }
+
+  const today = new Date();
+  if (filters.ageMin !== null) {
+    const maxBirth = new Date(today);
+    maxBirth.setFullYear(maxBirth.getFullYear() - filters.ageMin);
+    profileQuery = profileQuery.lte("birth_date", maxBirth.toISOString().split("T")[0]);
+  }
+  if (filters.ageMax !== null) {
+    const minBirth = new Date(today);
+    minBirth.setFullYear(minBirth.getFullYear() - filters.ageMax);
+    profileQuery = profileQuery.gte("birth_date", minBirth.toISOString().split("T")[0]);
+  }
+
+  const { data: profiles, error } = await profileQuery.limit(20);
+
+  if (error) throw error;
+  if (!profiles || profiles.length === 0) return [];
+
+  const userIds = profiles.map((p) => p.id);
+
+  let athleteProfileQuery = supabase
+    .from("athlete_profile")
+    .select("user_id, positions, strengths, is_searchable")
+    .in("user_id", userIds)
+    .eq("is_searchable", true);
+
+  if (filters.dominantFoot !== null) {
+    athleteProfileQuery = athleteProfileQuery.eq("dominant_foot", filters.dominantFoot);
+  }
+  if (filters.minHeight !== null) {
+    athleteProfileQuery = athleteProfileQuery.gte("height", filters.minHeight);
+  }
+  if (filters.maxWeight !== null) {
+    athleteProfileQuery = athleteProfileQuery.lte("weight", filters.maxWeight);
+  }
+
+  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts] =
+    await Promise.all([
+      athleteProfileQuery,
+      supabase
+        .from("media")
+        .select("athlete_user_id")
+        .in("athlete_user_id", userIds)
+        .eq("type", "video")
+        .eq("status", "approved"),
+      supabase
+        .from("validation")
+        .select("athlete_user_id")
+        .in("athlete_user_id", userIds)
+        .eq("status", "approved"),
+      supabase
+        .from("contact_request")
+        .select("athlete_user_id")
+        .in("athlete_user_id", userIds)
+        .eq("status", "accepted"),
+    ]);
+
+  const searchableIds = new Set(
+    (athleteProfilesResult.data ?? []).map((ap) => ap.user_id)
+  );
+  const positionsMap = new Map(
+    (athleteProfilesResult.data ?? []).map((ap) => [
+      ap.user_id,
+      (ap.positions as string[]) ?? [],
+    ])
+  );
+  const strengthsMap = new Map(
+    (athleteProfilesResult.data ?? []).map((ap) => [
+      ap.user_id,
+      (ap.strengths as string[]) ?? [],
+    ])
+  );
+
+  const countByUser = (rows: { athlete_user_id: string }[] | null, id: string) =>
+    (rows ?? []).filter((r) => r.athlete_user_id === id).length;
+
+  let filtered = profiles.filter((p) => searchableIds.has(p.id));
+
+  if (filters.positions.length > 0) {
+    filtered = filtered.filter((p) =>
+      filters.positions.some((pos) => positionsMap.get(p.id)?.includes(pos))
+    );
+  }
+  if (filters.strengths.length > 0) {
+    filtered = filtered.filter((p) =>
+      filters.strengths.some((str) => strengthsMap.get(p.id)?.includes(str))
+    );
+  }
+
+  const results = await Promise.all(
+    filtered.map(async (p) => {
+      const avatarUrl = await getSignedUrl(MEDIA_BUCKET, p.avatar_url);
+      return {
+        id: p.id,
+        name: p.name ?? "",
+        avatarUrl,
+        verified: p.verified ?? false,
+        positions: positionsMap.get(p.id) ?? [],
+        videoCount: countByUser(videoCounts.data, p.id),
+        validationCount: countByUser(validationCounts.data, p.id),
+        contactCount: countByUser(contactCounts.data, p.id),
+      };
+    })
+  );
+
+  return results;
+}
 
 export const uploadAvatar = async (
   userId: string,

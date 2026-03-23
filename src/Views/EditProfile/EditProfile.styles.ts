@@ -97,9 +97,9 @@ export const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: Brand.white,
-    fontSize: 13,
-    fontWeight: "800",
-    letterSpacing: 2,
+    fontSize: 15,
+    fontWeight: "900",
+    letterSpacing: 3.5,
   },
 
   // ── Fields ──
@@ -108,9 +108,9 @@ export const styles = StyleSheet.create({
   },
   fieldLabel: {
     color: Brand.gray,
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 1.8,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.2,
     marginBottom: 8,
     marginTop: 16,
   },

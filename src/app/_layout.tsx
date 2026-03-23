@@ -119,6 +119,13 @@ const RootLayoutNav = () => {
         }}
       />
       <Stack.Screen
+        name="search-filter"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
         name="settings"
         options={{
           headerShown: true,

@@ -1,9 +1,3 @@
-import { Layout, Text } from '@ui-kitten/components';
+import { Search } from "@/Views/Search";
 
-export default function SearchTab() {
-  return (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Buscar (placeholder)</Text>
-    </Layout>
-  );
-}
+export default Search;
