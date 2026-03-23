@@ -1,12 +1,13 @@
 import { Brand } from "@/constants/theme";
 import { FeedVideo } from "@/processes/types/feedTypes";
+import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useEvent } from "expo";
 import { Button, Spinner, Text } from "@ui-kitten/components";
 import { VideoView, useVideoPlayer } from "expo-video";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ListRenderItemInfo, useWindowDimensions, View } from "react-native";
+import { FlatList, ListRenderItemInfo, Pressable, useWindowDimensions, View } from "react-native";
 import { styles } from "./HomeFeed.styles";
 import { useHomeFeed } from "./useHomeFeed";
 
@@ -44,17 +45,18 @@ const FeedVideoSlide = ({
     availableAudioTracks: [],
   });
   const [hasRenderedFirstFrame, setHasRenderedFirstFrame] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [progressTrackWidth, setProgressTrackWidth] = useState(0);
   const shouldPlay = isActive && isScreenFocused;
 
   useEffect(() => {
-    if (shouldPlay) {
+    if (shouldPlay && !isManuallyPaused) {
       player.play();
       return;
     }
 
     player.pause();
-  }, [shouldPlay, player]);
+  }, [shouldPlay, isManuallyPaused, player]);
 
   useEffect(() => {
     if (status === "loading") {
@@ -64,6 +66,7 @@ const FeedVideoSlide = ({
 
   useEffect(() => {
     setHasRenderedFirstFrame(false);
+    setIsManuallyPaused(false);
   }, [video.url]);
 
   const isVideoLoading =
@@ -80,35 +83,55 @@ const FeedVideoSlide = ({
     [duration, progressTrackWidth, player]
   );
 
+  const handleTogglePlayback = useCallback(() => {
+    if (!isActive || !isScreenFocused || isVideoLoading) return;
+    setIsManuallyPaused((prev) => !prev);
+  }, [isActive, isScreenFocused, isVideoLoading]);
+
+  useEffect(() => {
+    if (!isActive || !isScreenFocused) {
+      setIsManuallyPaused(false);
+    }
+  }, [isActive, isScreenFocused]);
+
   return (
     <View style={[styles.slide, { height }]}>
-      <VideoView
-        player={player}
-        style={styles.video}
-        contentFit="cover"
-        nativeControls={false}
-        onFirstFrameRender={() => setHasRenderedFirstFrame(true)}
-      />
-      {isVideoLoading && (
-        <View style={styles.videoLoadingOverlay} pointerEvents="none">
-          <Spinner status="primary" />
-        </View>
-      )}
-      <View style={styles.overlay} />
-      {(!!video.username || !!video.title) && (
-        <View style={styles.captionContainer}>
-          {!!video.username && (
-            <Text category="h6" style={styles.usernameText}>
-              @{video.username}
-            </Text>
-          )}
-          {!!video.title && (
-            <Text category="s1" style={styles.captionText}>
-              {video.title}
-            </Text>
-          )}
-        </View>
-      )}
+      <Pressable style={styles.tapArea} onPress={handleTogglePlayback}>
+        <VideoView
+          player={player}
+          style={styles.video}
+          contentFit="cover"
+          nativeControls={false}
+          onFirstFrameRender={() => setHasRenderedFirstFrame(true)}
+        />
+        {isVideoLoading && (
+          <View style={styles.videoLoadingOverlay} pointerEvents="none">
+            <Spinner status="primary" />
+          </View>
+        )}
+        <View style={styles.overlay} />
+        {isManuallyPaused && !isVideoLoading && (
+          <View style={styles.centerIconWrapper} pointerEvents="none">
+            <View style={styles.centerIconBackground}>
+              <Ionicons name="play" size={30} color={Brand.white} style={styles.centerIcon} />
+            </View>
+          </View>
+        )}
+        {(!!video.username || !!video.title) && (
+          <View style={styles.captionContainer}>
+            {!!video.username && (
+              <Text category="h6" style={styles.usernameText}>
+                @{video.username}
+              </Text>
+            )}
+            {!!video.title && (
+              <Text category="s1" style={styles.captionText}>
+                {video.title}
+              </Text>
+            )}
+          </View>
+        )}
+      </Pressable>
       <View
         style={styles.progressTrack}
         onLayout={(event) => setProgressTrackWidth(event.nativeEvent.layout.width)}

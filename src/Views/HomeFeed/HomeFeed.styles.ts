@@ -10,12 +10,33 @@ export const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: Brand.bg,
   },
+  tapArea: {
+    flex: 1,
+  },
   video: {
     ...StyleSheet.absoluteFillObject,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.16)",
+  },
+  centerIconWrapper: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  centerIconBackground: {
+    width: 68,
+    height: 68,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.42)",
+  },
+  centerIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 2,
   },
   videoLoadingOverlay: {
     ...StyleSheet.absoluteFillObject,
