@@ -1,4 +1,5 @@
 import { AthleteProfileHeader, UserRole } from "@/processes/types/profileTypes";
+import { Brand } from "@/constants/theme";
 import {
   Avatar,
   Button,
@@ -67,7 +68,7 @@ export const ProfileHeader = ({
               <View
                 style={[
                   styles.avatarFallback,
-                  { backgroundColor: theme["color-basic-800"] },
+                  { backgroundColor: Brand.card },
                 ]}
               >
                 <Text
@@ -113,7 +114,7 @@ export const ProfileHeader = ({
           style={[
             styles.statsCard,
             {
-              backgroundColor: theme["background-basic-color-1"],
+              backgroundColor: Brand.card,
               borderColor: theme["color-primary-500"],
             },
           ]}
@@ -169,7 +170,7 @@ export const ProfileHeader = ({
             <Button
               style={[
                 styles.iconButton,
-                { backgroundColor: theme["color-basic-800"] },
+                { backgroundColor: Brand.card },
               ]}
               size="large"
               appearance="ghost"

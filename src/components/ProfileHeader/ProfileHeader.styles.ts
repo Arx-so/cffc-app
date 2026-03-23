@@ -7,7 +7,7 @@ const VERIFIED_SIZE = 24;
 export const styles = StyleSheet.create({
   avatarSection: {
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 16,
   },
   avatarContainer: {
     position: "relative",

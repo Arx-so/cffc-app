@@ -12,8 +12,8 @@ export const useLogin = (): UseLoginReturn => {
 
   const loginMutation = useMutation({
     mutationFn: (body: { email: string; password: string }) => login(body),
-    onSuccess: (data) => {
-      signIn(data.user);
+    onSuccess: async (data) => {
+      await signIn(data.user);
     },
     onError: (error) => {
       const message =

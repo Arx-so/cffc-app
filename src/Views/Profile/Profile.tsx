@@ -1,6 +1,8 @@
 import { VideosSection } from "@/components/VideosSection";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Layout, Spinner, Text, useTheme } from "@ui-kitten/components";
+import { Brand } from "@/constants/theme";
+import { Layout, Spinner, Text } from "@ui-kitten/components";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { styles } from "./Profile.styles";
@@ -15,18 +17,13 @@ const Profile = ({ userId }: ProfileProps) => {
     viewerRole,
     isLoading,
     isError,
+    handleAddVideoPress,
   } = useProfile(userId);
-  const theme = useTheme();
   const { t } = useTranslation();
 
   if (isLoading) {
     return (
-      <Layout
-        style={[
-          styles.loadingContainer,
-          { backgroundColor: theme["background-basic-color-2"] },
-        ]}
-      >
+      <Layout style={[styles.loadingContainer, { backgroundColor: Brand.bg }]}>
         <Spinner size="large" />
       </Layout>
     );
@@ -34,33 +31,25 @@ const Profile = ({ userId }: ProfileProps) => {
 
   if (isError || !profileData) {
     return (
-      <Layout
-        style={[
-          styles.errorContainer,
-          { backgroundColor: theme["background-basic-color-2"] },
-        ]}
-      >
+      <Layout style={[styles.errorContainer, { backgroundColor: Brand.bg }]}>
         <Text category="s1">{t("common.retry")}</Text>
       </Layout>
     );
   }
 
   return (
-    <Layout
-      style={[
-        styles.container,
-        { backgroundColor: theme["background-basic-color-2"] },
-      ]}
-    >
+    <Layout style={[styles.container, { backgroundColor: Brand.bg }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileHeader
           profile={profileData}
           isOwnProfile={isOwnProfile}
           viewerRole={viewerRole}
+          onEditProfilePress={() => router.push("/edit-profile")}
         />
         <VideosSection
           videos={videos}
           isOwnProfile={isOwnProfile}
+          onAddPress={handleAddVideoPress}
         />
       </ScrollView>
     </Layout>

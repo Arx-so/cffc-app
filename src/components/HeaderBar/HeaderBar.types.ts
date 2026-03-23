@@ -1,7 +1,8 @@
+import { ReactNode } from "react";
+
 export interface HeaderBarProps {
   title?: string;
   leftIcon?: string;
-  rightIcon?: string;
+  rightIcon?: ReactNode;
   onLeftPress?: () => void;
-  onRightPress?: () => void;
 }

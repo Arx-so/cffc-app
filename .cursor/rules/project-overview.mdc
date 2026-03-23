@@ -1,0 +1,53 @@
+---
+description: Visão geral do projeto, tech stack e estrutura de diretórios
+alwaysApply: true
+---
+
+# CFFC App — Visão Geral
+
+Expo React Native + TypeScript com Expo Router (file-based routing).
+
+## Tech Stack
+
+- **Expo SDK 55** + Expo Router (file-based routing)
+- **React 19** / React Native 0.83
+- **TypeScript** strict mode, path alias `@/*` → `./src/*`
+- **Zustand** — estado global com persistência via SecureStore
+- **Supabase** — autenticação e banco de dados
+- **react-query** — data fetching e cache
+- **UI Kitten** + Eva Design — componentes de UI
+- **react-i18next** — i18n (en/ja)
+- **react-native-toast-message** — notificações
+
+## Estrutura de Diretórios
+
+```
+src/
+  app/              # Rotas Expo Router
+  app/(athlete)/    # Rotas do papel athlete
+  app/(pro)/        # Rotas do papel pro
+  app/(club)/       # Rotas do papel club
+  app/(admin)/      # Rotas do papel admin
+  components/       # Componentes reutilizáveis
+  config/           # supabase, i18n, themes
+  constants/        # Constantes estáticas (Brand, etc)
+  hooks/            # Custom hooks reutilizáveis
+  locales/          # Arquivos de tradução
+  processes/        # Camada de negócio (API calls, tipos)
+  stores/           # Zustand stores
+  utils/            # Funções utilitárias
+  Views/            # Telas feature-based (padrão hook)
+```
+
+## Package Manager
+
+Este projeto usa **bun** como package manager. **Nunca usar `npm`** para instalar dependências ou rodar scripts.
+
+```bash
+bun install        # Instalar dependências
+bun start          # Expo dev server
+bun run ios        # iOS simulator
+bun run android    # Android emulator
+bun run lint       # ESLint
+bunx expo install  # Instalar pacotes compatíveis com Expo
+```

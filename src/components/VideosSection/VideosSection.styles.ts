@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 
-const GRID_PADDING = 24;
-const GRID_GAP = 8;
+const GRID_PADDING = 0;
+const GRID_GAP = 2;
 const COLUMNS = 3;
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const ITEM_SIZE =
@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   title: {
     fontWeight: "bold",
@@ -42,7 +43,6 @@ export const styles = StyleSheet.create({
   itemContainer: {
     width: ITEM_SIZE,
     height: ITEM_SIZE,
-    borderRadius: 8,
     overflow: "hidden",
   },
   thumbnail: {
@@ -60,12 +60,36 @@ export const styles = StyleSheet.create({
   addPlaceholder: {
     width: ITEM_SIZE,
     height: ITEM_SIZE,
-    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
   },
   addIcon: {
     width: 24,
     height: 24,
+  },
+  emptyState: {
+    marginHorizontal: 16,
+    marginTop: 0,
+    paddingVertical: 18,
+    paddingHorizontal: 24,
+    alignItems: "center",
+    gap: 8,
+  },
+  emptyIcon: {
+    width: 48,
+    height: 48,
+    marginBottom: 4,
+  },
+  emptyTitle: {
+    textAlign: "center",
+    fontWeight: "600",
+  },
+  emptySubtitle: {
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  emptyButton: {
+    marginTop: 8,
+    paddingHorizontal: 8,
   },
 });

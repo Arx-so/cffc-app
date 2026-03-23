@@ -15,4 +15,5 @@ export interface UseProfileReturn {
   viewerRole: UserRole;
   isLoading: boolean;
   isError: boolean;
+  handleAddVideoPress: () => Promise<void>;
 }

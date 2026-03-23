@@ -1,0 +1,62 @@
+---
+description: Regras de negócio — papéis de usuário, autenticação e roteamento por role
+alwaysApply: true
+---
+
+# Regras de Negócio
+
+## Papéis de Usuário (UserRole)
+
+Existem 4 papéis definidos em `src/processes/types/profileTypes.ts`:
+
+| Role      | Rota base       | Descrição                        |
+|-----------|-----------------|----------------------------------|
+| `athlete` | `/(athlete)/`   | Atleta — pode adicionar vídeos   |
+| `pro`     | `/(pro)/`       | Profissional (olheiro, técnico)  |
+| `club`    | `/(club)/`      | Clube de futebol                 |
+| `admin`   | `/(admin)/`     | Administrador da plataforma      |
+
+O papel é salvo na tabela `profile` no Supabase (campo `role`).
+
+## Fluxo de Autenticação
+
+1. App abre → `authStore.checkAuth()` busca sessão do Supabase
+2. Se sessão existir → busca o `role` na tabela `profile`
+3. O `_layout.tsx` raiz redireciona para `/(role)/home` conforme o papel
+4. Se não autenticado e em rota de role → redireciona para `/` (landing)
+
+```
+Não autenticado → /index (landing) → /login ou /signup
+Autenticado (athlete) → /(athlete)/home
+Autenticado (pro)     → /(pro)/home
+Autenticado (club)    → /(club)/home
+Autenticado (admin)   → /(admin)/home
+```
+
+## Proteção de Rotas
+
+- Toda rota dentro de `(athlete)`, `(pro)`, `(club)`, `(admin)` é protegida
+- A guarda de rota está em `src/app/_layout.tsx` via `useAuthStore`
+- Nunca usar navegação direta sem considerar o `role` do usuário
+
+## Tabelas Supabase Relevantes
+
+| Tabela            | Descrição                              |
+|-------------------|----------------------------------------|
+| `profile`         | Dados do usuário (role, name, avatar, verified, city, state) |
+| `media`           | Vídeos do atleta (type: "video", status: pending/approved/rejected) |
+| `validation`      | Validações recebidas pelo atleta       |
+| `contact_request` | Solicitações de contato ao atleta      |
+
+## Status de Vídeo (ProfileVideoStatus)
+
+- `pending` — aguardando moderação
+- `approved` — aprovado e visível
+- `rejected` — recusado
+
+## Perfil do Atleta (AthleteProfileHeader)
+
+Stats exibidas no perfil são contagens de registros **aprovados**:
+- `videoCount` — vídeos com `status = approved`
+- `validationCount` — validações com `status = approved`
+- `contactCount` — contact_requests com `status = accepted`
