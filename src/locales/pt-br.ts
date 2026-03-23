@@ -162,6 +162,12 @@ export default {
     thumbSectionLabel: 'THUMBNAIL',
     thumbUploadLabel: 'FAZER UPLOAD',
   },
+  homeFeed: {
+    loading: 'Carregando vídeos...',
+    loadError: 'Não foi possível carregar o feed agora',
+    emptyTitle: 'Ainda não há vídeos',
+    emptySubtitle: 'Assim que os atletas postarem vídeos, eles aparecerão aqui',
+  },
   tabs: {
     home: 'Início',
     search: 'Buscar',

@@ -40,6 +40,7 @@ export const signup = async (body: {
   email: string;
   password: string;
   name: string;
+  username: string;
   role: 'athlete' | 'pro' | 'club';
   birthDate: string; // YYYY-MM-DD
   guardianEmail?: string;
@@ -53,6 +54,7 @@ export const signup = async (body: {
       data: {
         name: body.name,
         full_name: body.name,
+        username: body.username,
         role: body.role,
         birth_date: body.birthDate,
         guardian_email: body.guardianEmail ?? '',

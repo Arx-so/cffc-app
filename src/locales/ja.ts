@@ -158,6 +158,12 @@ export default {
     thumbSectionLabel: 'サムネイル',
     thumbUploadLabel: 'サムネイルをアップロード',
   },
+  homeFeed: {
+    loading: '動画を読み込み中...',
+    loadError: '現在フィードを読み込めません',
+    emptyTitle: 'まだ動画がありません',
+    emptySubtitle: '選手が動画を投稿すると、ここに表示されます',
+  },
   tabs: {
     home: 'ホーム',
     search: '検索',

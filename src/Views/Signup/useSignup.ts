@@ -47,6 +47,7 @@ const toYYYYMMDD = (date: Date): string => {
 
 export const useSignup = (): UseSignupReturn => {
   const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,6 +60,7 @@ export const useSignup = (): UseSignupReturn => {
   const signupMutation = useMutation({
     mutationFn: (body: {
       name: string;
+      username: string;
       email: string;
       password: string;
       role: ProfileRole;
@@ -75,10 +77,24 @@ export const useSignup = (): UseSignupReturn => {
         autoHide: true,
       });
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Falha ao criar conta. Tente novamente.";
+
+      const isConfirmationEmailError = message
+        .toLowerCase()
+        .includes("error sending confirmation email");
+
       Toast.show({
         type: "error",
-        text1: "Falha ao criar conta. Tente novamente.",
+        text1: isConfirmationEmailError
+          ? "Não foi possível enviar o e-mail de confirmação."
+          : "Falha ao criar conta. Tente novamente.",
+        text2: isConfirmationEmailError
+          ? "Verifique SMTP/Auth no projeto Supabase."
+          : undefined,
         autoHide: true,
       });
     },
@@ -100,7 +116,7 @@ export const useSignup = (): UseSignupReturn => {
   }, [parsedBirthDate]);
 
   const onSignupPress = useCallback(async () => {
-    if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
+    if (!fullName.trim() || !username.trim() || !email.trim() || !password || !confirmPassword) {
       Toast.show({ type: "error", text1: "Preencha todos os campos obrigatórios.", autoHide: true });
       return;
     }
@@ -131,14 +147,19 @@ export const useSignup = (): UseSignupReturn => {
       return;
     }
 
-    await signupMutation.mutateAsync({
-      name: fullName.trim(),
-      email: email.trim().toLowerCase(),
-      password,
-      role: selectedRole,
-      birthDate: toYYYYMMDD(parsedBirthDate),
-      guardianEmail: isMinor ? guardianEmailValue : undefined,
-    });
+    try {
+      await signupMutation.mutateAsync({
+        name: fullName.trim(),
+        username: username.trim().replace(/^@+/, "").toLowerCase(),
+        email: email.trim().toLowerCase(),
+        password,
+        role: selectedRole,
+        birthDate: toYYYYMMDD(parsedBirthDate),
+        guardianEmail: isMinor ? guardianEmailValue : undefined,
+      });
+    } catch {
+      // Error feedback is handled centrally in mutation onError.
+    }
   }, [
     acceptedPrivacy,
     acceptedTerms,
@@ -151,6 +172,7 @@ export const useSignup = (): UseSignupReturn => {
     password,
     selectedRole,
     signupMutation,
+    username,
   ]);
 
   const onLoginPress = useCallback(() => {
@@ -159,6 +181,7 @@ export const useSignup = (): UseSignupReturn => {
 
   return {
     fullName,
+    username,
     email,
     password,
     confirmPassword,
@@ -169,6 +192,7 @@ export const useSignup = (): UseSignupReturn => {
     acceptedPrivacy,
     isMinor,
     setFullName,
+    setUsername,
     setEmail,
     setPassword,
     setConfirmPassword,

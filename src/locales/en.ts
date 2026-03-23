@@ -158,6 +158,12 @@ export default {
     thumbSectionLabel: "THUMBNAIL",
     thumbUploadLabel: "UPLOAD THUMBNAIL",
   },
+  homeFeed: {
+    loading: "Loading videos...",
+    loadError: "Could not load the feed right now",
+    emptyTitle: "No videos yet",
+    emptySubtitle: "As soon as athletes post videos, they will appear here",
+  },
   tabs: {
     home: "Home",
     search: "Search",
