@@ -248,10 +248,16 @@ export async function searchAthletes(
   query: string,
   filters: SearchFilters = DEFAULT_FILTERS
 ): Promise<AthleteSearchResult[]> {
+  const { data: { user } } = await supabase.auth.getUser();
+
   let profileQuery = supabase
     .from("profile")
     .select("id, name, avatar_url, verified")
     .eq("role", "athlete");
+
+  if (user) {
+    profileQuery = profileQuery.neq("id", user.id);
+  }
 
   if (query.length >= 3) {
     profileQuery = profileQuery.ilike("name", `%${query}%`);
