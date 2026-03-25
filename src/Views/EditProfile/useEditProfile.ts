@@ -56,6 +56,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
   const [athleteForm, setAthleteForm] =
     useState<AthleteFormState>(INITIAL_ATHLETE);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [saveAttempted, setSaveAttempted] = useState(false);
 
   const originalProfileRef = useRef<ProfileFormState>(INITIAL_PROFILE);
   const originalAthleteRef = useRef<AthleteFormState>(INITIAL_ATHLETE);
@@ -261,12 +262,30 @@ export const useEditProfile = (): UseEditProfileReturn => {
   });
 
   const handleSave = useCallback(async () => {
+    setSaveAttempted(true);
+
+    const hasRequiredFieldError =
+      !profileForm.name.trim() ||
+      !profileForm.username.trim() ||
+      !profileForm.city.trim() ||
+      !profileForm.state.trim() ||
+      !profileForm.birthDate.trim() ||
+      !profileForm.phone.trim();
+
+    if (hasRequiredFieldError) {
+      Toast.show({
+        type: "error",
+        text1: "Preencha todos os campos obrigatórios.",
+      });
+      return;
+    }
+
     try {
       await saveMutation.mutateAsync();
     } catch {
       // Error feedback is handled in mutation onError.
     }
-  }, [saveMutation]);
+  }, [profileForm, saveMutation]);
 
   const hasUnsavedChanges = useCallback((): boolean => {
     const orig = originalProfileRef.current;
@@ -333,6 +352,14 @@ export const useEditProfile = (): UseEditProfileReturn => {
   }, [navigation, hasUnsavedChanges, t]);
 
   const isDirty = hasUnsavedChanges();
+  const requiredFieldErrors = {
+    name: saveAttempted && !profileForm.name.trim(),
+    username: saveAttempted && !profileForm.username.trim(),
+    city: saveAttempted && !profileForm.city.trim(),
+    state: saveAttempted && !profileForm.state.trim(),
+    birthDate: saveAttempted && !profileForm.birthDate.trim(),
+    phone: saveAttempted && !profileForm.phone.trim(),
+  };
 
   return {
     profileForm,
@@ -341,6 +368,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
     isLoading: profileLoading || (isAthlete && athleteLoading),
     isSaving: saveMutation.isPending,
     isUploadingAvatar,
+    requiredFieldErrors,
     isDirty,
     setProfileField,
     setAthleteField,

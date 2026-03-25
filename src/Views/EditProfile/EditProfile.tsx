@@ -220,6 +220,7 @@ const EditProfile = () => {
     handleSave,
     handleClose,
     isDirty,
+    requiredFieldErrors,
   } = useEditProfile();
 
   const [positionModalVisible, setPositionModalVisible] = useState(false);
@@ -381,7 +382,7 @@ const EditProfile = () => {
             {t("editProfile.name")}
           </Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, requiredFieldErrors.name && styles.inputError]}
             value={profileForm.name}
             onChangeText={(v) => setProfileField("name", v)}
             placeholder={t("editProfile.namePlaceholder")}
@@ -391,7 +392,10 @@ const EditProfile = () => {
 
           <Text style={styles.fieldLabel}>{t("editProfile.username")}</Text>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              requiredFieldErrors.username && styles.inputError,
+            ]}
             value={profileForm.username}
             onChangeText={(v) => setProfileField("username", v)}
             placeholder={t("editProfile.usernamePlaceholder")}
@@ -403,7 +407,10 @@ const EditProfile = () => {
             <View style={styles.rowItem}>
               <Text style={styles.fieldLabel}>{t("editProfile.city")}</Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  requiredFieldErrors.city && styles.inputError,
+                ]}
                 value={profileForm.city}
                 onChangeText={(v) => setProfileField("city", v)}
                 placeholder={t("editProfile.cityPlaceholder")}
@@ -415,7 +422,10 @@ const EditProfile = () => {
                 {t("editProfile.stateProv")}
               </Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  requiredFieldErrors.state && styles.inputError,
+                ]}
                 value={profileForm.state}
                 onChangeText={(v) => setProfileField("state", v)}
                 placeholder={t("editProfile.statePlaceholder")}
@@ -428,7 +438,10 @@ const EditProfile = () => {
 
           <Text style={styles.fieldLabel}>{t("editProfile.birthDate")}</Text>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              requiredFieldErrors.birthDate && styles.inputError,
+            ]}
             value={profileForm.birthDate}
             onChangeText={(v) => setProfileField("birthDate", v)}
             placeholder={t("editProfile.birthDatePlaceholder")}
@@ -439,7 +452,10 @@ const EditProfile = () => {
 
           <Text style={styles.fieldLabel}>{t("editProfile.phone")}</Text>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              requiredFieldErrors.phone && styles.inputError,
+            ]}
             value={profileForm.phone}
             onChangeText={(v) => setProfileField("phone", v)}
             placeholder={t("editProfile.phonePlaceholder")}

@@ -3,6 +3,100 @@ import { User } from "@/processes/types/authTypes";
 import { UserRole } from "@/processes/types/profileTypes";
 import { create } from "zustand";
 
+type AuthMetadata = Record<string, unknown>;
+const VALID_ROLES: UserRole[] = ["athlete", "pro", "club", "admin"];
+
+const normalizeMetaString = (value: unknown): string | null => {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+};
+
+const readMetadataValue = (
+  metadata: AuthMetadata,
+  keys: string[]
+): string | null => {
+  for (const key of keys) {
+    const value = normalizeMetaString(metadata[key]);
+    if (value) return value;
+  }
+  return null;
+};
+
+const readMetadataRole = (metadata: AuthMetadata): UserRole | null => {
+  const role = normalizeMetaString(metadata.role);
+  if (!role) return null;
+  return VALID_ROLES.includes(role as UserRole) ? (role as UserRole) : null;
+};
+
+const ensureAthleteProfileRow = async (
+  userId: string,
+  role: UserRole | null
+): Promise<void> => {
+  if (role !== "athlete") return;
+  await supabase
+    .from("athlete_profile")
+    .upsert({ user_id: userId }, { onConflict: "user_id" });
+};
+
+const syncProfileFromMetadata = async (
+  userId: string,
+  metadata: AuthMetadata
+): Promise<void> => {
+  const { data: profile } = await supabase
+    .from("profile")
+    .select("name, role, username, city, state, phone, birth_date, guardian_email")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (!profile) return;
+
+  const nameFromMeta = readMetadataValue(metadata, ["name", "full_name"]);
+  const roleFromMeta = readMetadataRole(metadata);
+  const usernameFromMeta = readMetadataValue(metadata, ["username", "user_name"]);
+  const cityFromMeta = readMetadataValue(metadata, ["city"]);
+  const stateFromMeta = readMetadataValue(metadata, ["state", "state_prov"]);
+  const phoneFromMeta = readMetadataValue(metadata, ["phone", "phone_number"]);
+  const birthDateFromMeta = readMetadataValue(metadata, ["birth_date"]);
+  const guardianEmailFromMeta = readMetadataValue(metadata, ["guardian_email"]);
+
+  const updates: Record<string, unknown> = {};
+
+  if (!profile.name && nameFromMeta) {
+    updates.name = nameFromMeta;
+  }
+  if (roleFromMeta && profile.role !== roleFromMeta) {
+    updates.role = roleFromMeta;
+  }
+  if (!profile.username && usernameFromMeta) {
+    updates.username = usernameFromMeta.replace(/^@+/, "").toLowerCase();
+  }
+  if (!profile.city && cityFromMeta) {
+    updates.city = cityFromMeta;
+  }
+  if (!profile.state && stateFromMeta) {
+    updates.state = stateFromMeta.toUpperCase();
+  }
+  if (!profile.phone && phoneFromMeta) {
+    updates.phone = phoneFromMeta;
+  }
+  if (!profile.birth_date && birthDateFromMeta) {
+    updates.birth_date = birthDateFromMeta;
+  }
+  if (!profile.guardian_email && guardianEmailFromMeta) {
+    updates.guardian_email = guardianEmailFromMeta;
+  }
+
+  if (Object.keys(updates).length > 0) {
+    await supabase.from("profile").update(updates).eq("id", userId);
+  }
+
+  await ensureAthleteProfileRow(
+    userId,
+    roleFromMeta ?? ((profile.role as UserRole | null) ?? null)
+  );
+};
+
 const fetchUserRole = async (userId: string): Promise<UserRole | null> => {
   const { data } = await supabase
     .from("profile")
@@ -37,6 +131,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       let role: UserRole | null = null;
       if (session?.user) {
+        const metadata = (session.user.user_metadata as AuthMetadata) ?? {};
+        await syncProfileFromMetadata(session.user.id, metadata);
         role = await fetchUserRole(session.user.id);
       }
 
@@ -59,6 +155,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   signIn: async (user: User) => {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (authUser?.id) {
+      const metadata = (authUser.user_metadata as AuthMetadata) ?? {};
+      await syncProfileFromMetadata(authUser.id, metadata);
+    }
+
     const role = await fetchUserRole(user.id);
     set({ isAuthenticated: true, user, role });
   },

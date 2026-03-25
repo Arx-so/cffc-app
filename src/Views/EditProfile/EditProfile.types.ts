@@ -30,6 +30,14 @@ export interface UseEditProfileReturn {
   isLoading: boolean;
   isSaving: boolean;
   isUploadingAvatar: boolean;
+  requiredFieldErrors: {
+    name: boolean;
+    username: boolean;
+    city: boolean;
+    state: boolean;
+    birthDate: boolean;
+    phone: boolean;
+  };
 
   setProfileField: <K extends keyof ProfileFormState>(
     key: K,

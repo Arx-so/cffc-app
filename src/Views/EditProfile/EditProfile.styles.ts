@@ -124,6 +124,9 @@ export const styles = StyleSheet.create({
     color: Brand.white,
     fontSize: 15,
   },
+  inputError: {
+    borderColor: Brand.error,
+  },
   row: {
     flexDirection: "row",
     gap: 12,

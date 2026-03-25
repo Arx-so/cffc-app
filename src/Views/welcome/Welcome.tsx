@@ -3,6 +3,7 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { authStyles as A } from "@/styles/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -15,6 +16,7 @@ import { styles as S } from "./Welcome.styles";
 import { useWelcome } from "./useWelcome";
 
 const Welcome = () => {
+  const { t } = useTranslation();
   const { onLoginPress, onSignupPress } = useWelcome();
   const { onGoogleSignIn, isLoading: googleLoading } = useGoogleAuth();
 
@@ -27,14 +29,15 @@ const Welcome = () => {
           <Ionicons name="football" size={36} color={Brand.green} />
         </View>
 
-        <Text style={A.heroSubtitle}>JUNTE-SE À ELITE</Text>
+        <Text style={A.heroSubtitle}>{t("welcome.heroSubtitle")}</Text>
         <Text style={A.heroTitle}>
-          ENTRE NO{"\n"}
-          <Text style={A.heroTitleGreen}>GRAMADO{"\n"}DIGITAL</Text>
+          {t("welcome.heroTitlePrefix")}
+          {"\n"}
+          <Text style={A.heroTitleGreen}>{t("welcome.heroTitleHighlight")}</Text>
         </Text>
 
         <Text style={S.tagline}>
-          A plataforma que conecta atletas, profissionais e clubes de futebol.
+          {t("welcome.tagline")}
         </Text>
 
         <View style={S.dots}>
@@ -50,7 +53,7 @@ const Welcome = () => {
           onPress={onLoginPress}
           activeOpacity={0.85}
         >
-          <Text style={S.primaryButtonText}>ENTRAR →</Text>
+          <Text style={S.primaryButtonText}>{t("welcome.signIn")} →</Text>
         </TouchableOpacity>
 
         {/* Google sign-in */}
@@ -70,7 +73,7 @@ const Welcome = () => {
                 color="#fff"
                 style={{ marginRight: 10 }}
               />
-              <Text style={ls.googleButtonText}>Continuar com Google</Text>
+              <Text style={ls.googleButtonText}>{t("welcome.googleButton")}</Text>
             </>
           )}
         </TouchableOpacity>
@@ -81,8 +84,8 @@ const Welcome = () => {
           activeOpacity={0.75}
         >
           <Text style={S.secondaryButtonText}>
-            Não tem conta?{" "}
-            <Text style={S.secondaryButtonHighlight}>CRIAR CONTA</Text>
+            {`${t("welcome.noAccountPrefix")} `}
+            <Text style={S.secondaryButtonHighlight}>{t("auth.createAccount")}</Text>
           </Text>
         </TouchableOpacity>
       </View>
