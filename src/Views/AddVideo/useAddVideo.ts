@@ -82,7 +82,8 @@ export const useAddVideo = (): UseAddVideoReturn => {
     },
     onSuccess: () => {
       isSavedRef.current = true;
-      queryClient.invalidateQueries({ queryKey: ["profile-videos", userId] });
+      queryClient.invalidateQueries({ queryKey: ["profileVideos", userId] });
+      queryClient.invalidateQueries({ queryKey: ["profile", userId] });
       Toast.show({ type: "success", text1: t("addVideo.successMessage") });
       router.back();
     },
