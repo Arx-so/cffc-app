@@ -138,6 +138,17 @@ const RootLayoutNav = () => {
         }}
       />
       <Stack.Screen
+        name="visitor-profile"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
+      <Stack.Screen
+        name="user-feed"
+        options={{ headerShown: false, presentation: "fullScreenModal" }}
+      />
+      <Stack.Screen
         name="settings"
         options={{
           headerShown: true,

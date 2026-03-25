@@ -17,7 +17,7 @@ import { styles } from "./Search.styles";
 
 export function Search() {
   const { t } = useTranslation();
-  const { query, setQuery, athletes, isLoading, isError, refetch, openFilter, hasActiveFilters } = useSearch();
+  const { query, setQuery, athletes, isLoading, isError, refetch, openFilter, hasActiveFilters, handleViewProfile } = useSearch();
 
   return (
     <View style={styles.container}>
@@ -67,7 +67,12 @@ export function Search() {
           data={athletes}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
-          renderItem={({ item }) => <AthleteSearchCard athlete={item} />}
+          renderItem={({ item }) => (
+              <AthleteSearchCard
+                athlete={item}
+                onViewProfile={() => handleViewProfile(item)}
+              />
+            )}
           ListEmptyComponent={
             <View style={styles.centered}>
               <Text style={styles.emptyText}>{t("search.noResults")}</Text>

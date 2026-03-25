@@ -73,6 +73,7 @@ export default {
     noVideosTitle: "No videos yet",
     noVideosHint: "Show your highlights to scouts and clubs",
     addFirstVideo: "Add your first video",
+    noVideosVisitor: "This athlete hasn't uploaded any videos yet",
   },
   editProfile: {
     title: "EDIT PROFILE",
@@ -163,6 +164,13 @@ export default {
     loadError: "Could not load the feed right now",
     emptyTitle: "No videos yet",
     emptySubtitle: "As soon as athletes post videos, they will appear here",
+  },
+  userFeed: {
+    loading: "Loading videos...",
+    loadError: "Could not load videos right now",
+    emptyTitle: "No videos yet",
+    emptySubtitle: "This athlete hasn't posted any videos",
+    headerTitle: "Videos",
   },
   tabs: {
     home: "Home",

@@ -252,7 +252,7 @@ export async function searchAthletes(
 
   let profileQuery = supabase
     .from("profile")
-    .select("id, name, avatar_url, verified")
+    .select("id, name, username, avatar_url, verified")
     .eq("role", "athlete");
 
   if (user) {
@@ -357,6 +357,7 @@ export async function searchAthletes(
       return {
         id: p.id,
         name: p.name ?? "",
+        username: p.username ?? null,
         avatarUrl,
         verified: p.verified ?? false,
         positions: positionsMap.get(p.id) ?? [],

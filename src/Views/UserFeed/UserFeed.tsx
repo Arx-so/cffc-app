@@ -1,6 +1,5 @@
 import { Brand } from "@/constants/theme";
 import { FeedVideo } from "@/processes/types/feedTypes";
-import { useAuthStore } from "@/stores/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useEvent } from "expo";
@@ -9,25 +8,31 @@ import { VideoView, useVideoPlayer } from "expo-video";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ListRenderItemInfo, Pressable, TouchableOpacity, useWindowDimensions, View } from "react-native";
-import { styles } from "./HomeFeed.styles";
-import { useHomeFeed } from "./useHomeFeed";
+import {
+  FlatList,
+  ListRenderItemInfo,
+  Pressable,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { styles } from "./UserFeed.styles";
+import { useUserFeed } from "./useUserFeed";
+import { UserFeedProps } from "./UserFeed.types";
 
-interface FeedVideoSlideProps {
+interface UserFeedVideoSlideProps {
   video: FeedVideo;
   isActive: boolean;
   isScreenFocused: boolean;
   height: number;
-  onUsernamePress: () => void;
 }
 
-const FeedVideoSlide = ({
+const UserFeedVideoSlide = ({
   video,
   isActive,
   isScreenFocused,
   height,
-  onUsernamePress,
-}: FeedVideoSlideProps) => {
+}: UserFeedVideoSlideProps) => {
   const player = useVideoPlayer(video.url, (currentPlayer) => {
     currentPlayer.loop = true;
     currentPlayer.timeUpdateEventInterval = 0.25;
@@ -58,7 +63,6 @@ const FeedVideoSlide = ({
       player.play();
       return;
     }
-
     player.pause();
   }, [shouldPlay, isManuallyPaused, player]);
 
@@ -75,13 +79,16 @@ const FeedVideoSlide = ({
 
   const isVideoLoading =
     status === "idle" || status === "loading" || !hasRenderedFirstFrame;
-  const progress = duration > 0 ? Math.min(Math.max(currentTime / duration, 0), 1) : 0;
+  const progress =
+    duration > 0 ? Math.min(Math.max(currentTime / duration, 0), 1) : 0;
 
   const handleSeek = useCallback(
     (locationX: number) => {
       if (duration <= 0 || progressTrackWidth <= 0) return;
-
-      const nextProgress = Math.min(Math.max(locationX / progressTrackWidth, 0), 1);
+      const nextProgress = Math.min(
+        Math.max(locationX / progressTrackWidth, 0),
+        1
+      );
       player.currentTime = nextProgress * duration;
     },
     [duration, progressTrackWidth, player]
@@ -117,64 +124,65 @@ const FeedVideoSlide = ({
         {isManuallyPaused && !isVideoLoading && (
           <View style={styles.centerIconWrapper} pointerEvents="none">
             <View style={styles.centerIconBackground}>
-              <Ionicons name="play" size={30} color={Brand.white} style={styles.centerIcon} />
+              <Ionicons
+                name="play"
+                size={30}
+                color={Brand.white}
+                style={styles.centerIcon}
+              />
             </View>
           </View>
         )}
-        {(!!video.username || !!video.title) && (
+        {!!video.title && (
           <View style={styles.captionContainer}>
-            {!!video.username && (
-              <TouchableOpacity onPress={onUsernamePress} activeOpacity={0.7}>
-                <Text category="h6" style={styles.usernameText}>
-                  @{video.username}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {!!video.title && (
-              <Text category="s1" style={styles.captionText}>
-                {video.title}
-              </Text>
-            )}
+            <Text category="s1" style={styles.captionText}>
+              {video.title}
+            </Text>
           </View>
         )}
       </Pressable>
       <View
         style={styles.progressTrack}
-        onLayout={(event) => setProgressTrackWidth(event.nativeEvent.layout.width)}
+        onLayout={(event) =>
+          setProgressTrackWidth(event.nativeEvent.layout.width)
+        }
         onStartShouldSetResponder={() => true}
         onMoveShouldSetResponder={() => true}
         onResponderGrant={(event) => handleSeek(event.nativeEvent.locationX)}
         onResponderMove={(event) => handleSeek(event.nativeEvent.locationX)}
       >
         <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
-        <View style={[styles.progressThumb, { left: `${progress * 100}%` }]} />
+        <View
+          style={[styles.progressThumb, { left: `${progress * 100}%` }]}
+        />
       </View>
     </View>
   );
 };
 
-const HomeFeed = () => {
+export const UserFeed = ({ userId, username, initialIndex }: UserFeedProps) => {
   const { t } = useTranslation();
   const { height } = useWindowDimensions();
   const isScreenFocused = useIsFocused();
-  const currentUserId = useAuthStore((state) => state.user?.id);
+  const insets = useSafeAreaInsets();
   const {
     videos,
     isLoading,
     isRefetching,
     hasError,
     activeIndex,
+    listRef,
     handleRetry,
     handleRefresh,
     onViewableItemsChanged,
     viewabilityConfig,
-  } = useHomeFeed();
+  } = useUserFeed({ userId, initialIndex });
 
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <Spinner status="primary" />
-        <Text style={styles.loadingText}>{t("homeFeed.loading")}</Text>
+        <Text style={styles.loadingText}>{t("userFeed.loading")}</Text>
       </View>
     );
   }
@@ -183,7 +191,7 @@ const HomeFeed = () => {
     return (
       <View style={styles.errorContainer}>
         <Text category="s1" style={styles.errorText}>
-          {t("homeFeed.loadError")}
+          {t("userFeed.loadError")}
         </Text>
         <Button size="small" onPress={handleRetry}>
           {t("common.retry")}
@@ -196,63 +204,77 @@ const HomeFeed = () => {
     return (
       <View style={styles.emptyContainer}>
         <Text category="h6" style={styles.emptyTitle}>
-          {t("homeFeed.emptyTitle")}
+          {t("userFeed.emptyTitle")}
         </Text>
         <Text category="s1" style={styles.emptySubtitle}>
-          {t("homeFeed.emptySubtitle")}
+          {t("userFeed.emptySubtitle")}
         </Text>
       </View>
     );
   }
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<FeedVideo>) => {
-    const isOwnVideo = item.athleteUserId === currentUserId;
-    const handleUsernamePress = isOwnVideo
-      ? () => router.push("/(athlete)/profile" as any)
-      : () =>
-          router.push(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            `/visitor-profile?userId=${item.athleteUserId}&username=${encodeURIComponent(item.username ?? "")}&name=` as any
-          );
-
-    return (
-      <FeedVideoSlide
-        video={item}
-        isActive={index === activeIndex}
-        isScreenFocused={isScreenFocused}
-        height={height}
-        onUsernamePress={handleUsernamePress}
-      />
-    );
-  };
+  const renderItem = ({ item, index }: ListRenderItemInfo<FeedVideo>) => (
+    <UserFeedVideoSlide
+      video={item}
+      isActive={index === activeIndex}
+      isScreenFocused={isScreenFocused}
+      height={height}
+    />
+  );
 
   return (
-    <FlatList
-      data={videos}
-      extraData={activeIndex}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      pagingEnabled
-      snapToInterval={height}
-      decelerationRate="fast"
-      showsVerticalScrollIndicator={false}
-      style={styles.container}
-      onViewableItemsChanged={onViewableItemsChanged}
-      viewabilityConfig={viewabilityConfig}
-      onRefresh={handleRefresh}
-      refreshing={isRefetching && !isLoading}
-      getItemLayout={(_, index) => ({
-        length: height,
-        offset: height * index,
-        index,
-      })}
-      initialNumToRender={2}
-      maxToRenderPerBatch={2}
-      windowSize={3}
-      removeClippedSubviews
-      contentContainerStyle={{ backgroundColor: Brand.bg }}
-    />
+    <View style={styles.container}>
+      <FlatList
+        ref={listRef}
+        data={videos}
+        extraData={activeIndex}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        pagingEnabled
+        snapToInterval={height}
+        decelerationRate="fast"
+        showsVerticalScrollIndicator={false}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        onRefresh={handleRefresh}
+        refreshing={isRefetching && !isLoading}
+        getItemLayout={(_, index) => ({
+          length: height,
+          offset: height * index,
+          index,
+        })}
+        initialNumToRender={2}
+        maxToRenderPerBatch={2}
+        windowSize={3}
+        removeClippedSubviews
+        contentContainerStyle={{ backgroundColor: Brand.bg }}
+        onScrollToIndexFailed={(info) => {
+          const wait = new Promise((resolve) => setTimeout(resolve, 500));
+          wait.then(() => {
+            listRef.current?.scrollToIndex({
+              index: info.index,
+              animated: false,
+            });
+          });
+        }}
+      />
+      <View
+        style={[styles.headerOverlay, { paddingTop: insets.top + 8 }]}
+        pointerEvents="box-none"
+      >
+        <Pressable
+          style={styles.headerBackButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color={Brand.white} />
+        </Pressable>
+        <Text category="s1" style={styles.headerTitle}>
+          {username ? `@${username}` : t("userFeed.headerTitle")}
+        </Text>
+        <View style={styles.headerSpacer} />
+      </View>
+    </View>
   );
 };
 
-export default HomeFeed;
+export default UserFeed;

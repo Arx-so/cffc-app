@@ -73,6 +73,7 @@ export default {
     noVideosTitle: 'まだ動画がありません',
     noVideosHint: 'スカウトやクラブにハイライトを見せましょう',
     addFirstVideo: '最初の動画を追加する',
+    noVideosVisitor: 'このアスリートはまだ動画を登録していません',
   },
   editProfile: {
     title: 'プロフィール編集',
@@ -163,6 +164,13 @@ export default {
     loadError: '現在フィードを読み込めません',
     emptyTitle: 'まだ動画がありません',
     emptySubtitle: '選手が動画を投稿すると、ここに表示されます',
+  },
+  userFeed: {
+    loading: '動画を読み込み中...',
+    loadError: '現在動画を読み込めません',
+    emptyTitle: 'まだ動画がありません',
+    emptySubtitle: 'この選手はまだ動画を投稿していません',
+    headerTitle: '動画',
   },
   tabs: {
     home: 'ホーム',

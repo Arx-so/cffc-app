@@ -32,7 +32,7 @@ export const VideosSection = ({
         </Text>
       </View>
 
-      {isOwnProfile && isEmpty ? (
+      {isEmpty && isOwnProfile ? (
         <View style={styles.emptyState}>
           <Icon
             name="video-outline"
@@ -53,6 +53,17 @@ export const VideosSection = ({
           >
             {t("profile.addFirstVideo")}
           </Button>
+        </View>
+      ) : isEmpty ? (
+        <View style={styles.emptyState}>
+          <Icon
+            name="video-outline"
+            fill={theme["color-basic-600"]}
+            style={styles.emptyIcon}
+          />
+          <Text category="s1" appearance="hint" style={styles.emptyTitle}>
+            {t("profile.noVideosVisitor")}
+          </Text>
         </View>
       ) : (
         <View style={styles.grid}>

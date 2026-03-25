@@ -1,13 +1,13 @@
 import { useState, useCallback } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useFocusEffect, useRouter } from "expo-router";
 import { searchAthletes } from "@/processes/profile";
+import { AthleteSearchResult } from "@/processes/types/profileTypes";
 import { useSearchFilterStore } from "@/stores/searchFilterStore";
 import { UseSearchReturn } from "./Search.types";
 
 export function useSearch(): UseSearchReturn {
   const [query, setQuery] = useState("");
-  const queryClient = useQueryClient();
   const router = useRouter();
   const store = useSearchFilterStore();
   const filters = {
@@ -23,21 +23,30 @@ export function useSearch(): UseSearchReturn {
   useFocusEffect(
     useCallback(() => {
       setQuery("");
-      queryClient.resetQueries({ queryKey: ["search-athletes"] });
-    }, [queryClient])
+    }, [])
   );
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["search-athletes", query, filters],
     queryFn: () => searchAthletes(query, filters),
-    gcTime: 0,
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const openFilter = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     router.push("/search-filter" as any);
   };
+
+  const handleViewProfile = useCallback(
+    (athlete: AthleteSearchResult) => {
+      router.push(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        `/visitor-profile?userId=${athlete.id}&username=${encodeURIComponent(athlete.username ?? "")}&name=${encodeURIComponent(athlete.name)}` as any
+      );
+    },
+    [router]
+  );
 
   return {
     query,
@@ -48,5 +57,6 @@ export function useSearch(): UseSearchReturn {
     refetch,
     openFilter,
     hasActiveFilters: store.hasActiveFilters(),
+    handleViewProfile,
   };
 }

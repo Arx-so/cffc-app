@@ -1,22 +1,16 @@
-import { VideosSection } from "@/components/VideosSection";
 import { ProfileHeader } from "@/components/ProfileHeader";
+import { VideosSection } from "@/components/VideosSection";
 import { Brand } from "@/constants/theme";
 import { Layout, Spinner, Text } from "@ui-kitten/components";
-import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { styles } from "./Profile.styles";
-import { useProfile } from "./useProfile";
+import { styles } from "./VisitorProfile.styles";
+import { VisitorProfileProps } from "./VisitorProfile.types";
+import { useVisitorProfile } from "./useVisitorProfile";
 
-const Profile = () => {
-  const {
-    profileData,
-    videos,
-    isLoading,
-    isError,
-    handleAddVideoPress,
-    handleVideoPress,
-  } = useProfile();
+const VisitorProfile = ({ userId, username }: VisitorProfileProps) => {
+  const { profileData, videos, isLoading, isError, handleVideoPress } =
+    useVisitorProfile(userId, username);
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -40,14 +34,12 @@ const Profile = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileHeader
           profile={profileData}
-          isOwnProfile={true}
-          viewerRole={profileData.role}
-          onEditProfilePress={() => router.push("/edit-profile")}
+          isOwnProfile={false}
+          viewerRole="athlete"
         />
         <VideosSection
           videos={videos}
-          isOwnProfile={true}
-          onAddPress={handleAddVideoPress}
+          isOwnProfile={false}
           onVideoPress={handleVideoPress}
         />
       </ScrollView>
@@ -55,4 +47,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default VisitorProfile;

@@ -77,6 +77,7 @@ export default {
     noVideosTitle: 'Nenhum vídeo ainda',
     noVideosHint: 'Mostre seus melhores momentos para scouts e clubes',
     addFirstVideo: 'Adicione seu primeiro vídeo',
+    noVideosVisitor: 'Este atleta ainda não cadastrou nenhum vídeo',
   },
   editProfile: {
     title: 'EDITAR PERFIL',
@@ -167,6 +168,13 @@ export default {
     loadError: 'Não foi possível carregar o feed agora',
     emptyTitle: 'Ainda não há vídeos',
     emptySubtitle: 'Assim que os atletas postarem vídeos, eles aparecerão aqui',
+  },
+  userFeed: {
+    loading: 'Carregando vídeos...',
+    loadError: 'Não foi possível carregar os vídeos agora',
+    emptyTitle: 'Nenhum vídeo ainda',
+    emptySubtitle: 'Este atleta ainda não postou vídeos',
+    headerTitle: 'Vídeos',
   },
   tabs: {
     home: 'Início',

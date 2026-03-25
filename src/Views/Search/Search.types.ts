@@ -9,4 +9,5 @@ export interface UseSearchReturn {
   refetch: () => void;
   openFilter: () => void;
   hasActiveFilters: boolean;
+  handleViewProfile: (athlete: AthleteSearchResult) => void;
 }

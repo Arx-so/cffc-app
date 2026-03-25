@@ -62,6 +62,7 @@ export interface ProfileData {
 export interface AthleteSearchResult {
   id: string;
   name: string;
+  username: string | null;
   avatarUrl: string | null;
   verified: boolean;
   positions: string[];

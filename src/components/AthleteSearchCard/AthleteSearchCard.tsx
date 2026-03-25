@@ -13,7 +13,7 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-export function AthleteSearchCard({ athlete }: AthleteSearchCardProps) {
+export function AthleteSearchCard({ athlete, onViewProfile }: AthleteSearchCardProps) {
   const { t } = useTranslation();
   const position = athlete.positions[0] ?? "";
 
@@ -61,7 +61,7 @@ export function AthleteSearchCard({ athlete }: AthleteSearchCardProps) {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.viewProfileButton} activeOpacity={0.8}>
+      <TouchableOpacity style={styles.viewProfileButton} activeOpacity={0.8} onPress={onViewProfile}>
         <Text style={styles.viewProfileText}>{t("search.viewProfile")}</Text>
       </TouchableOpacity>
     </View>

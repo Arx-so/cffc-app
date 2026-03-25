@@ -81,6 +81,15 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="add-videos/index"
+        options={{
+          title: t("tabs.addVideos"),
+          tabBarButton: (props) => (
+            <TabBarButton {...props} isAddTab onPress={handleAddVideoPress} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="home/index"
         options={{
           title: t("tabs.home"),
@@ -111,27 +120,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="add-videos/index"
-        options={{
-          title: t("tabs.addVideos"),
-          tabBarButton: (props) => (
-            <TabBarButton {...props} isAddTab onPress={handleAddVideoPress} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="favorites/index"
         options={{
-          title: t("tabs.favorites"),
-          tabBarLabel: t("tabs.favorites"),
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? "heart" : "heart-outline"}
-              size={22}
-              color={color}
-            />
-          ),
-          tabBarButton: (props) => <TabBarButton {...props} />,
+          href: null,
         }}
       />
       <Tabs.Screen

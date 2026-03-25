@@ -3,13 +3,15 @@ import {
   ProfileVideo,
 } from "@/processes/types/profileTypes";
 
-export interface ProfileProps {}
+export interface VisitorProfileProps {
+  userId: string;
+  username: string | null;
+}
 
-export interface UseProfileReturn {
+export interface UseVisitorProfileReturn {
   profileData: AthleteProfileHeader | null;
   videos: ProfileVideo[];
   isLoading: boolean;
   isError: boolean;
-  handleAddVideoPress: () => Promise<void>;
   handleVideoPress: (item: ProfileVideo) => void;
 }
