@@ -2,10 +2,12 @@ import { login } from "@/processes/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import { UseLoginReturn } from "./Login.types";
 
 export const useLogin = (): UseLoginReturn => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const signIn = useAuthStore((state) => state.signIn);
@@ -17,7 +19,7 @@ export const useLogin = (): UseLoginReturn => {
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : 'Login failed. Please try again.';
+        error instanceof Error ? error.message : t("login.toasts.loginFailed");
 
       // Show the real error message (helps with debugging auth issues).
       console.error('Login error:', error);
@@ -34,7 +36,7 @@ export const useLogin = (): UseLoginReturn => {
     if (!email.trim() || !password) {
       Toast.show({
         type: "error",
-        text1: "Please enter your email and password.",
+        text1: t("login.toasts.missingCredentials"),
         autoHide: true,
       });
       return;
@@ -44,7 +46,7 @@ export const useLogin = (): UseLoginReturn => {
       email: email.trim().toLowerCase(),
       password,
     });
-  }, [email, password, loginMutation]);
+  }, [email, password, loginMutation, t]);
 
   return {
     email,

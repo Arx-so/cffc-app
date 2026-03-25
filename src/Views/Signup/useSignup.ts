@@ -1,11 +1,15 @@
 import { signup } from "@/processes/auth";
+import { ClubHistoryEntry } from "@/processes/types/profileTypes";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import { UseSignupReturn } from "./Signup.types";
 
 type ProfileRole = 'athlete' | 'pro' | 'club';
+type AthleteFoot = "right" | "left" | "both";
+type AthleteContactVisibility = "clubs_agents" | "public";
 
 // Auto-insert slashes so the user sees DD/MM/YYYY while typing digits.
 const formatBirthDateInput = (raw: string): string => {
@@ -45,7 +49,15 @@ const toYYYYMMDD = (date: Date): string => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
+const parseCommaSeparatedItems = (value: string): string[] => {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
 export const useSignup = (): UseSignupReturn => {
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -54,6 +66,29 @@ export const useSignup = (): UseSignupReturn => {
   const [selectedRole, setSelectedRole] = useState<ProfileRole | null>(null);
   const [birthDateText, setBirthDateText] = useState("");
   const [guardianEmail, setGuardianEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [phone, setPhone] = useState("");
+  const [athleteHeight, setAthleteHeight] = useState("");
+  const [athleteWeight, setAthleteWeight] = useState("");
+  const [athleteDominantFoot, setAthleteDominantFoot] =
+    useState<AthleteFoot | null>(null);
+  const [athletePositionsText, setAthletePositionsText] = useState("");
+  const [athleteStrengthsText, setAthleteStrengthsText] = useState("");
+  const [athleteCurrentCategory, setAthleteCurrentCategory] = useState("");
+  const [athleteAvailability, setAthleteAvailability] = useState("");
+  const [athleteIsSearchable, setAthleteIsSearchable] = useState(true);
+  const [athleteContactVisibility, setAthleteContactVisibility] =
+    useState<AthleteContactVisibility>("clubs_agents");
+  const [athleteClubHistory, setAthleteClubHistory] = useState<ClubHistoryEntry[]>(
+    []
+  );
+  const [athleteClubDraft, setAthleteClubDraft] = useState<ClubHistoryEntry>({
+    club: "",
+    category: "",
+    start: "",
+    end: "",
+  });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
@@ -66,13 +101,26 @@ export const useSignup = (): UseSignupReturn => {
       role: ProfileRole;
       birthDate: string; // YYYY-MM-DD
       guardianEmail?: string;
+      city?: string;
+      state?: string;
+      phone?: string;
+      athleteHeight?: number;
+      athleteWeight?: number;
+      athleteDominantFoot?: AthleteFoot;
+      athletePositions?: string[];
+      athleteStrengths?: string[];
+      athleteCurrentCategory?: string;
+      athleteAvailability?: string;
+      athleteClubHistory?: ClubHistoryEntry[];
+      athleteIsSearchable?: boolean;
+      athleteContactVisibility?: AthleteContactVisibility;
     }) => signup(body),
     onSuccess: () => {
       router.replace('/login');
       Toast.show({
         type: 'success',
-        text1: 'Conta criada com sucesso! 🎉',
-        text2: 'Confirme seu e-mail antes de entrar.',
+        text1: t("signup.toasts.accountCreated"),
+        text2: t("signup.toasts.confirmEmail"),
         visibilityTime: 6000,
         autoHide: true,
       });
@@ -81,7 +129,7 @@ export const useSignup = (): UseSignupReturn => {
       const message =
         error instanceof Error
           ? error.message
-          : "Falha ao criar conta. Tente novamente.";
+          : t("signup.toasts.createError");
 
       const isConfirmationEmailError = message
         .toLowerCase()
@@ -90,10 +138,10 @@ export const useSignup = (): UseSignupReturn => {
       Toast.show({
         type: "error",
         text1: isConfirmationEmailError
-          ? "Não foi possível enviar o e-mail de confirmação."
-          : "Falha ao criar conta. Tente novamente.",
+          ? t("signup.toasts.confirmationEmailError")
+          : t("signup.toasts.createError"),
         text2: isConfirmationEmailError
-          ? "Verifique SMTP/Auth no projeto Supabase."
+          ? t("signup.toasts.smtpCheck")
           : undefined,
         autoHide: true,
       });
@@ -115,39 +163,73 @@ export const useSignup = (): UseSignupReturn => {
     return getAgeInYears(parsedBirthDate) < 18;
   }, [parsedBirthDate]);
 
+  const onAddAthleteClub = useCallback(() => {
+    const trimmedClub = athleteClubDraft.club.trim();
+    if (!trimmedClub) return;
+    setAthleteClubHistory((prev) => [
+      ...prev,
+      {
+        club: trimmedClub,
+        category: athleteClubDraft.category.trim(),
+        start: athleteClubDraft.start.trim(),
+        end: athleteClubDraft.end.trim(),
+      },
+    ]);
+    setAthleteClubDraft({
+      club: "",
+      category: "",
+      start: "",
+      end: "",
+    });
+  }, [athleteClubDraft]);
+
+  const onRemoveAthleteClub = useCallback((index: number) => {
+    setAthleteClubHistory((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
   const onSignupPress = useCallback(async () => {
-    if (!fullName.trim() || !username.trim() || !email.trim() || !password || !confirmPassword) {
-      Toast.show({ type: "error", text1: "Preencha todos os campos obrigatórios.", autoHide: true });
+    if (
+      !fullName.trim() ||
+      !username.trim() ||
+      !email.trim() ||
+      !password ||
+      !confirmPassword ||
+      !city.trim() ||
+      !state.trim() ||
+      !phone.trim()
+    ) {
+      Toast.show({ type: "error", text1: t("signup.toasts.requiredFields"), autoHide: true });
       return;
     }
 
     if (!selectedRole) {
-      Toast.show({ type: "error", text1: "Selecione um tipo de perfil.", autoHide: true });
+      Toast.show({ type: "error", text1: t("signup.toasts.selectProfileType"), autoHide: true });
       return;
     }
 
     if (!parsedBirthDate) {
-      Toast.show({ type: "error", text1: "Data de nascimento inválida. Use DD/MM/AAAA.", autoHide: true });
+      Toast.show({ type: "error", text1: t("signup.toasts.invalidBirthDate"), autoHide: true });
       return;
     }
 
     if (password !== confirmPassword) {
-      Toast.show({ type: "error", text1: "As senhas não coincidem.", autoHide: true });
+      Toast.show({ type: "error", text1: t("signup.toasts.passwordMismatch"), autoHide: true });
       return;
     }
 
     if (!acceptedTerms || !acceptedPrivacy) {
-      Toast.show({ type: "error", text1: "Aceite os Termos de Uso e a Política de Privacidade.", autoHide: true });
+      Toast.show({ type: "error", text1: t("signup.toasts.acceptTermsPrivacy"), autoHide: true });
       return;
     }
 
     const guardianEmailValue = guardianEmail.trim();
     if (isMinor && !guardianEmailValue) {
-      Toast.show({ type: "error", text1: "Informe o e-mail do responsável.", autoHide: true });
+      Toast.show({ type: "error", text1: t("signup.toasts.guardianEmailRequired"), autoHide: true });
       return;
     }
 
     try {
+      const isAthlete = selectedRole === "athlete";
       await signupMutation.mutateAsync({
         name: fullName.trim(),
         username: username.trim().replace(/^@+/, "").toLowerCase(),
@@ -156,6 +238,35 @@ export const useSignup = (): UseSignupReturn => {
         role: selectedRole,
         birthDate: toYYYYMMDD(parsedBirthDate),
         guardianEmail: isMinor ? guardianEmailValue : undefined,
+        city: city.trim() || undefined,
+        state: state.trim().toUpperCase() || undefined,
+        phone: phone.trim() || undefined,
+        athleteHeight:
+          isAthlete && athleteHeight.trim()
+            ? Number(athleteHeight.trim())
+            : undefined,
+        athleteWeight:
+          isAthlete && athleteWeight.trim()
+            ? Number(athleteWeight.trim())
+            : undefined,
+        athleteDominantFoot: isAthlete ? athleteDominantFoot ?? undefined : undefined,
+        athletePositions: isAthlete
+          ? parseCommaSeparatedItems(athletePositionsText)
+          : undefined,
+        athleteStrengths: isAthlete
+          ? parseCommaSeparatedItems(athleteStrengthsText)
+          : undefined,
+        athleteCurrentCategory: isAthlete
+          ? athleteCurrentCategory.trim() || undefined
+          : undefined,
+        athleteAvailability: isAthlete
+          ? athleteAvailability.trim() || undefined
+          : undefined,
+        athleteClubHistory: isAthlete ? athleteClubHistory : undefined,
+        athleteIsSearchable: isAthlete ? athleteIsSearchable : undefined,
+        athleteContactVisibility: isAthlete
+          ? athleteContactVisibility
+          : undefined,
       });
     } catch {
       // Error feedback is handled centrally in mutation onError.
@@ -166,12 +277,26 @@ export const useSignup = (): UseSignupReturn => {
     confirmPassword,
     email,
     fullName,
+    city,
+    state,
+    phone,
+    athleteAvailability,
+    athleteClubHistory,
+    athleteContactVisibility,
+    athleteCurrentCategory,
+    athleteDominantFoot,
+    athleteHeight,
+    athleteIsSearchable,
+    athletePositionsText,
+    athleteStrengthsText,
+    athleteWeight,
     guardianEmail,
     isMinor,
     parsedBirthDate,
     password,
     selectedRole,
     signupMutation,
+    t,
     username,
   ]);
 
@@ -188,6 +313,20 @@ export const useSignup = (): UseSignupReturn => {
     selectedRole,
     birthDateText,
     guardianEmail,
+    city,
+    state,
+    phone,
+    athleteHeight,
+    athleteWeight,
+    athleteDominantFoot,
+    athletePositionsText,
+    athleteStrengthsText,
+    athleteCurrentCategory,
+    athleteAvailability,
+    athleteClubHistory,
+    athleteIsSearchable,
+    athleteContactVisibility,
+    athleteClubDraft,
     acceptedTerms,
     acceptedPrivacy,
     isMinor,
@@ -199,6 +338,21 @@ export const useSignup = (): UseSignupReturn => {
     setSelectedRole,
     onBirthDateChange,
     setGuardianEmail,
+    setCity,
+    setState,
+    setPhone,
+    setAthleteHeight,
+    setAthleteWeight,
+    setAthleteDominantFoot,
+    setAthletePositionsText,
+    setAthleteStrengthsText,
+    setAthleteCurrentCategory,
+    setAthleteAvailability,
+    setAthleteIsSearchable,
+    setAthleteContactVisibility,
+    setAthleteClubDraft,
+    onAddAthleteClub,
+    onRemoveAthleteClub,
     setAcceptedTerms,
     setAcceptedPrivacy,
     onSignupPress,
