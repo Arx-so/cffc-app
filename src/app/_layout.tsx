@@ -100,10 +100,22 @@ const RootLayoutNav = () => {
       <Stack.Screen name="index" options={{ headerShown: false, title: "" }} />
       <Stack.Screen name="login" options={{ headerBackTitle: "" }} />
       <Stack.Screen name="signup" options={{ headerBackTitle: "" }} />
-      <Stack.Screen name="(athlete)" options={{ headerShown: false }} />
-      <Stack.Screen name="(pro)" options={{ headerShown: false }} />
-      <Stack.Screen name="(club)" options={{ headerShown: false }} />
-      <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(athlete)"
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="(pro)"
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="(club)"
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen
+        name="(admin)"
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
       <Stack.Screen
         name="edit-profile"
         options={{

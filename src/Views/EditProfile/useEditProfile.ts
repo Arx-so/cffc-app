@@ -244,13 +244,28 @@ export const useEditProfile = (): UseEditProfileReturn => {
       Toast.show({ type: "success", text1: t("editProfile.profileUpdated") });
       router.back();
     },
-    onError: () => {
-      Toast.show({ type: "error", text1: t("editProfile.saveError") });
+    onError: (error: unknown) => {
+      const isPolicyRecursionError =
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as { code?: string }).code === "42P17";
+
+      Toast.show({
+        type: "error",
+        text1: isPolicyRecursionError
+          ? "Erro de permissão no banco (policy profile)."
+          : t("editProfile.saveError"),
+      });
     },
   });
 
   const handleSave = useCallback(async () => {
-    await saveMutation.mutateAsync();
+    try {
+      await saveMutation.mutateAsync();
+    } catch {
+      // Error feedback is handled in mutation onError.
+    }
   }, [saveMutation]);
 
   const hasUnsavedChanges = useCallback((): boolean => {

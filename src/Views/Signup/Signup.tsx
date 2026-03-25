@@ -33,6 +33,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const Signup = () => {
   const {
     fullName,
+    username,
     email,
     password,
     confirmPassword,
@@ -43,6 +44,7 @@ const Signup = () => {
     acceptedPrivacy,
     isMinor,
     setFullName,
+    setUsername,
     setEmail,
     setPassword,
     setConfirmPassword,
@@ -131,6 +133,18 @@ const Signup = () => {
           placeholder="Seu nome de craque"
           placeholderTextColor="#444"
           autoCapitalize="words"
+          editable={!isLoading}
+        />
+
+        {/* ── Username ── */}
+        <Text style={A.fieldLabel}>USERNAME</Text>
+        <TextInput
+          style={A.input}
+          value={username}
+          onChangeText={setUsername}
+          placeholder="@username"
+          placeholderTextColor="#444"
+          autoCapitalize="none"
           editable={!isLoading}
         />
 
