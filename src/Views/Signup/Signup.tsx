@@ -81,7 +81,7 @@ const Signup = () => {
     setGuardianEmail,
     setCity,
     setState,
-    setPhone,
+    onPhoneChange,
     setAthleteHeight,
     setAthleteWeight,
     setAthleteDominantFoot,
@@ -103,6 +103,9 @@ const Signup = () => {
 
   const [emailTouched, setEmailTouched] = useState(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [isAthleteDataExpanded, setIsAthleteDataExpanded] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const emailError =
     emailTouched && email.length > 0 && !EMAIL_REGEX.test(email);
   const canPressCreateAccount = acceptedTerms && acceptedPrivacy;
@@ -230,29 +233,65 @@ const Signup = () => {
 
         {/* ── Password ── */}
         <Text style={A.fieldLabel}>{t("auth.password")}</Text>
-        <TextInput
-          style={[A.input, passwordError && A.inputError]}
-          value={password}
-          onChangeText={setPassword}
-          placeholder={t("auth.passwordPlaceholder")}
-          placeholderTextColor="#444"
-          secureTextEntry
-          autoCapitalize="none"
-          editable={!isLoading}
-        />
+        <View style={[S.passwordRow, passwordError && A.inputError]}>
+          <TextInput
+            style={S.passwordInput}
+            value={password}
+            onChangeText={setPassword}
+            placeholder={t("auth.passwordPlaceholder")}
+            placeholderTextColor="#444"
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="off"
+            textContentType="oneTimeCode"
+            importantForAutofill="no"
+            editable={!isLoading}
+          />
+          <TouchableOpacity
+            style={S.passwordEyeButton}
+            onPress={() => setShowPassword((prev) => !prev)}
+            activeOpacity={0.75}
+            disabled={isLoading}
+          >
+            <Ionicons
+              name={showPassword ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={Brand.gray}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* ── Confirm password ── */}
         <Text style={A.fieldLabel}>{t("auth.confirmPassword")}</Text>
-        <TextInput
-          style={[A.input, confirmPasswordError && A.inputError]}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          placeholder={t("auth.confirmPasswordPlaceholder")}
-          placeholderTextColor="#444"
-          secureTextEntry
-          autoCapitalize="none"
-          editable={!isLoading}
-        />
+        <View style={[S.passwordRow, confirmPasswordError && A.inputError]}>
+          <TextInput
+            style={S.passwordInput}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholder={t("auth.confirmPasswordPlaceholder")}
+            placeholderTextColor="#444"
+            secureTextEntry={!showConfirmPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="off"
+            textContentType="oneTimeCode"
+            importantForAutofill="no"
+            editable={!isLoading}
+          />
+          <TouchableOpacity
+            style={S.passwordEyeButton}
+            onPress={() => setShowConfirmPassword((prev) => !prev)}
+            activeOpacity={0.75}
+            disabled={isLoading}
+          >
+            <Ionicons
+              name={showConfirmPassword ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={Brand.gray}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* ── Date of birth ── */}
         <Text style={A.fieldLabel}>{t("editProfile.birthDate")}</Text>
@@ -304,7 +343,7 @@ const Signup = () => {
             <TextInput
               style={[A.input, phoneError && A.inputError]}
               value={phone}
-              onChangeText={setPhone}
+              onChangeText={onPhoneChange}
               placeholder={t("editProfile.phonePlaceholder")}
               placeholderTextColor="#444"
               editable={!isLoading}
@@ -316,243 +355,266 @@ const Signup = () => {
         {selectedRole === "athlete" && (
           <>
             <Text style={S.sectionTitle}>{t("signup.athleteDataTitle")}</Text>
+            <View style={S.expandableHeader}>
+              <TouchableOpacity
+                style={S.expandButton}
+                onPress={() => setIsAthleteDataExpanded((prev) => !prev)}
+                activeOpacity={0.75}
+              >
+                <Ionicons
+                  name={isAthleteDataExpanded ? "chevron-up-outline" : "chevron-down-outline"}
+                  size={16}
+                  color={Brand.green}
+                />
+                <Text style={S.expandButtonText}>
+                  {isAthleteDataExpanded
+                    ? t("signup.athleteDataCollapse")
+                    : t("signup.athleteDataExpand")}
+                </Text>
+              </TouchableOpacity>
+              <Text style={S.expandHintText}>{t("signup.athleteDataFillLaterHint")}</Text>
+            </View>
 
-            <View style={S.inlineRow}>
-              <View style={S.inlineItem}>
-                <Text style={A.fieldLabel}>{t("editProfile.heightCm")}</Text>
+            {isAthleteDataExpanded && (
+              <>
+                <View style={S.inlineRow}>
+                  <View style={S.inlineItem}>
+                    <Text style={A.fieldLabel}>{t("editProfile.heightCm")}</Text>
+                    <TextInput
+                      style={A.input}
+                      value={athleteHeight}
+                      onChangeText={setAthleteHeight}
+                      placeholder="185"
+                      placeholderTextColor="#444"
+                      editable={!isLoading}
+                      keyboardType="number-pad"
+                      maxLength={3}
+                    />
+                  </View>
+                  <View style={S.inlineItem}>
+                    <Text style={A.fieldLabel}>{t("editProfile.weightKg")}</Text>
+                    <TextInput
+                      style={A.input}
+                      value={athleteWeight}
+                      onChangeText={setAthleteWeight}
+                      placeholder="78"
+                      placeholderTextColor="#444"
+                      editable={!isLoading}
+                      keyboardType="number-pad"
+                      maxLength={3}
+                    />
+                  </View>
+                </View>
+
+                <Text style={A.fieldLabel}>{t("editProfile.dominantFoot")}</Text>
+                <View style={S.optionRow}>
+                  {FOOT_OPTIONS.map((option) => {
+                    const active = athleteDominantFoot === option.key;
+                    return (
+                      <TouchableOpacity
+                        key={option.key}
+                        style={[S.optionButton, active && S.optionButtonSelected]}
+                        onPress={() => setAthleteDominantFoot(option.key)}
+                        activeOpacity={0.75}
+                      >
+                        <Text
+                          style={[
+                            S.optionButtonText,
+                            active && S.optionButtonTextSelected,
+                          ]}
+                        >
+                          {t(option.labelKey)}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                <Text style={A.fieldLabel}>{t("signup.positionsCsvLabel")}</Text>
                 <TextInput
                   style={A.input}
-                  value={athleteHeight}
-                  onChangeText={setAthleteHeight}
-                  placeholder="185"
+                  value={athletePositionsText}
+                  onChangeText={setAthletePositionsText}
+                  placeholder={t("signup.positionsPlaceholder")}
                   placeholderTextColor="#444"
                   editable={!isLoading}
-                  keyboardType="number-pad"
-                  maxLength={3}
                 />
-              </View>
-              <View style={S.inlineItem}>
-                <Text style={A.fieldLabel}>{t("editProfile.weightKg")}</Text>
+
+                <Text style={A.fieldLabel}>{t("signup.strengthsCsvLabel")}</Text>
                 <TextInput
                   style={A.input}
-                  value={athleteWeight}
-                  onChangeText={setAthleteWeight}
-                  placeholder="78"
+                  value={athleteStrengthsText}
+                  onChangeText={setAthleteStrengthsText}
+                  placeholder={t("signup.strengthsPlaceholder")}
                   placeholderTextColor="#444"
                   editable={!isLoading}
-                  keyboardType="number-pad"
-                  maxLength={3}
                 />
-              </View>
-            </View>
 
-            <Text style={A.fieldLabel}>{t("editProfile.dominantFoot")}</Text>
-            <View style={S.optionRow}>
-              {FOOT_OPTIONS.map((option) => {
-                const active = athleteDominantFoot === option.key;
-                return (
-                  <TouchableOpacity
-                    key={option.key}
-                    style={[S.optionButton, active && S.optionButtonSelected]}
-                    onPress={() => setAthleteDominantFoot(option.key)}
-                    activeOpacity={0.75}
-                  >
-                    <Text
-                      style={[
-                        S.optionButtonText,
-                        active && S.optionButtonTextSelected,
-                      ]}
+                <Text style={A.fieldLabel}>{t("editProfile.currentCategory")}</Text>
+                <TextInput
+                  style={A.input}
+                  value={athleteCurrentCategory}
+                  onChangeText={setAthleteCurrentCategory}
+                  placeholder={t("editProfile.categoryPlaceholder")}
+                  placeholderTextColor="#444"
+                  editable={!isLoading}
+                />
+
+                <Text style={A.fieldLabel}>{t("editProfile.availability")}</Text>
+                <View style={S.optionRow}>
+                  {AVAILABILITY_OPTIONS.map((option) => {
+                    const translatedOption = t(option.labelKey);
+                    const active = athleteAvailability === option.value;
+                    return (
+                      <TouchableOpacity
+                        key={option.value}
+                        style={[S.optionButton, active && S.optionButtonSelected]}
+                        onPress={() => setAthleteAvailability(option.value)}
+                        activeOpacity={0.75}
+                      >
+                        <Text
+                          style={[
+                            S.optionButtonText,
+                            active && S.optionButtonTextSelected,
+                          ]}
+                        >
+                          {translatedOption}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                <Text style={A.fieldLabel}>{t("editProfile.clubHistory")}</Text>
+                {athleteClubHistory.map((entry, index) => (
+                  <View key={`${entry.club}-${index}`} style={S.clubCard}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={S.clubTitle}>{entry.club}</Text>
+                      {!!entry.category && (
+                        <Text style={S.clubSubtitle}>{entry.category}</Text>
+                      )}
+                      <Text style={S.clubSubtitle}>
+                        {entry.start}
+                        {entry.end ? ` - ${entry.end}` : ""}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => onRemoveAthleteClub(index)}
+                      activeOpacity={0.75}
                     >
-                      {t(option.labelKey)}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-
-            <Text style={A.fieldLabel}>{t("signup.positionsCsvLabel")}</Text>
-            <TextInput
-              style={A.input}
-              value={athletePositionsText}
-              onChangeText={setAthletePositionsText}
-              placeholder={t("signup.positionsPlaceholder")}
-              placeholderTextColor="#444"
-              editable={!isLoading}
-            />
-
-            <Text style={A.fieldLabel}>{t("signup.strengthsCsvLabel")}</Text>
-            <TextInput
-              style={A.input}
-              value={athleteStrengthsText}
-              onChangeText={setAthleteStrengthsText}
-              placeholder={t("signup.strengthsPlaceholder")}
-              placeholderTextColor="#444"
-              editable={!isLoading}
-            />
-
-            <Text style={A.fieldLabel}>{t("editProfile.currentCategory")}</Text>
-            <TextInput
-              style={A.input}
-              value={athleteCurrentCategory}
-              onChangeText={setAthleteCurrentCategory}
-              placeholder={t("editProfile.categoryPlaceholder")}
-              placeholderTextColor="#444"
-              editable={!isLoading}
-            />
-
-            <Text style={A.fieldLabel}>{t("editProfile.availability")}</Text>
-            <View style={S.optionRow}>
-              {AVAILABILITY_OPTIONS.map((option) => {
-                const translatedOption = t(option.labelKey);
-                const active = athleteAvailability === option.value;
-                return (
-                  <TouchableOpacity
-                    key={option.value}
-                    style={[S.optionButton, active && S.optionButtonSelected]}
-                    onPress={() => setAthleteAvailability(option.value)}
-                    activeOpacity={0.75}
-                  >
-                    <Text
-                      style={[
-                        S.optionButtonText,
-                        active && S.optionButtonTextSelected,
-                      ]}
-                    >
-                      {translatedOption}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-
-            <Text style={A.fieldLabel}>{t("editProfile.clubHistory")}</Text>
-            {athleteClubHistory.map((entry, index) => (
-              <View key={`${entry.club}-${index}`} style={S.clubCard}>
-                <View style={{ flex: 1 }}>
-                  <Text style={S.clubTitle}>{entry.club}</Text>
-                  {!!entry.category && (
-                    <Text style={S.clubSubtitle}>{entry.category}</Text>
-                  )}
-                  <Text style={S.clubSubtitle}>
-                    {entry.start}
-                    {entry.end ? ` - ${entry.end}` : ""}
-                  </Text>
+                      <Ionicons name="close-circle-outline" size={20} color="#777" />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+                <TextInput
+                  style={[A.input, S.clubDraftInput]}
+                  value={athleteClubDraft.club}
+                  onChangeText={(value) =>
+                    setAthleteClubDraft({ ...athleteClubDraft, club: value })
+                  }
+                  placeholder={t("editProfile.clubNamePlaceholder")}
+                  placeholderTextColor="#444"
+                  editable={!isLoading}
+                />
+                <TextInput
+                  style={[A.input, S.clubDraftInput]}
+                  value={athleteClubDraft.category}
+                  onChangeText={(value) =>
+                    setAthleteClubDraft({ ...athleteClubDraft, category: value })
+                  }
+                  placeholder={t("editProfile.clubCategoryPlaceholder")}
+                  placeholderTextColor="#444"
+                  editable={!isLoading}
+                />
+                <View style={[S.inlineRow, S.clubDraftPeriodRow]}>
+                  <View style={S.inlineItem}>
+                    <TextInput
+                      style={A.input}
+                      value={athleteClubDraft.start}
+                      onChangeText={(value) =>
+                        setAthleteClubDraft({ ...athleteClubDraft, start: value })
+                      }
+                      placeholder={t("editProfile.clubStartPlaceholder")}
+                      placeholderTextColor="#444"
+                      editable={!isLoading}
+                    />
+                  </View>
+                  <View style={S.inlineItem}>
+                    <TextInput
+                      style={A.input}
+                      value={athleteClubDraft.end}
+                      onChangeText={(value) =>
+                        setAthleteClubDraft({ ...athleteClubDraft, end: value })
+                      }
+                      placeholder={t("editProfile.clubEndPlaceholder")}
+                      placeholderTextColor="#444"
+                      editable={!isLoading}
+                    />
+                  </View>
                 </View>
                 <TouchableOpacity
-                  onPress={() => onRemoveAthleteClub(index)}
+                  style={S.secondaryButton}
+                  onPress={onAddAthleteClub}
+                  disabled={isLoading}
                   activeOpacity={0.75}
                 >
-                  <Ionicons name="close-circle-outline" size={20} color="#777" />
+                  <Text style={S.secondaryButtonText}>{t("editProfile.addClub")}</Text>
                 </TouchableOpacity>
-              </View>
-            ))}
-            <TextInput
-              style={A.input}
-              value={athleteClubDraft.club}
-              onChangeText={(value) =>
-                setAthleteClubDraft({ ...athleteClubDraft, club: value })
-              }
-              placeholder={t("editProfile.clubNamePlaceholder")}
-              placeholderTextColor="#444"
-              editable={!isLoading}
-            />
-            <TextInput
-              style={A.input}
-              value={athleteClubDraft.category}
-              onChangeText={(value) =>
-                setAthleteClubDraft({ ...athleteClubDraft, category: value })
-              }
-              placeholder={t("editProfile.clubCategoryPlaceholder")}
-              placeholderTextColor="#444"
-              editable={!isLoading}
-            />
-            <View style={S.inlineRow}>
-              <View style={S.inlineItem}>
-                <TextInput
-                  style={A.input}
-                  value={athleteClubDraft.start}
-                  onChangeText={(value) =>
-                    setAthleteClubDraft({ ...athleteClubDraft, start: value })
-                  }
-                  placeholder={t("editProfile.clubStartPlaceholder")}
-                  placeholderTextColor="#444"
-                  editable={!isLoading}
-                />
-              </View>
-              <View style={S.inlineItem}>
-                <TextInput
-                  style={A.input}
-                  value={athleteClubDraft.end}
-                  onChangeText={(value) =>
-                    setAthleteClubDraft({ ...athleteClubDraft, end: value })
-                  }
-                  placeholder={t("editProfile.clubEndPlaceholder")}
-                  placeholderTextColor="#444"
-                  editable={!isLoading}
-                />
-              </View>
-            </View>
-            <TouchableOpacity
-              style={S.secondaryButton}
-              onPress={onAddAthleteClub}
-              disabled={isLoading}
-              activeOpacity={0.75}
-            >
-              <Text style={S.secondaryButtonText}>{t("editProfile.addClub")}</Text>
-            </TouchableOpacity>
 
-            <View style={S.toggleRow}>
-              <Text style={A.fieldLabel}>{t("editProfile.searchableProfile")}</Text>
-              <Switch
-                value={athleteIsSearchable}
-                onValueChange={setAthleteIsSearchable}
-                disabled={isLoading}
-                trackColor={{ false: Brand.border, true: Brand.green }}
-                thumbColor={Brand.white}
-              />
-            </View>
+                <View style={S.toggleRow}>
+                  <Text style={A.fieldLabel}>{t("editProfile.searchableProfile")}</Text>
+                  <Switch
+                    value={athleteIsSearchable}
+                    onValueChange={setAthleteIsSearchable}
+                    disabled={isLoading}
+                    trackColor={{ false: Brand.border, true: Brand.green }}
+                    thumbColor={Brand.white}
+                  />
+                </View>
 
-            <Text style={A.fieldLabel}>{t("editProfile.contactVisibility")}</Text>
-            <View style={S.optionRow}>
-              <TouchableOpacity
-                style={[
-                  S.optionButton,
-                  athleteContactVisibility === "clubs_agents" &&
-                    S.optionButtonSelected,
-                ]}
-                onPress={() => setAthleteContactVisibility("clubs_agents")}
-                activeOpacity={0.75}
-              >
-                <Text
-                  style={[
-                    S.optionButtonText,
-                    athleteContactVisibility === "clubs_agents" &&
-                      S.optionButtonTextSelected,
-                  ]}
-                >
-                  {t("editProfile.contactClubsAgents")}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  S.optionButton,
-                  athleteContactVisibility === "public" &&
-                    S.optionButtonSelected,
-                ]}
-                onPress={() => setAthleteContactVisibility("public")}
-                activeOpacity={0.75}
-              >
-                <Text
-                  style={[
-                    S.optionButtonText,
-                    athleteContactVisibility === "public" &&
-                      S.optionButtonTextSelected,
-                  ]}
-                >
-                  {t("editProfile.contactPublic")}
-                </Text>
-              </TouchableOpacity>
-            </View>
+                <Text style={A.fieldLabel}>{t("editProfile.contactVisibility")}</Text>
+                <View style={S.optionRow}>
+                  <TouchableOpacity
+                    style={[
+                      S.optionButton,
+                      athleteContactVisibility === "clubs_agents" &&
+                        S.optionButtonSelected,
+                    ]}
+                    onPress={() => setAthleteContactVisibility("clubs_agents")}
+                    activeOpacity={0.75}
+                  >
+                    <Text
+                      style={[
+                        S.optionButtonText,
+                        athleteContactVisibility === "clubs_agents" &&
+                          S.optionButtonTextSelected,
+                      ]}
+                    >
+                      {t("editProfile.contactClubsAgents")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      S.optionButton,
+                      athleteContactVisibility === "public" &&
+                        S.optionButtonSelected,
+                    ]}
+                    onPress={() => setAthleteContactVisibility("public")}
+                    activeOpacity={0.75}
+                  >
+                    <Text
+                      style={[
+                        S.optionButtonText,
+                        athleteContactVisibility === "public" &&
+                          S.optionButtonTextSelected,
+                      ]}
+                    >
+                      {t("editProfile.contactPublic")}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
           </>
         )}
 

@@ -3,6 +3,7 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { authStyles as S } from "@/styles/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, router } from "expo-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -23,6 +24,7 @@ const Login = () => {
     useLogin();
   const { onGoogleSignIn, isLoading: googleLoading } = useGoogleAuth();
   const busy = isLoading || googleLoading;
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -72,17 +74,31 @@ const Login = () => {
         />
 
         <Text style={S.fieldLabel}>{t("auth.password")}</Text>
-        <TextInput
-          style={S.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder={t("auth.passwordPlaceholder")}
-          placeholderTextColor="#444"
-          secureTextEntry
-          autoCapitalize="none"
-          textContentType="password"
-          editable={!busy}
-        />
+        <View style={ls.passwordRow}>
+          <TextInput
+            style={ls.passwordInput}
+            value={password}
+            onChangeText={setPassword}
+            placeholder={t("auth.passwordPlaceholder")}
+            placeholderTextColor="#444"
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            textContentType="password"
+            editable={!busy}
+          />
+          <TouchableOpacity
+            style={ls.passwordEyeButton}
+            onPress={() => setShowPassword((prev) => !prev)}
+            activeOpacity={0.75}
+            disabled={busy}
+          >
+            <Ionicons
+              name={showPassword ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={Brand.gray}
+            />
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           style={[S.submitButton, busy && S.submitButtonDisabled]}
@@ -142,6 +158,22 @@ const Login = () => {
 };
 
 const ls = StyleSheet.create({
+  passwordRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Brand.card,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    borderRadius: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    color: Brand.white,
+    fontSize: 15,
+  },
+  passwordEyeButton: { paddingHorizontal: 14, paddingVertical: 10 },
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",

@@ -56,6 +56,15 @@ const parseCommaSeparatedItems = (value: string): string[] => {
     .filter(Boolean);
 };
 
+// Auto-format input as Brazilian phone while restricting to digits.
+const formatPhonePtBrInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
+  if (!digits) return "";
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+};
+
 export const useSignup = (): UseSignupReturn => {
   const { t } = useTranslation();
   const [fullName, setFullName] = useState("");
@@ -151,6 +160,10 @@ export const useSignup = (): UseSignupReturn => {
   // Auto-format input as DD/MM/YYYY while restricting to digits.
   const onBirthDateChange = useCallback((text: string) => {
     setBirthDateText(formatBirthDateInput(text));
+  }, []);
+
+  const onPhoneChange = useCallback((text: string) => {
+    setPhone(formatPhonePtBrInput(text));
   }, []);
 
   const parsedBirthDate = useMemo(
@@ -340,7 +353,7 @@ export const useSignup = (): UseSignupReturn => {
     setGuardianEmail,
     setCity,
     setState,
-    setPhone,
+    onPhoneChange,
     setAthleteHeight,
     setAthleteWeight,
     setAthleteDominantFoot,
