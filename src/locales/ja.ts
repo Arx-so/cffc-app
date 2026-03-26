@@ -18,6 +18,7 @@ export default {
     themeSystem: 'システム',
     langEn: 'English',
     langJa: '日本語',
+    langPtBr: 'ポルトガル語（ブラジル）',
   },
   inbox: {
     title: '受信箱',

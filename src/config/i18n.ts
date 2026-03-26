@@ -8,10 +8,12 @@ import ptBr from '@/locales/pt-br';
 i18n.use(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
+  supportedLngs: ['en', 'ja', 'pt-BR'],
+  load: 'currentOnly',
   resources: {
     en: { translation: en },
     ja: { translation: ja },
-    'pt-br': { translation: ptBr },
+    'pt-BR': { translation: ptBr },
   },
   interpolation: {
     escapeValue: false,

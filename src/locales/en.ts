@@ -18,6 +18,7 @@ export default {
     themeSystem: "System",
     langEn: "English",
     langJa: "日本語",
+    langPtBr: "Português (Brasil)",
   },
   inbox: {
     title: "Inbox",

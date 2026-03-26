@@ -24,6 +24,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
   },
+  value: {
+    color: Brand.gray,
+    fontSize: 14,
+    marginRight: 8,
+  },
   chevron: {
     marginLeft: 8,
   },

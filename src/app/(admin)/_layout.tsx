@@ -1,7 +1,10 @@
 import { Brand } from "@/constants/theme";
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function AdminTabLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       sceneContainerStyle={{ backgroundColor: Brand.bg }}
@@ -15,8 +18,8 @@ export default function AdminTabLayout() {
       <Tabs.Screen
         name="home/index"
         options={{
-          title: "Início",
-          tabBarLabel: "Início",
+          title: t("tabs.home"),
+          tabBarLabel: t("tabs.home"),
         }}
       />
     </Tabs>

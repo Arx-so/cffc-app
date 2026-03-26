@@ -4,12 +4,18 @@ import * as SecureStore from 'expo-secure-store';
 
 import i18n from '@/config/i18n';
 
-export type Language = 'en' | 'ja' | 'pt-br';
+export type Language = 'en' | 'ja' | 'pt-BR';
 
 interface LanguageState {
   language: Language;
   setLanguage: (lang: Language) => void;
 }
+
+const normalizeLanguage = (language: string): Language => {
+  if (language === 'pt-br' || language === 'pt-BR') return 'pt-BR';
+  if (language === 'ja') return 'ja';
+  return 'en';
+};
 
 const secureStorage = {
   getItem: (name: string) => SecureStore.getItemAsync(name),
@@ -22,15 +28,22 @@ export const useLanguageStore = create<LanguageState>()(
     (set) => ({
       language: 'en',
       setLanguage: (language: Language) => {
-        i18n.changeLanguage(language);
-        set({ language });
+        const normalized = normalizeLanguage(language);
+        i18n.changeLanguage(normalized);
+        set({ language: normalized });
       },
     }),
     {
       name: 'language-store',
       storage: createJSONStorage(() => secureStorage),
       onRehydrateStorage: () => (state) => {
-        if (state) i18n.changeLanguage(state.language);
+        if (!state) return;
+
+        const normalized = normalizeLanguage(state.language);
+        i18n.changeLanguage(normalized);
+        if (state.language !== normalized) {
+          state.setLanguage(normalized);
+        }
       },
     },
   ),

@@ -22,6 +22,8 @@ import { darkTheme, lightTheme } from "@/config/themes";
 import { Brand } from "@/constants/theme";
 import { UserRole } from "@/processes/types/profileTypes";
 import { useAuthStore } from "@/stores/authStore";
+import i18n from "@/config/i18n";
+import { useLanguageStore } from "@/stores/languageStore";
 import { useEffectiveTheme } from "@/stores/themeStore";
 
 export const unstable_settings = {
@@ -167,7 +169,12 @@ const RootLayoutNav = () => {
 
 const RootLayout = () => {
   const effectiveTheme = useEffectiveTheme();
+  const language = useLanguageStore((state) => state.language);
   const theme = effectiveTheme === "dark" ? darkTheme : lightTheme;
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   return (
     <>

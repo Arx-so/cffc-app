@@ -20,8 +20,8 @@ export default function ProTabLayout() {
       <Tabs.Screen
         name="home/index"
         options={{
-          title: "Início",
-          tabBarLabel: "Início",
+          title: t("tabs.home"),
+          tabBarLabel: t("tabs.home"),
         }}
       />
       <Tabs.Screen
@@ -34,7 +34,7 @@ export default function ProTabLayout() {
               rightIcon={<SettingsAction />}
             />
           ),
-          tabBarLabel: "Perfil",
+          tabBarLabel: t("tabs.profile"),
         }}
       />
     </Tabs>

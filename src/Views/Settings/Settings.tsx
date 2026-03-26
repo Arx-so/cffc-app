@@ -17,6 +17,7 @@ const SettingRow = ({ item, isLast }: { item: SettingItem; isLast: boolean }) =>
           <Icon name={item.icon} fill={iconColor} style={{ width: 22, height: 22 }} />
         </View>
         <Text style={[styles.label, { color: labelColor }]}>{item.label}</Text>
+        {item.value && <Text style={styles.value}>{item.value}</Text>}
         {!item.destructive && (
           <Icon
             name="chevron-right-outline"

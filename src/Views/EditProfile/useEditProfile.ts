@@ -43,6 +43,15 @@ const INITIAL_ATHLETE: AthleteFormState = {
   contactVisibility: "clubs_agents",
 };
 
+// Auto-format input as Brazilian phone while restricting to digits.
+const formatPhonePtBrInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
+  if (!digits) return "";
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+};
+
 export const useEditProfile = (): UseEditProfileReturn => {
   const currentUser = useAuthStore((s) => s.user);
   const role = useAuthStore((s) => s.role);
@@ -83,7 +92,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
       city: profileData.city ?? "",
       state: profileData.state ?? "",
       birthDate: profileData.birth_date ?? "",
-      phone: profileData.phone ?? "",
+      phone: formatPhonePtBrInput(profileData.phone ?? ""),
       avatarUrl: profileData.avatar_url,
     };
     setProfileForm(snapshot);
@@ -110,7 +119,11 @@ export const useEditProfile = (): UseEditProfileReturn => {
 
   const setProfileField = useCallback(
     <K extends keyof ProfileFormState>(key: K, value: ProfileFormState[K]) => {
-      setProfileForm((prev) => ({ ...prev, [key]: value }));
+      const nextValue =
+        key === "phone" && typeof value === "string"
+          ? (formatPhonePtBrInput(value) as ProfileFormState[K])
+          : value;
+      setProfileForm((prev) => ({ ...prev, [key]: nextValue }));
     },
     []
   );
@@ -217,7 +230,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
         city: profileForm.city || null,
         state: profileForm.state || null,
         birth_date: profileForm.birthDate || null,
-        phone: profileForm.phone || null,
+        phone: profileForm.phone.replace(/\D/g, "") || null,
       });
 
       if (isAthlete) {

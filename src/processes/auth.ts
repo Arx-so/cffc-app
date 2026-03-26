@@ -59,6 +59,8 @@ export const signup = async (body: {
   athleteIsSearchable?: boolean;
   athleteContactVisibility?: "clubs_agents" | "public";
 }): Promise<SignupResponse> => {
+  const normalizedPhone = (body.phone ?? "").replace(/\D/g, "");
+
   const { data, error } = await supabase.auth.signUp({
     email: body.email,
     password: body.password,
@@ -76,8 +78,8 @@ export const signup = async (body: {
         city: body.city ?? "",
         state: body.state ?? "",
         state_prov: body.state ?? "",
-        phone: body.phone ?? "",
-        phone_number: body.phone ?? "",
+        phone: normalizedPhone,
+        phone_number: normalizedPhone,
         athlete_height: body.athleteHeight ?? null,
         athlete_weight: body.athleteWeight ?? null,
         athlete_dominant_foot: body.athleteDominantFoot ?? null,
