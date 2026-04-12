@@ -1,0 +1,68 @@
+---
+description: Regras de roteamento Expo Router e estrutura de tabs por role
+globs: src/app/**/*.tsx
+alwaysApply: false
+---
+
+# Roteamento — Expo Router
+
+## Estrutura de Grupos por Role
+
+Cada role tem seu próprio grupo de rotas com tab navigator próprio:
+
+```
+app/
+  _layout.tsx         # Root Stack — guarda de auth e redirecionamento por role
+  index.tsx           # Landing (não autenticado)
+  login.tsx
+  signup.tsx
+  (athlete)/
+    _layout.tsx       # Tabs: home, search, add-videos, favorites, profile
+    home/index.tsx
+    search/index.tsx
+    add-videos/index.tsx
+    favorites/index.tsx
+    profile/index.tsx
+  (pro)/
+    _layout.tsx       # Tabs: home, profile
+    home/index.tsx
+    profile/index.tsx
+  (club)/
+    _layout.tsx       # Tabs: home, profile
+    home/index.tsx
+    profile/index.tsx
+  (admin)/
+    _layout.tsx       # Tabs: home
+    home/index.tsx
+```
+
+## Redirecionamento por Role
+
+Definido em `src/app/_layout.tsx`:
+
+```typescript
+const ROLE_ROUTES: Record<UserRole, string> = {
+  athlete: "/(athlete)/home",
+  pro:     "/(pro)/home",
+  club:    "/(club)/home",
+  admin:   "/(admin)/home",
+};
+```
+
+## Regras ao Adicionar Novas Rotas
+
+1. Novas telas de um role específico → criar dentro do grupo `(role)/`
+2. Telas compartilhadas entre roles → avaliar criar como modal no root stack
+3. Sempre registrar nova tab no `_layout.tsx` do grupo correspondente
+4. Tab de perfil do athlete usa `HeaderBar` com ícone de configurações
+
+## Configurações de Tab Padrão
+
+```typescript
+screenOptions={{
+  headerShown: false,
+  tabBarStyle: { backgroundColor: Brand.bg, borderTopColor: Brand.border },
+  tabBarActiveTintColor: Brand.green,
+  tabBarInactiveTintColor: Brand.gray,
+}}
+```

@@ -12,7 +12,7 @@ export const useGoogleAuth = () => {
     try {
       const result = await signInWithGoogle();
       // result is null when the user cancelled the browser session — no error toast needed.
-      if (result) signIn(result.user);
+      if (result) await signIn(result.user);
     } catch (error) {
       console.error('[Google Auth] error:', error);
       Toast.show({ type: 'error', text1: 'Falha no login com Google. Tente novamente.', autoHide: true });

@@ -1,23 +1,56 @@
+import { ClubHistoryEntry } from "@/processes/types/profileTypes";
+
 export type UseSignupReturn = {
   fullName: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
   selectedRole: 'athlete' | 'pro' | 'club' | null;
   birthDateText: string;
   guardianEmail: string;
+  city: string;
+  state: string;
+  phone: string;
+  athleteHeight: string;
+  athleteWeight: string;
+  athleteDominantFoot: "right" | "left" | "both" | null;
+  athletePositionsText: string;
+  athleteStrengthsText: string;
+  athleteCurrentCategory: string;
+  athleteAvailability: string;
+  athleteClubHistory: ClubHistoryEntry[];
+  athleteIsSearchable: boolean;
+  athleteContactVisibility: "clubs_agents" | "public";
+  athleteClubDraft: ClubHistoryEntry;
   acceptedTerms: boolean;
   acceptedPrivacy: boolean;
 
   isMinor: boolean;
 
   setFullName: (fullName: string) => void;
+  setUsername: (username: string) => void;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setConfirmPassword: (confirmPassword: string) => void;
   setSelectedRole: (role: 'athlete' | 'pro' | 'club') => void;
   onBirthDateChange: (text: string) => void;
   setGuardianEmail: (guardianEmail: string) => void;
+  setCity: (city: string) => void;
+  setState: (state: string) => void;
+  onPhoneChange: (phone: string) => void;
+  setAthleteHeight: (value: string) => void;
+  setAthleteWeight: (value: string) => void;
+  setAthleteDominantFoot: (value: "right" | "left" | "both") => void;
+  setAthletePositionsText: (value: string) => void;
+  setAthleteStrengthsText: (value: string) => void;
+  setAthleteCurrentCategory: (value: string) => void;
+  setAthleteAvailability: (value: string) => void;
+  setAthleteIsSearchable: (value: boolean) => void;
+  setAthleteContactVisibility: (value: "clubs_agents" | "public") => void;
+  setAthleteClubDraft: (draft: ClubHistoryEntry) => void;
+  onAddAthleteClub: () => void;
+  onRemoveAthleteClub: (index: number) => void;
   setAcceptedTerms: (value: boolean) => void;
   setAcceptedPrivacy: (value: boolean) => void;
   onSignupPress: () => void;

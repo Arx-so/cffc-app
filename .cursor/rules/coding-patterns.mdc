@@ -1,0 +1,95 @@
+---
+description: Padrões de código — Views, hooks, estilos, stores e imports
+alwaysApply: true
+---
+
+# Padrões de Código
+
+## Padrão de Views (Hook Pattern)
+
+Toda tela em `src/Views/` segue esta estrutura obrigatória:
+
+```
+Views/
+  NomeDaTela/
+    index.ts              # barrel export
+    useNomeDaTela.ts      # hook com toda a lógica (state, handlers, queries)
+    NomeDaTela.tsx        # componente que chama o hook e renderiza UI
+    NomeDaTela.types.ts   # tipos do hook e do componente
+    NomeDaTela.styles.ts  # StyleSheet
+```
+
+```typescript
+// ✅ Correto — lógica no hook, componente só renderiza
+export const MinhaView = () => {
+  const { data, handlePress } = useMinhaView();
+  return <Button onPress={handlePress}>{data.title}</Button>;
+};
+
+// ❌ Errado — lógica no componente
+export const MinhaView = () => {
+  const [data, setData] = useState(null);
+  useEffect(() => { fetch(...) }, []);
+  return <Button>{data?.title}</Button>;
+};
+```
+
+## Imports
+
+Sempre usar path alias `@/`, nunca caminhos relativos para fora do módulo:
+
+```typescript
+// ✅
+import { useAuthStore } from "@/stores/authStore";
+import { Brand } from "@/constants/theme";
+
+// ❌
+import { useAuthStore } from "../../stores/authStore";
+```
+
+## Estilos
+
+- Usar `StyleSheet.create()` em arquivo `.styles.ts` separado
+- Cores e design tokens via `Brand` de `@/constants/theme`
+- Nunca usar hexadecimais hardcoded no componente
+
+```typescript
+// ✅
+import { Brand } from "@/constants/theme";
+style={{ color: Brand.green, backgroundColor: Brand.bg }}
+
+// ❌
+style={{ color: "#00FF00", backgroundColor: "#000" }}
+```
+
+## Estado Global
+
+Zustand stores em `src/stores/`:
+- `useAuthStore` — autenticação (`isAuthenticated`, `user`, `role`, `checkAuth`, `signOut`)
+- `useThemeStore` / `useEffectiveTheme` — tema (light/dark/system)
+- `useLanguageStore` — idioma (en/ja)
+
+Nunca duplicar estado que já existe nos stores.
+
+## Data Fetching
+
+- Usar **react-query** (`useQuery`, `useMutation`) para chamadas ao Supabase
+- Funções de API ficam em `src/processes/`
+- Nunca chamar `supabase` diretamente dentro de componentes ou hooks de UI
+
+```typescript
+// ✅ — processo em src/processes/profile.ts
+const { data } = useQuery({
+  queryKey: ["profile", userId],
+  queryFn: () => fetchAthleteProfile(userId),
+});
+
+// ❌ — supabase direto no hook da View
+const { data } = await supabase.from("profile").select(...);
+```
+
+## TypeScript
+
+- Strict mode habilitado — sem `any` desnecessário
+- Tipos de domínio ficam em `src/processes/types/`
+- Tipos de componente/hook ficam no `NomeDaTela.types.ts` da View

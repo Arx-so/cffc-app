@@ -1,0 +1,75 @@
+import {
+  fetchAthleteProfile,
+  fetchProfileVideos,
+} from "@/processes/profile";
+import { fetchUserVideoFeed } from "@/processes/feed";
+import { ProfileVideo } from "@/processes/types/profileTypes";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import { UseVisitorProfileReturn } from "./VisitorProfile.types";
+
+const VISITOR_PROFILE_STALE = 2 * 60 * 1000;
+const VISITOR_PROFILE_GC = 5 * 60 * 1000;
+
+export const useVisitorProfile = (
+  userId: string,
+  username: string | null
+): UseVisitorProfileReturn => {
+  const queryClient = useQueryClient();
+
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries({ queryKey: ["visitor-profile", userId] });
+      queryClient.invalidateQueries({ queryKey: ["visitor-profile-videos", userId] });
+    }, [userId, queryClient])
+  );
+
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = useQuery({
+    queryKey: ["visitor-profile", userId],
+    queryFn: () => fetchAthleteProfile(userId),
+    enabled: !!userId,
+    staleTime: VISITOR_PROFILE_STALE,
+    gcTime: VISITOR_PROFILE_GC,
+  });
+
+  const { data: videosData } = useQuery({
+    queryKey: ["visitor-profile-videos", userId],
+    queryFn: () => fetchProfileVideos(userId),
+    enabled: !!userId,
+    staleTime: VISITOR_PROFILE_STALE,
+    gcTime: VISITOR_PROFILE_GC,
+  });
+
+  useQuery({
+    queryKey: ["user-feed-videos", userId],
+    queryFn: () => fetchUserVideoFeed(userId),
+    enabled: !!userId,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
+
+  const videos = videosData ?? [];
+
+  const handleVideoPress = useCallback(
+    (item: ProfileVideo) => {
+      const index = videos.findIndex((v) => v.id === item.id);
+      router.push(
+        `/user-feed?userId=${userId}&username=${encodeURIComponent(username ?? "")}&initialIndex=${Math.max(index, 0)}` as any
+      );
+    },
+    [videos, userId, username]
+  );
+
+  return {
+    profileData: profileData ?? null,
+    videos,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    handleVideoPress,
+  };
+};

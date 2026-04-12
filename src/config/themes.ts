@@ -62,25 +62,25 @@ const darkThemeColors = {
   'color-primary-200': '#113213',
   'color-primary-300': '#1b4b1d',
   'color-primary-400': '#256427',
-  'color-primary-500': '#4caf50', // Main accent color (brighter for dark bg)
+  'color-primary-500': '#39FF14', // Brand.green - neon accent
   'color-primary-600': '#66bb6a',
   'color-primary-700': '#a5d6a7',
   'color-primary-800': '#c8e6c9',
   'color-primary-900': '#e8f5e9',
-  'color-primary-transparent-100': 'rgba(76, 175, 80, 0.08)',
-  'color-primary-transparent-200': 'rgba(76, 175, 80, 0.16)',
-  'color-primary-transparent-300': 'rgba(76, 175, 80, 0.24)',
-  'color-primary-transparent-400': 'rgba(76, 175, 80, 0.32)',
-  'color-primary-transparent-500': 'rgba(76, 175, 80, 0.40)',
-  'color-primary-transparent-600': 'rgba(76, 175, 80, 0.48)',
+  'color-primary-transparent-100': 'rgba(57, 255, 20, 0.08)',
+  'color-primary-transparent-200': 'rgba(57, 255, 20, 0.16)',
+  'color-primary-transparent-300': 'rgba(57, 255, 20, 0.24)',
+  'color-primary-transparent-400': 'rgba(57, 255, 20, 0.32)',
+  'color-primary-transparent-500': 'rgba(57, 255, 20, 0.40)',
+  'color-primary-transparent-600': 'rgba(57, 255, 20, 0.48)',
 
-  'color-basic-100': '#2a2a2a', // Muted
-  'color-basic-200': '#333333', // Background
-  'color-basic-300': '#363636', // Card
-  'color-basic-400': '#3a3a3a', // Secondary
-  'color-basic-500': '#444444', // Border
-  'color-basic-600': '#c0c0c0', // Muted foreground
-  'color-basic-700': '#fdfdfd', // Foreground
+  'color-basic-100': '#2a2a2a',
+  'color-basic-200': '#333333',
+  'color-basic-300': '#363636',
+  'color-basic-400': '#3a3a3a',
+  'color-basic-500': '#444444',
+  'color-basic-600': '#c0c0c0',
+  'color-basic-700': '#fdfdfd',
   'color-basic-800': '#ffffff',
   'color-basic-900': '#ffffff',
   'color-basic-transparent-100': 'rgba(253, 253, 253, 0.08)',
@@ -89,6 +89,25 @@ const darkThemeColors = {
   'color-basic-transparent-400': 'rgba(253, 253, 253, 0.32)',
   'color-basic-transparent-500': 'rgba(253, 253, 253, 0.40)',
   'color-basic-transparent-600': 'rgba(253, 253, 253, 0.48)',
+
+  // Explicit semantic background tokens — override Eva's computed values
+  // which otherwise resolve to white because color-basic-800/900 = #ffffff
+  'background-basic-color-1': '#0B0B0B', // Brand.bg  — main screen background
+  'background-basic-color-2': '#1A1A1A', // Brand.card — header / elevated surfaces
+  'background-basic-color-3': '#2A2A2A', // Brand.border — inputs / subtle surfaces
+  'background-basic-color-4': '#333333', // — hover / selected state
+
+  // Explicit semantic text tokens for correct contrast
+  'text-basic-color':    '#FFFFFF', // Brand.white
+  'text-hint-color':     '#777777', // Brand.gray
+  'text-disabled-color': '#555555',
+
+  // Explicit border tokens
+  'border-basic-color-1': '#1A1A1A',
+  'border-basic-color-2': '#2A2A2A', // Brand.border
+  'border-basic-color-3': '#3A3A3A',
+  'border-basic-color-4': '#444444',
+  'border-basic-color-5': '#555555',
 
   'color-success-100': '#1b3a1f',
   'color-success-500': '#4caf50',

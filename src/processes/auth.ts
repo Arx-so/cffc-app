@@ -1,6 +1,7 @@
 import { supabase } from "@/config/supabase";
 import { makeRedirectUri } from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
+import { ClubHistoryEntry } from "./types/profileTypes";
 import { LoginResponse, SignupResponse } from "./types/authTypes";
 
 // Parse access_token / refresh_token from the OAuth redirect URL.
@@ -40,10 +41,26 @@ export const signup = async (body: {
   email: string;
   password: string;
   name: string;
+  username: string;
   role: 'athlete' | 'pro' | 'club';
   birthDate: string; // YYYY-MM-DD
   guardianEmail?: string;
+  city?: string;
+  state?: string;
+  phone?: string;
+  athleteHeight?: number;
+  athleteWeight?: number;
+  athleteDominantFoot?: "right" | "left" | "both";
+  athletePositions?: string[];
+  athleteStrengths?: string[];
+  athleteCurrentCategory?: string;
+  athleteAvailability?: string;
+  athleteClubHistory?: ClubHistoryEntry[];
+  athleteIsSearchable?: boolean;
+  athleteContactVisibility?: "clubs_agents" | "public";
 }): Promise<SignupResponse> => {
+  const normalizedPhone = (body.phone ?? "").replace(/\D/g, "");
+
   const { data, error } = await supabase.auth.signUp({
     email: body.email,
     password: body.password,
@@ -53,9 +70,26 @@ export const signup = async (body: {
       data: {
         name: body.name,
         full_name: body.name,
+        username: body.username,
+        user_name: body.username,
         role: body.role,
         birth_date: body.birthDate,
         guardian_email: body.guardianEmail ?? '',
+        city: body.city ?? "",
+        state: body.state ?? "",
+        state_prov: body.state ?? "",
+        phone: normalizedPhone,
+        phone_number: normalizedPhone,
+        athlete_height: body.athleteHeight ?? null,
+        athlete_weight: body.athleteWeight ?? null,
+        athlete_dominant_foot: body.athleteDominantFoot ?? null,
+        athlete_positions: body.athletePositions ?? [],
+        athlete_strengths: body.athleteStrengths ?? [],
+        athlete_current_category: body.athleteCurrentCategory ?? "",
+        athlete_availability: body.athleteAvailability ?? "",
+        athlete_club_history: body.athleteClubHistory ?? [],
+        athlete_is_searchable: body.athleteIsSearchable ?? true,
+        athlete_contact_visibility: body.athleteContactVisibility ?? "clubs_agents",
       },
     },
   });
