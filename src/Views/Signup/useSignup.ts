@@ -1,70 +1,373 @@
 import { signup } from "@/processes/auth";
-import { useAuthStore } from "@/stores/authStore";
+import { ClubHistoryEntry } from "@/processes/types/profileTypes";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import { UseSignupReturn } from "./Signup.types";
 
+type ProfileRole = 'athlete' | 'pro' | 'club';
+type AthleteFoot = "right" | "left" | "both";
+type AthleteContactVisibility = "clubs_agents" | "public";
+
+// Auto-insert slashes so the user sees DD/MM/YYYY while typing digits.
+const formatBirthDateInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, '').slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+};
+
+// Parse DD/MM/YYYY string into a Date. Returns null when incomplete or invalid.
+const parseDDMMYYYY = (text: string): Date | null => {
+  if (text.length !== 10) return null;
+  const [dd, mm, yyyy] = text.split('/').map(Number);
+  if (!dd || !mm || !yyyy) return null;
+  const date = new Date(yyyy, mm - 1, dd);
+  // Guard against invalid dates like 31/02/2000.
+  if (
+    date.getDate() !== dd ||
+    date.getMonth() !== mm - 1 ||
+    date.getFullYear() !== yyyy
+  ) return null;
+  return date;
+};
+
+const getAgeInYears = (date: Date): number => {
+  const today = new Date();
+  let age = today.getFullYear() - date.getFullYear();
+  const m = today.getMonth() - date.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < date.getDate())) age -= 1;
+  return age;
+};
+
+const toYYYYMMDD = (date: Date): string => {
+  const yyyy = date.getFullYear();
+  const mm = `${date.getMonth() + 1}`.padStart(2, '0');
+  const dd = `${date.getDate()}`.padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+const parseCommaSeparatedItems = (value: string): string[] => {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+
+// Auto-format input as Brazilian phone while restricting to digits.
+const formatPhonePtBrInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
+  if (!digits) return "";
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+};
+
 export const useSignup = (): UseSignupReturn => {
-  const [name, setName] = useState("");
+  const { t } = useTranslation();
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const signIn = useAuthStore((state) => state.signIn);
+  const [selectedRole, setSelectedRole] = useState<ProfileRole | null>(null);
+  const [birthDateText, setBirthDateText] = useState("");
+  const [guardianEmail, setGuardianEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [phone, setPhone] = useState("");
+  const [athleteHeight, setAthleteHeight] = useState("");
+  const [athleteWeight, setAthleteWeight] = useState("");
+  const [athleteDominantFoot, setAthleteDominantFoot] =
+    useState<AthleteFoot | null>(null);
+  const [athletePositionsText, setAthletePositionsText] = useState("");
+  const [athleteStrengthsText, setAthleteStrengthsText] = useState("");
+  const [athleteCurrentCategory, setAthleteCurrentCategory] = useState("");
+  const [athleteAvailability, setAthleteAvailability] = useState("");
+  const [athleteIsSearchable, setAthleteIsSearchable] = useState(true);
+  const [athleteContactVisibility, setAthleteContactVisibility] =
+    useState<AthleteContactVisibility>("clubs_agents");
+  const [athleteClubHistory, setAthleteClubHistory] = useState<ClubHistoryEntry[]>(
+    []
+  );
+  const [athleteClubDraft, setAthleteClubDraft] = useState<ClubHistoryEntry>({
+    club: "",
+    category: "",
+    start: "",
+    end: "",
+  });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
   const signupMutation = useMutation({
-    mutationFn: (body: { name: string; email: string; password: string }) =>
-      signup(body),
-    onSuccess: (data) => {
-      signIn(data.user);
+    mutationFn: (body: {
+      name: string;
+      username: string;
+      email: string;
+      password: string;
+      role: ProfileRole;
+      birthDate: string; // YYYY-MM-DD
+      guardianEmail?: string;
+      city?: string;
+      state?: string;
+      phone?: string;
+      athleteHeight?: number;
+      athleteWeight?: number;
+      athleteDominantFoot?: AthleteFoot;
+      athletePositions?: string[];
+      athleteStrengths?: string[];
+      athleteCurrentCategory?: string;
+      athleteAvailability?: string;
+      athleteClubHistory?: ClubHistoryEntry[];
+      athleteIsSearchable?: boolean;
+      athleteContactVisibility?: AthleteContactVisibility;
+    }) => signup(body),
+    onSuccess: () => {
+      router.replace('/login');
+      Toast.show({
+        type: 'success',
+        text1: t("signup.toasts.accountCreated"),
+        text2: t("signup.toasts.confirmEmail"),
+        visibilityTime: 6000,
+        autoHide: true,
+      });
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error
+          ? error.message
+          : t("signup.toasts.createError");
+
+      const isConfirmationEmailError = message
+        .toLowerCase()
+        .includes("error sending confirmation email");
+
       Toast.show({
         type: "error",
-        text1: "Signup failed. Please try again.",
+        text1: isConfirmationEmailError
+          ? t("signup.toasts.confirmationEmailError")
+          : t("signup.toasts.createError"),
+        text2: isConfirmationEmailError
+          ? t("signup.toasts.smtpCheck")
+          : undefined,
         autoHide: true,
       });
     },
   });
 
-  const onSignupPress = useCallback(async () => {
-    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
-      Toast.show({
-        type: "error",
-        text1: "Please fill in all fields.",
-        autoHide: true,
-      });
-      return;
-    }
-    if (password !== confirmPassword) {
-      Toast.show({
-        type: "error",
-        text1: "Passwords do not match.",
-        autoHide: true,
-      });
-      return;
-    }
-    await signupMutation.mutateAsync({
-      name: name.trim(),
-      email: email.trim(),
-      password,
+  // Auto-format input as DD/MM/YYYY while restricting to digits.
+  const onBirthDateChange = useCallback((text: string) => {
+    setBirthDateText(formatBirthDateInput(text));
+  }, []);
+
+  const onPhoneChange = useCallback((text: string) => {
+    setPhone(formatPhonePtBrInput(text));
+  }, []);
+
+  const parsedBirthDate = useMemo(
+    () => parseDDMMYYYY(birthDateText),
+    [birthDateText],
+  );
+
+  const isMinor = useMemo(() => {
+    if (!parsedBirthDate) return false;
+    return getAgeInYears(parsedBirthDate) < 18;
+  }, [parsedBirthDate]);
+
+  const onAddAthleteClub = useCallback(() => {
+    const trimmedClub = athleteClubDraft.club.trim();
+    if (!trimmedClub) return;
+    setAthleteClubHistory((prev) => [
+      ...prev,
+      {
+        club: trimmedClub,
+        category: athleteClubDraft.category.trim(),
+        start: athleteClubDraft.start.trim(),
+        end: athleteClubDraft.end.trim(),
+      },
+    ]);
+    setAthleteClubDraft({
+      club: "",
+      category: "",
+      start: "",
+      end: "",
     });
-  }, [name, email, password, confirmPassword, signupMutation]);
+  }, [athleteClubDraft]);
+
+  const onRemoveAthleteClub = useCallback((index: number) => {
+    setAthleteClubHistory((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const onSignupPress = useCallback(async () => {
+    if (
+      !fullName.trim() ||
+      !username.trim() ||
+      !email.trim() ||
+      !password ||
+      !confirmPassword ||
+      !city.trim() ||
+      !state.trim() ||
+      !phone.trim()
+    ) {
+      Toast.show({ type: "error", text1: t("signup.toasts.requiredFields"), autoHide: true });
+      return;
+    }
+
+    if (!selectedRole) {
+      Toast.show({ type: "error", text1: t("signup.toasts.selectProfileType"), autoHide: true });
+      return;
+    }
+
+    if (!parsedBirthDate) {
+      Toast.show({ type: "error", text1: t("signup.toasts.invalidBirthDate"), autoHide: true });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Toast.show({ type: "error", text1: t("signup.toasts.passwordMismatch"), autoHide: true });
+      return;
+    }
+
+    if (!acceptedTerms || !acceptedPrivacy) {
+      Toast.show({ type: "error", text1: t("signup.toasts.acceptTermsPrivacy"), autoHide: true });
+      return;
+    }
+
+    const guardianEmailValue = guardianEmail.trim();
+    if (isMinor && !guardianEmailValue) {
+      Toast.show({ type: "error", text1: t("signup.toasts.guardianEmailRequired"), autoHide: true });
+      return;
+    }
+
+    try {
+      const isAthlete = selectedRole === "athlete";
+      await signupMutation.mutateAsync({
+        name: fullName.trim(),
+        username: username.trim().replace(/^@+/, "").toLowerCase(),
+        email: email.trim().toLowerCase(),
+        password,
+        role: selectedRole,
+        birthDate: toYYYYMMDD(parsedBirthDate),
+        guardianEmail: isMinor ? guardianEmailValue : undefined,
+        city: city.trim() || undefined,
+        state: state.trim().toUpperCase() || undefined,
+        phone: phone.trim() || undefined,
+        athleteHeight:
+          isAthlete && athleteHeight.trim()
+            ? Number(athleteHeight.trim())
+            : undefined,
+        athleteWeight:
+          isAthlete && athleteWeight.trim()
+            ? Number(athleteWeight.trim())
+            : undefined,
+        athleteDominantFoot: isAthlete ? athleteDominantFoot ?? undefined : undefined,
+        athletePositions: isAthlete
+          ? parseCommaSeparatedItems(athletePositionsText)
+          : undefined,
+        athleteStrengths: isAthlete
+          ? parseCommaSeparatedItems(athleteStrengthsText)
+          : undefined,
+        athleteCurrentCategory: isAthlete
+          ? athleteCurrentCategory.trim() || undefined
+          : undefined,
+        athleteAvailability: isAthlete
+          ? athleteAvailability.trim() || undefined
+          : undefined,
+        athleteClubHistory: isAthlete ? athleteClubHistory : undefined,
+        athleteIsSearchable: isAthlete ? athleteIsSearchable : undefined,
+        athleteContactVisibility: isAthlete
+          ? athleteContactVisibility
+          : undefined,
+      });
+    } catch {
+      // Error feedback is handled centrally in mutation onError.
+    }
+  }, [
+    acceptedPrivacy,
+    acceptedTerms,
+    confirmPassword,
+    email,
+    fullName,
+    city,
+    state,
+    phone,
+    athleteAvailability,
+    athleteClubHistory,
+    athleteContactVisibility,
+    athleteCurrentCategory,
+    athleteDominantFoot,
+    athleteHeight,
+    athleteIsSearchable,
+    athletePositionsText,
+    athleteStrengthsText,
+    athleteWeight,
+    guardianEmail,
+    isMinor,
+    parsedBirthDate,
+    password,
+    selectedRole,
+    signupMutation,
+    t,
+    username,
+  ]);
 
   const onLoginPress = useCallback(() => {
     router.push("/login");
   }, []);
 
   return {
-    name,
+    fullName,
+    username,
     email,
     password,
     confirmPassword,
-    setName,
+    selectedRole,
+    birthDateText,
+    guardianEmail,
+    city,
+    state,
+    phone,
+    athleteHeight,
+    athleteWeight,
+    athleteDominantFoot,
+    athletePositionsText,
+    athleteStrengthsText,
+    athleteCurrentCategory,
+    athleteAvailability,
+    athleteClubHistory,
+    athleteIsSearchable,
+    athleteContactVisibility,
+    athleteClubDraft,
+    acceptedTerms,
+    acceptedPrivacy,
+    isMinor,
+    setFullName,
+    setUsername,
     setEmail,
     setPassword,
     setConfirmPassword,
+    setSelectedRole,
+    onBirthDateChange,
+    setGuardianEmail,
+    setCity,
+    setState,
+    onPhoneChange,
+    setAthleteHeight,
+    setAthleteWeight,
+    setAthleteDominantFoot,
+    setAthletePositionsText,
+    setAthleteStrengthsText,
+    setAthleteCurrentCategory,
+    setAthleteAvailability,
+    setAthleteIsSearchable,
+    setAthleteContactVisibility,
+    setAthleteClubDraft,
+    onAddAthleteClub,
+    onRemoveAthleteClub,
+    setAcceptedTerms,
+    setAcceptedPrivacy,
     onSignupPress,
     onLoginPress,
     isLoading: signupMutation.isPending,
