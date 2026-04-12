@@ -8,6 +8,7 @@ import {
   ProfileData,
   ProfileVideo,
   SearchFilters,
+  UserRole,
 } from "./types/profileTypes";
 
 const MEDIA_BUCKET = "media";
@@ -167,6 +168,67 @@ export const upsertAthleteProfile = async (
     );
 
   if (error) throw error;
+};
+
+const isMissingRpcError = (error: { code?: string; message?: string }): boolean => {
+  const msg = (error.message ?? "").toLowerCase();
+  return (
+    error.code === "PGRST202" ||
+    error.code === "42883" ||
+    msg.includes("could not find") ||
+    msg.includes("schema cache")
+  );
+};
+
+/**
+ * Ensures athlete_profile exists only for athletes.
+ * Prefers RPC `cffc_sync_athlete_profile_for_role` (SECURITY DEFINER) so delete works even when
+ * RLS blocks direct DELETE on athlete_profile. Apply migration in supabase/migrations/.
+ */
+export const syncAthleteProfileRowForRole = async (
+  userId: string,
+  role: UserRole | null
+): Promise<void> => {
+  if (role === null) return;
+
+  const { error: rpcError } = await supabase.rpc("cffc_sync_athlete_profile_for_role", {
+    p_user_id: userId,
+    p_role: role,
+  });
+
+  if (!rpcError) return;
+
+  if (!isMissingRpcError(rpcError)) {
+    throw rpcError;
+  }
+
+  if (role === "athlete") {
+    const { error } = await supabase
+      .from("athlete_profile")
+      .upsert({ user_id: userId }, { onConflict: "user_id" });
+    if (error) throw error;
+    return;
+  }
+  if (role === "pro" || role === "club" || role === "admin") {
+    const { error } = await supabase
+      .from("athlete_profile")
+      .delete()
+      .eq("user_id", userId);
+    if (error) throw error;
+  }
+};
+
+/** After signUp, correct profile.role and athlete_profile when a session exists (email confirm off). */
+export const applySignupRoleFromClient = async (
+  userId: string,
+  role: "athlete" | "pro" | "club"
+): Promise<void> => {
+  const { error } = await supabase
+    .from("profile")
+    .update({ role })
+    .eq("id", userId);
+  if (error) throw error;
+  await syncAthleteProfileRowForRole(userId, role);
 };
 
 export const uploadVideo = async (

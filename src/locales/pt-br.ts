@@ -182,6 +182,30 @@ export default {
     emptySubtitle: 'Este atleta ainda não postou vídeos',
     headerTitle: 'Vídeos',
   },
+  rolePlaceholders: {
+    pro: {
+      searchTitle: 'Descoberta de atletas (mock)',
+      searchBody:
+        'Filtros avançados, listas curtas e anotações de scouting para profissionais ficarão aqui. Texto fictício para o perfil Pro.',
+      addVideosTitle: 'Clipes e marcações (mock)',
+      addVideosBody:
+        'Salvar trechos do feed e anexar notas privadas ficará aqui. Atletas enviam vídeos; profissionais revisam por esta aba depois.',
+      favoritesTitle: 'Lista de observação (mock)',
+      favoritesBody:
+        'Atletas favoritos e avisos quando postarem novo material ficarão aqui. Aba oculta hoje — mesmo esqueleto do app do atleta.',
+    },
+    club: {
+      searchTitle: 'Banco de talentos (mock)',
+      searchBody:
+        'Busca de elenco por categoria, posição e região do clube ficará aqui. Texto fictício para o perfil Clube.',
+      addVideosTitle: 'Mídia do clube (mock)',
+      addVideosBody:
+        'Destaques da base, peneiras e reels internos geridos pelo clube ficarão aqui. Mesmo padrão de navegação dos outros perfis.',
+      favoritesTitle: 'Listas curtas (mock)',
+      favoritesBody:
+        'Comparar atletas e compartilhar listas com a comissão ficará aqui. Aba oculta — estrutura espelha a experiência do atleta.',
+    },
+  },
   tabs: {
     home: 'Início',
     search: 'Buscar',

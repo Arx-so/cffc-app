@@ -179,6 +179,30 @@ export default {
     emptySubtitle: "This athlete hasn't posted any videos",
     headerTitle: "Videos",
   },
+  rolePlaceholders: {
+    pro: {
+      searchTitle: "Athlete discovery (mock)",
+      searchBody:
+        "Advanced filters, shortlists, and scouting notes for professionals will live here. This is placeholder copy for the Pro role.",
+      addVideosTitle: "Clips & tags (mock)",
+      addVideosBody:
+        "Save moments from the feed and attach private notes will live here. Athletes upload videos; pros review them from this tab later.",
+      favoritesTitle: "Watchlist (mock)",
+      favoritesBody:
+        "Starred athletes and alerts when they post new footage will live here. Hidden tab today — same shell as the athlete app.",
+    },
+    club: {
+      searchTitle: "Talent pool (mock)",
+      searchBody:
+        "Roster search by age group, position, and region for your club will live here. This is placeholder copy for the Club role.",
+      addVideosTitle: "Club media (mock)",
+      addVideosBody:
+        "Academy highlights, tryouts, and internal reels managed by the club will live here. Same navigation pattern as other roles.",
+      favoritesTitle: "Shortlists (mock)",
+      favoritesBody:
+        "Compare candidates and share lists with your staff will live here. Hidden tab — structure mirrors the athlete experience.",
+    },
+  },
   tabs: {
     home: "Home",
     search: "Search",

@@ -1,6 +1,7 @@
 import { supabase } from "@/config/supabase";
 import { makeRedirectUri } from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
+import { applySignupRoleFromClient } from "@/processes/profile";
 import { ClubHistoryEntry } from "./types/profileTypes";
 import { LoginResponse, SignupResponse } from "./types/authTypes";
 
@@ -73,6 +74,8 @@ export const signup = async (body: {
         username: body.username,
         user_name: body.username,
         role: body.role,
+        // Some Auth / trigger setups ignore or mishandle `role`; keep an explicit alias.
+        profile_role: body.role,
         birth_date: body.birthDate,
         guardian_email: body.guardianEmail ?? '',
         city: body.city ?? "",
@@ -96,6 +99,11 @@ export const signup = async (body: {
 
   if (error) throw error;
   if (!data.user) throw new Error("Signup failed");
+
+  // Correct profile + athlete_profile when we already have a session (e.g. email confirm disabled).
+  if (data.session?.user?.id) {
+    await applySignupRoleFromClient(data.user.id, body.role);
+  }
 
   // Only return a token (and auto-sign-in) when the email is already confirmed.
   // If email confirmation is required, email_confirmed_at will be null and
