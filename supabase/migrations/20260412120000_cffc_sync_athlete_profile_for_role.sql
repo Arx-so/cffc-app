@@ -1,16 +1,20 @@
 -- Keeps athlete_profile aligned with account role.
 -- Run via Supabase CLI or paste the full file into Supabase Dashboard → SQL → Run.
 --
--- 1) BEFORE INSERT: blocks creating athlete_profile rows for non-athletes (fixes handle_new_user
---    that always inserts here). Runs as SECURITY DEFINER so it can read profile even with RLS.
--- 2) RPC: used by the app when the session exists (optional extra cleanup).
--- 3) Optional: tighten handle_new_user so it only INSERTs athlete_profile when role = athlete.
+-- 1) Drops the old trigger that blindly inserted into athlete_profile for every new profile.
+-- 2) BEFORE INSERT: blocks creating athlete_profile rows for non-athletes.
+--    Runs as SECURITY DEFINER so it can read profile even with RLS.
+-- 3) RPC: used by the app when the session exists (optional extra cleanup).
 
 -- One-time cleanup for rows created before this migration
 DELETE FROM public.athlete_profile AS ap
 USING public.profile AS p
 WHERE ap.user_id = p.id
   AND lower(trim(p.role::text)) IS DISTINCT FROM 'athlete';
+
+-- Drop the old trigger that blindly inserts into athlete_profile for every new profile
+DROP TRIGGER IF EXISTS trg_ensure_athlete_profile_on_profile_insert ON public.profile;
+DROP FUNCTION IF EXISTS public.ensure_athlete_profile_on_profile_insert();
 
 -- Prevent INSERT into athlete_profile unless profile.role is athlete (no row created for pro/club/admin)
 CREATE OR REPLACE FUNCTION public.cffc_athlete_profile_only_athletes_before_insert()
