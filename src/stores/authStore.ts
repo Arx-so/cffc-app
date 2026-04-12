@@ -1,5 +1,6 @@
 import { supabase } from "@/config/supabase";
 import { User } from "@/processes/types/authTypes";
+import { syncAthleteProfileRowForRole } from "@/processes/profile";
 import { UserRole } from "@/processes/types/profileTypes";
 import { create } from "zustand";
 
@@ -24,19 +25,9 @@ const readMetadataValue = (
 };
 
 const readMetadataRole = (metadata: AuthMetadata): UserRole | null => {
-  const role = normalizeMetaString(metadata.role);
+  const role = readMetadataValue(metadata, ["profile_role", "role"]);
   if (!role) return null;
   return VALID_ROLES.includes(role as UserRole) ? (role as UserRole) : null;
-};
-
-const ensureAthleteProfileRow = async (
-  userId: string,
-  role: UserRole | null
-): Promise<void> => {
-  if (role !== "athlete") return;
-  await supabase
-    .from("athlete_profile")
-    .upsert({ user_id: userId }, { onConflict: "user_id" });
 };
 
 const syncProfileFromMetadata = async (
@@ -91,9 +82,16 @@ const syncProfileFromMetadata = async (
     await supabase.from("profile").update(updates).eq("id", userId);
   }
 
-  await ensureAthleteProfileRow(
+  // Align athlete_profile to the role actually stored in profile (avoids relying on metadata alone).
+  const { data: roleRow } = await supabase
+    .from("profile")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+
+  await syncAthleteProfileRowForRole(
     userId,
-    roleFromMeta ?? ((profile.role as UserRole | null) ?? null)
+    (roleRow?.role as UserRole | null) ?? null,
   );
 };
 
