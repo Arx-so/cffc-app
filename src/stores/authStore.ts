@@ -1,6 +1,6 @@
 import { supabase } from "@/config/supabase";
 import { User } from "@/processes/types/authTypes";
-import { syncAthleteProfileRowForRole } from "@/processes/profile";
+import { syncAthleteProfileRowForRole, syncProfessionalProfileRowForRole } from "@/processes/profile";
 import { UserRole } from "@/processes/types/profileTypes";
 import { create } from "zustand";
 
@@ -89,10 +89,9 @@ const syncProfileFromMetadata = async (
     .eq("id", userId)
     .maybeSingle();
 
-  await syncAthleteProfileRowForRole(
-    userId,
-    (roleRow?.role as UserRole | null) ?? null,
-  );
+  const r = (roleRow?.role as UserRole | null) ?? null;
+  await syncAthleteProfileRowForRole(userId, r);
+  await syncProfessionalProfileRowForRole(userId, r);
 };
 
 const fetchUserRole = async (userId: string): Promise<UserRole | null> => {

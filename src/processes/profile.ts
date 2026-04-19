@@ -219,6 +219,42 @@ export const syncAthleteProfileRowForRole = async (
   }
 };
 
+/**
+ * Keeps professional_profile aligned with role (SECURITY DEFINER RPC when available).
+ * Apply migration `20260419120000_professional_profile.sql`.
+ */
+export const syncProfessionalProfileRowForRole = async (
+  userId: string,
+  role: UserRole | null
+): Promise<void> => {
+  if (role === null) return;
+
+  const { error: rpcError } = await supabase.rpc("cffc_sync_professional_profile_for_role", {
+    p_user_id: userId,
+    p_role: role,
+  });
+
+  if (!rpcError) return;
+
+  if (!isMissingRpcError(rpcError)) {
+    throw rpcError;
+  }
+
+  if (role === "pro") {
+    const { error } = await supabase
+      .from("professional_profile")
+      .upsert({ user_id: userId }, { onConflict: "user_id" });
+    if (error) throw error;
+    return;
+  }
+
+  const { error } = await supabase
+    .from("professional_profile")
+    .delete()
+    .eq("user_id", userId);
+  if (error) throw error;
+};
+
 /** After signUp, correct profile.role and athlete_profile when a session exists (email confirm off). */
 export const applySignupRoleFromClient = async (
   userId: string,
@@ -230,6 +266,7 @@ export const applySignupRoleFromClient = async (
     .eq("id", userId);
   if (error) throw error;
   await syncAthleteProfileRowForRole(userId, role);
+  await syncProfessionalProfileRowForRole(userId, role);
 };
 
 export const uploadVideo = async (
