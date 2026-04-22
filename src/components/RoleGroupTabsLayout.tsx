@@ -51,11 +51,16 @@ function TabBarButton({
 }
 
 type RoleGroupTabsLayoutProps =
-  | { addVideosMode: "picker" }
-  | { addVideosMode: "navigate"; groupBasePath: "/(pro)" | "/(club)" };
+  | { addVideosMode: "picker"; showAddVideos?: boolean }
+  | {
+      addVideosMode: "navigate";
+      groupBasePath: "/(pro)" | "/(club)";
+      showAddVideos?: boolean;
+    };
 
 export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
   const { t } = useTranslation();
+  const showAddVideos = props.showAddVideos ?? true;
   const addVideosNavigateBase =
     props.addVideosMode === "navigate" ? props.groupBasePath : null;
 
@@ -93,16 +98,20 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
     >
       <Tabs.Screen
         name="add-videos/index"
-        options={{
-          title: t("tabs.addVideos"),
-          tabBarButton: (tabProps) => (
-            <TabBarButton
-              {...tabProps}
-              isAddTab
-              onPress={handleAddVideosPress}
-            />
-          ),
-        }}
+        options={
+          showAddVideos
+            ? {
+                title: t("tabs.addVideos"),
+                tabBarButton: (tabProps) => (
+                  <TabBarButton
+                    {...tabProps}
+                    isAddTab
+                    onPress={handleAddVideosPress}
+                  />
+                ),
+              }
+            : { href: null }
+        }
       />
       <Tabs.Screen
         name="home/index"
