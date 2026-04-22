@@ -1,10 +1,3 @@
-import { RoleTabPlaceholder } from "@/Views/RoleTabPlaceholder";
+import { Favorites } from "@/Views/Favorites";
 
-export default function ClubFavoritesTab() {
-  return (
-    <RoleTabPlaceholder
-      titleKey="rolePlaceholders.club.favoritesTitle"
-      bodyKey="rolePlaceholders.club.favoritesBody"
-    />
-  );
-}
+export default Favorites;

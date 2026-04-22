@@ -1,10 +1,3 @@
-import { RoleTabPlaceholder } from "@/Views/RoleTabPlaceholder";
+import { Search } from "@/Views/Search";
 
-export default function ClubSearchTab() {
-  return (
-    <RoleTabPlaceholder
-      titleKey="rolePlaceholders.club.searchTitle"
-      bodyKey="rolePlaceholders.club.searchBody"
-    />
-  );
-}
+export default Search;

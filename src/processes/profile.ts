@@ -1,14 +1,15 @@
 import { supabase } from "@/config/supabase";
 import { getSignedUrl } from "@/utils/supabaseStorage";
 import {
-  AthleteProfile,
-  AthleteProfileHeader,
-  AthleteSearchResult,
-  ClubHistoryEntry,
-  ProfileData,
-  ProfileVideo,
-  SearchFilters,
-  UserRole,
+    AthleteProfile,
+    AthleteProfileHeader,
+    AthleteSearchResult,
+    ClubHistoryEntry,
+    ProfileData,
+    ProfileVideo,
+    SearchFilters,
+    ShortlistedAthlete,
+    UserRole,
 } from "./types/profileTypes";
 
 const MEDIA_BUCKET = "media";
@@ -308,7 +309,8 @@ const DEFAULT_FILTERS: SearchFilters = {
 
 export async function searchAthletes(
   query: string,
-  filters: SearchFilters = DEFAULT_FILTERS
+  filters: SearchFilters = DEFAULT_FILTERS,
+  clubUserId?: string
 ): Promise<AthleteSearchResult[]> {
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -360,7 +362,15 @@ export async function searchAthletes(
     athleteProfileQuery = athleteProfileQuery.lte("weight", filters.maxWeight);
   }
 
-  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts] =
+  const shortlistQuery = clubUserId
+    ? supabase
+        .from("club_shortlist")
+        .select("athlete_user_id")
+        .eq("club_user_id", clubUserId)
+        .in("athlete_user_id", userIds)
+    : null;
+
+  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts, shortlistResult] =
     await Promise.all([
       athleteProfileQuery,
       supabase
@@ -379,7 +389,12 @@ export async function searchAthletes(
         .select("athlete_user_id")
         .in("athlete_user_id", userIds)
         .eq("status", "accepted"),
+      shortlistQuery ?? Promise.resolve({ data: [] }),
     ]);
+
+  const shortlistedIds = new Set(
+    (shortlistResult.data ?? []).map((r: { athlete_user_id: string }) => r.athlete_user_id)
+  );
 
   const searchableIds = new Set(
     (athleteProfilesResult.data ?? []).map((ap) => ap.user_id)
@@ -426,11 +441,110 @@ export async function searchAthletes(
         videoCount: countByUser(videoCounts.data, p.id),
         validationCount: countByUser(validationCounts.data, p.id),
         contactCount: countByUser(contactCounts.data, p.id),
+        isShortlisted: shortlistedIds.has(p.id),
       };
     })
   );
 
   return results;
+}
+
+export async function addToClubShortlist(athleteUserId: string): Promise<void> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not authenticated");
+
+  const { error } = await supabase
+    .from("club_shortlist")
+    .upsert(
+      { club_user_id: user.id, athlete_user_id: athleteUserId },
+      { onConflict: "club_user_id,athlete_user_id" }
+    );
+
+  if (error) throw error;
+}
+
+export async function fetchClubShortlist(
+  clubUserId: string,
+  query: string = ""
+): Promise<ShortlistedAthlete[]> {
+  const { data: shortlist, error: shortlistError } = await supabase
+    .from("club_shortlist")
+    .select("athlete_user_id")
+    .eq("club_user_id", clubUserId);
+
+  if (shortlistError) throw shortlistError;
+  if (!shortlist || shortlist.length === 0) return [];
+
+  const userIds = shortlist.map((s: { athlete_user_id: string }) => s.athlete_user_id);
+
+  let profileQuery = supabase
+    .from("profile")
+    .select("id, name, username, avatar_url, verified, phone")
+    .in("id", userIds);
+
+  if (query.length >= 2) {
+    profileQuery = profileQuery.or(`name.ilike.%${query}%,username.ilike.%${query}%`);
+  }
+
+  const { data: profiles, error: profilesError } = await profileQuery;
+
+  if (profilesError) throw profilesError;
+  if (!profiles || profiles.length === 0) return [];
+
+  const profileIds = profiles.map((p: { id: string }) => p.id);
+
+  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts] =
+    await Promise.all([
+      supabase
+        .from("athlete_profile")
+        .select("user_id, positions")
+        .in("user_id", profileIds),
+      supabase
+        .from("media")
+        .select("athlete_user_id")
+        .in("athlete_user_id", profileIds)
+        .eq("type", "video")
+        .eq("status", "approved"),
+      supabase
+        .from("validation")
+        .select("athlete_user_id")
+        .in("athlete_user_id", profileIds)
+        .eq("status", "approved"),
+      supabase
+        .from("contact_request")
+        .select("athlete_user_id")
+        .in("athlete_user_id", profileIds)
+        .eq("status", "accepted"),
+    ]);
+
+  const positionsMap = new Map(
+    (athleteProfilesResult.data ?? []).map((ap: { user_id: string; positions: string[] }) => [
+      ap.user_id,
+      (ap.positions as string[]) ?? [],
+    ])
+  );
+
+  const countByUser = (rows: { athlete_user_id: string }[] | null, id: string) =>
+    (rows ?? []).filter((r) => r.athlete_user_id === id).length;
+
+  return await Promise.all(
+    profiles.map(async (p: { id: string; name: string | null; username: string | null; avatar_url: string | null; verified: boolean; phone: string | null }) => {
+      const avatarUrl = await getSignedUrl(MEDIA_BUCKET, p.avatar_url);
+      return {
+        id: p.id,
+        name: p.name ?? "",
+        username: p.username ?? null,
+        avatarUrl,
+        verified: p.verified ?? false,
+        positions: positionsMap.get(p.id) ?? [],
+        videoCount: countByUser(videoCounts.data, p.id),
+        validationCount: countByUser(validationCounts.data, p.id),
+        contactCount: countByUser(contactCounts.data, p.id),
+        isShortlisted: true,
+        phone: p.phone ?? null,
+      };
+    })
+  );
 }
 
 export const uploadAvatar = async (

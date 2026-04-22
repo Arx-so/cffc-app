@@ -44,12 +44,14 @@ const Profile = () => {
           viewerRole={profileData.role}
           onEditProfilePress={() => router.push("/edit-profile")}
         />
-        <VideosSection
-          videos={videos}
-          isOwnProfile={true}
-          onAddPress={handleAddVideoPress}
-          onVideoPress={handleVideoPress}
-        />
+        {profileData.role === "athlete" && (
+          <VideosSection
+            videos={videos}
+            isOwnProfile={true}
+            onAddPress={handleAddVideoPress}
+            onVideoPress={handleVideoPress}
+          />
+        )}
       </ScrollView>
     </Layout>
   );

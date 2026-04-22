@@ -137,7 +137,16 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
       <Tabs.Screen
         name="favorites/index"
         options={{
-          href: null,
+          title: t("tabs.favorites"),
+          tabBarLabel: t("tabs.favorites"),
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? "star" : "star-outline"}
+              size={22}
+              color={color}
+            />
+          ),
+          tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
         }}
       />
       <Tabs.Screen

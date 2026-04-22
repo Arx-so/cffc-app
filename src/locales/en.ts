@@ -221,6 +221,10 @@ export default {
     viewProfile: "VIEW PROFILE",
     noResults: "No athletes found",
     verified: "VERIFIED",
+    addFavorite: "ADD FAVORITE",
+    favoriteAdded: "FAVORITED",
+    favoriteSuccess: "Athlete added to your shortlist",
+    favoriteError: "Failed to add to shortlist",
   },
   searchFilter: {
     title: "SEARCH FILTERS",
@@ -313,6 +317,14 @@ export default {
       acceptTermsPrivacy: "Please accept Terms of Use and Privacy Policy.",
       guardianEmailRequired: "Please provide the guardian email.",
     },
+  },
+  favorites: {
+    title: "TALENT POOL",
+    total: "TOTAL",
+    searchPlaceholder: "Search by name or username...",
+    noFavorites: "No athletes in your shortlist yet",
+    contactAthlete: "CONTACT ATHLETE",
+    noPhone: "NO PHONE",
   },
   auth: {
     email: "Email",

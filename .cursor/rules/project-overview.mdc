@@ -16,7 +16,7 @@ Expo React Native + TypeScript com Expo Router (file-based routing).
 - **Supabase** — autenticação e banco de dados
 - **react-query** — data fetching e cache
 - **UI Kitten** + Eva Design — componentes de UI
-- **react-i18next** — i18n (en/ja)
+- **react-i18next** — i18n (en/pt-br/ja)
 - **react-native-toast-message** — notificações
 
 ## Estrutura de Diretórios
@@ -48,6 +48,7 @@ bun install        # Instalar dependências
 bun start          # Expo dev server
 bun run ios        # iOS simulator
 bun run android    # Android emulator
+bun run web        # Web browser
 bun run lint       # ESLint
 bunx expo install  # Instalar pacotes compatíveis com Expo
 ```

@@ -221,6 +221,10 @@ export default {
     viewProfile: "プロフィールを見る",
     noResults: "アスリートが見つかりません",
     verified: "認証済み",
+    addFavorite: "お気に入り追加",
+    favoriteAdded: "追加済み",
+    favoriteSuccess: "ショートリストに追加されました",
+    favoriteError: "追加に失敗しました",
   },
   searchFilter: {
     title: "検索フィルター",
@@ -313,6 +317,14 @@ export default {
       acceptTermsPrivacy: "利用規約とプライバシーポリシーに同意してください。",
       guardianEmailRequired: "保護者のメールアドレスを入力してください。",
     },
+  },
+  favorites: {
+    title: 'タレントプール',
+    total: '合計',
+    searchPlaceholder: '名前またはユーザー名で検索...',
+    noFavorites: 'ショートリストにまだ選手がいません',
+    contactAthlete: '選手に連絡',
+    noPhone: '電話番号なし',
   },
   auth: {
     email: 'メールアドレス',

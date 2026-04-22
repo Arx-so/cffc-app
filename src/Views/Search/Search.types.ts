@@ -1,4 +1,4 @@
-import { AthleteSearchResult } from "@/processes/types/profileTypes";
+import { AthleteSearchResult, UserRole } from "@/processes/types/profileTypes";
 
 export interface UseSearchReturn {
   query: string;
@@ -10,4 +10,7 @@ export interface UseSearchReturn {
   openFilter: () => void;
   hasActiveFilters: boolean;
   handleViewProfile: (athlete: AthleteSearchResult) => void;
+  handleAddFavorite: (athleteId: string) => void;
+  addingAthleteId: string | null;
+  role: UserRole | null;
 }
