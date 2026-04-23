@@ -80,6 +80,8 @@ export function Search() {
           data={athletes}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           renderItem={({ item }) => (
             <AthleteSearchCard
               athlete={item}

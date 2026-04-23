@@ -128,6 +128,8 @@ export function Favorites() {
           data={athletes}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           renderItem={renderItem}
           ListEmptyComponent={
             <View style={styles.centered}>
