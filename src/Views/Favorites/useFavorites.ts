@@ -3,11 +3,14 @@ import { ShortlistedAthlete } from "@/processes/types/profileTypes";
 import { useAuthStore } from "@/stores/authStore";
 import { useQuery } from "@tanstack/react-query";
 import { useFocusEffect, useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useCallback, useState } from "react";
-import { Linking } from "react-native";
+import { Linking, Platform, Share } from "react-native";
+import Toast from "react-native-toast-message";
 import { UseFavoritesReturn } from "./Favorites.types";
 
 export function useFavorites(): UseFavoritesReturn {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const router = useRouter();
   const { user } = useAuthStore();
@@ -28,11 +31,47 @@ export function useFavorites(): UseFavoritesReturn {
     }, [refetch])
   );
 
-  const handleContact = useCallback((phone: string | null) => {
-    if (!phone) return;
-    const cleaned = phone.replace(/\D/g, "");
-    Linking.openURL(`tel:${cleaned}`);
-  }, []);
+  const handleContact = useCallback(
+    async (phone: string | null) => {
+      if (!phone) return;
+
+      const cleaned = phone.replace(/\D/g, "");
+      if (!cleaned) {
+        Toast.show({ type: "error", text1: t("favorites.contactUnavailable") });
+        return;
+      }
+
+      const text = `${t("favorites.contactShareText")}\n${cleaned}`;
+      const phoneUrl = `tel:${cleaned}`;
+
+      try {
+        if (Platform.OS === "android") {
+          await Share.share({ message: text, title: t("favorites.contactOptions.title") });
+          return;
+        }
+
+        await Share.share({
+          message: text,
+          url: phoneUrl,
+        });
+      } catch {
+        try {
+          const canCall = await Linking.canOpenURL(phoneUrl);
+          if (canCall) {
+            await Linking.openURL(phoneUrl);
+            return;
+          }
+        } catch {
+          // Fall through to toast error.
+        }
+        Toast.show({
+          type: "error",
+          text1: t("favorites.contactOpenError"),
+        });
+      }
+    },
+    [t]
+  );
 
   const handleViewProfile = useCallback(
     (athlete: ShortlistedAthlete) => {

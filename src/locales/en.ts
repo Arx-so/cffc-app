@@ -325,6 +325,16 @@ export default {
     noFavorites: "No athletes in your shortlist yet",
     contactAthlete: "CONTACT ATHLETE",
     noPhone: "NO PHONE",
+    contactShareText: "Athlete contact:",
+    contactUnavailable: "No app available for this number",
+    contactOpenError: "Could not open the selected app",
+    contactOptions: {
+      title: "Contact athlete",
+      message: "Choose how you want to get in touch",
+      phone: "Phone",
+      sms: "SMS",
+      whatsapp: "WhatsApp",
+    },
   },
   auth: {
     email: "Email",

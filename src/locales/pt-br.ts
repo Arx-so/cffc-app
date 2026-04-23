@@ -328,6 +328,16 @@ export default {
     noFavorites: 'Nenhum atleta na sua lista ainda',
     contactAthlete: 'CONTATAR ATLETA',
     noPhone: 'SEM TELEFONE',
+    contactShareText: 'Contato do atleta:',
+    contactUnavailable: 'Nenhum app disponível para este número',
+    contactOpenError: 'Não foi possível abrir o app selecionado',
+    contactOptions: {
+      title: 'Contatar atleta',
+      message: 'Escolha como deseja entrar em contato',
+      phone: 'Telefone',
+      sms: 'SMS',
+      whatsapp: 'WhatsApp',
+    },
   },
   auth: {
     email: 'E-mail',

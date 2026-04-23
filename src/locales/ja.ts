@@ -325,6 +325,16 @@ export default {
     noFavorites: 'ショートリストにまだ選手がいません',
     contactAthlete: '選手に連絡',
     noPhone: '電話番号なし',
+    contactShareText: '選手の連絡先:',
+    contactUnavailable: 'この番号で利用可能なアプリがありません',
+    contactOpenError: '選択したアプリを開けませんでした',
+    contactOptions: {
+      title: '選手に連絡',
+      message: '連絡方法を選択してください',
+      phone: '電話',
+      sms: 'SMS',
+      whatsapp: 'WhatsApp',
+    },
   },
   auth: {
     email: 'メールアドレス',
