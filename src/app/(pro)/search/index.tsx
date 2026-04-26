@@ -1,10 +1,3 @@
-import { RoleTabPlaceholder } from "@/Views/RoleTabPlaceholder";
+import { Search } from "@/Views/Search";
 
-export default function ProSearchTab() {
-  return (
-    <RoleTabPlaceholder
-      titleKey="rolePlaceholders.pro.searchTitle"
-      bodyKey="rolePlaceholders.pro.searchBody"
-    />
-  );
-}
+export default Search;
