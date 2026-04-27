@@ -1,3 +1,3 @@
-import Profile from "@/Views/Profile";
+import ProProfile from "@/Views/ProProfile";
 
-export default Profile;
+export default ProProfile;

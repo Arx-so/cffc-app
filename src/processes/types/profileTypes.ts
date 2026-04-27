@@ -85,3 +85,49 @@ export interface SearchFilters {
   maxWeight: number | null;
   strengths: string[];
 }
+
+/** Editable credential fields stored in `professional_profile`. */
+export interface ProfessionalCredentialFields {
+  specialty: string | null;
+  registration_number: string | null;
+  institution: string | null;
+}
+
+/** Full row in `professional_profile` (role `pro`). */
+export interface ProfessionalProfile extends ProfessionalCredentialFields {
+  user_id: string;
+  /** Escala típica 0–5; atualizada no backend/admin, não pelo upsert de credenciais no app. */
+  reputation_score: number | null;
+}
+
+export type ProfessionalDocumentStatus = "pending" | "approved" | "rejected";
+
+export interface ProfessionalDocumentSummary {
+  id: string;
+  storagePath: string | null;
+  status: ProfessionalDocumentStatus;
+  created_at: string;
+}
+
+export interface ProIssuedValidationRow {
+  id: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  athleteName: string;
+}
+
+/** Data for the professional's own profile screen (tab Profile). */
+export interface ProProfileScreenData {
+  id: string;
+  name: string;
+  username: string | null;
+  avatarUrl: string | null;
+  verified: boolean;
+  memberSinceYear: number;
+  issuedValidationCount: number;
+  reputationScore: number | null;
+  credentials: ProfessionalCredentialFields;
+  document: ProfessionalDocumentSummary | null;
+  documentSignedUrl: string | null;
+  recentValidations: ProIssuedValidationRow[];
+}
