@@ -1,3 +1,5 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
 import { Brand } from "@/constants/theme";
 import { Icon } from "@ui-kitten/components";
 import { Stack } from "expo-router";
@@ -7,7 +9,6 @@ import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -64,10 +65,9 @@ const AddVideo = () => {
     <>
       <Stack.Screen options={headerOptions} />
       <View style={styles.container}>
-        <ScrollView
+        <KeyboardAwareScreen
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
+          bottomOffset={120}
         >
           {/* ── Video preview ── */}
           <TouchableOpacity
@@ -171,10 +171,10 @@ const AddVideo = () => {
             autoCapitalize="sentences"
           />
           <Text style={styles.captionCounter}>{captionLength}/2200</Text>
-        </ScrollView>
+        </KeyboardAwareScreen>
 
         {/* ── Footer post button ── */}
-        <View style={styles.footer}>
+        <KeyboardStickyFooter style={styles.footer}>
           <TouchableOpacity
             style={[
               styles.postButton,
@@ -199,7 +199,7 @@ const AddVideo = () => {
               </>
             )}
           </TouchableOpacity>
-        </View>
+        </KeyboardStickyFooter>
       </View>
     </>
   );

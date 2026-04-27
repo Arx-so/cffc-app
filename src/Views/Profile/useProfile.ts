@@ -1,8 +1,8 @@
+import { fetchUserVideoFeed } from "@/processes/feed";
 import {
   fetchAthleteProfile,
   fetchProfileVideos,
 } from "@/processes/profile";
-import { fetchUserVideoFeed } from "@/processes/feed";
 import { ProfileVideo } from "@/processes/types/profileTypes";
 import { useAuthStore } from "@/stores/authStore";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ const OWN_PROFILE_STALE = 10 * 60 * 1000;
 const OWN_PROFILE_GC = 30 * 60 * 1000;
 
 export const useProfile = (): UseProfileReturn => {
-  const currentUser = useAuthStore((state) => state.user);
+  const {user:currentUser, role} = useAuthStore(state => state);
   const userId = currentUser?.id ?? "";
   const { t } = useTranslation();
 
@@ -54,7 +54,7 @@ export const useProfile = (): UseProfileReturn => {
   const { data: videosData } = useQuery({
     queryKey: ["profileVideos", userId],
     queryFn: () => fetchProfileVideos(userId),
-    enabled: !!userId,
+    enabled: !!userId && role === "athlete",
     staleTime: OWN_PROFILE_STALE,
     gcTime: OWN_PROFILE_GC,
   });

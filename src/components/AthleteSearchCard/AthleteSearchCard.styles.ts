@@ -104,4 +104,34 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.5,
   },
+  buttonsRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  halfButton: {
+    flex: 1,
+  },
+  addFavoriteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    backgroundColor: Brand.green,
+    borderRadius: 8,
+    paddingVertical: 10,
+  },
+  addFavoriteButtonDisabled: {
+    backgroundColor: Brand.border,
+    opacity: 0.7,
+  },
+  addFavoriteText: {
+    color: Brand.bg,
+    fontSize: 12,
+    fontWeight: "bold",
+    letterSpacing: 0.5,
+  },
+  starIcon: {
+    marginLeft: 8,
+    alignSelf: "flex-start",
+  },
 });

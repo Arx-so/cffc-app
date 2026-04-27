@@ -67,6 +67,7 @@ export const MaxContentWidth = 800;
 // Brand color palette used across auth screens and the custom dark theme.
 export const Brand = {
   green:  '#39FF14',
+  blue:   '#5BA4F5',
   bg:     '#0B0B0B',
   card:   '#1A1A1A',
   border: '#2A2A2A',

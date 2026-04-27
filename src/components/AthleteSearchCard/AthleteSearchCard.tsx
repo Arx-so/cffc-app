@@ -1,6 +1,14 @@
+import { Brand } from "@/constants/theme";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import {
+    ActivityIndicator,
+    Image,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { styles } from "./AthleteSearchCard.styles";
 import { AthleteSearchCardProps } from "./AthleteSearchCard.types";
 
@@ -13,13 +21,25 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-export function AthleteSearchCard({ athlete, onViewProfile }: AthleteSearchCardProps) {
+export function AthleteSearchCard({
+  athlete,
+  onViewProfile,
+  onAddFavorite,
+  isShortlisted = false,
+  isAddingToShortlist = false,
+  footer,
+}: AthleteSearchCardProps) {
   const { t } = useTranslation();
   const position = athlete.positions[0] ?? "";
 
   return (
     <View style={styles.card}>
-      <View style={styles.cardHeader}>
+      <TouchableOpacity
+        style={styles.cardHeader}
+        activeOpacity={onViewProfile ? 0.7 : 1}
+        onPress={onViewProfile}
+        disabled={!onViewProfile}
+      >
         <View style={styles.avatarContainer}>
           {athlete.avatarUrl ? (
             <Image
@@ -59,11 +79,66 @@ export function AthleteSearchCard({ athlete, onViewProfile }: AthleteSearchCardP
             </View>
           </View>
         </View>
-      </View>
-
-      <TouchableOpacity style={styles.viewProfileButton} activeOpacity={0.8} onPress={onViewProfile}>
-        <Text style={styles.viewProfileText}>{t("search.viewProfile")}</Text>
+        {isShortlisted && (
+          <Ionicons
+            name="star"
+            size={18}
+            color={Brand.green}
+            style={styles.starIcon}
+          />
+        )}
       </TouchableOpacity>
+
+      {footer !== undefined ? (
+        footer
+      ) : (
+        <View style={onAddFavorite ? styles.buttonsRow : undefined}>
+          <TouchableOpacity
+            style={[
+              styles.viewProfileButton,
+              onAddFavorite ? styles.halfButton : undefined,
+            ]}
+            activeOpacity={0.8}
+            onPress={onViewProfile}
+          >
+            <Text style={styles.viewProfileText}>
+              {t("search.viewProfile")}
+            </Text>
+          </TouchableOpacity>
+
+          {onAddFavorite && (
+            <TouchableOpacity
+              style={[
+                styles.addFavoriteButton,
+                styles.halfButton,
+                (isShortlisted || isAddingToShortlist) &&
+                  styles.addFavoriteButtonDisabled,
+              ]}
+              activeOpacity={0.8}
+              onPress={onAddFavorite}
+              disabled={isShortlisted || isAddingToShortlist}
+            >
+              {isAddingToShortlist ? (
+                <ActivityIndicator size="small" color={Brand.bg} />
+              ) : isShortlisted ? (
+                <>
+                  <Ionicons name="star" size={14} color={Brand.bg} />
+                  <Text style={styles.addFavoriteText}>
+                    {t("search.favoriteAdded")}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Ionicons name="star-outline" size={14} color={Brand.bg} />
+                  <Text style={styles.addFavoriteText}>
+                    {t("search.addFavorite")}
+                  </Text>
+                </>
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
     </View>
   );
 }

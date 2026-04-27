@@ -432,6 +432,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
   },
+  modalKeyboardAvoid: {
+    flex: 1,
+  },
   modalContent: {
     backgroundColor: Brand.card,
     borderRadius: 16,

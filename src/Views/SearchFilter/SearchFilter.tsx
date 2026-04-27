@@ -1,9 +1,10 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
 import { Brand } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -88,9 +89,10 @@ export function SearchFilter() {
         <View style={styles.headerSlotRight} />
       </View>
 
-      <ScrollView
+      <KeyboardAwareScreen
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
+        bottomOffset={120}
       >
         {/* POSITION */}
         <SectionHeader title={t("searchFilter.position")} />
@@ -239,9 +241,9 @@ export function SearchFilter() {
             })}
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScreen>
 
-      <View style={styles.footer}>
+      <KeyboardStickyFooter style={styles.footer}>
         <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
           <Text style={styles.clearButtonText}>
             {t("searchFilter.clearAll")}
@@ -252,7 +254,7 @@ export function SearchFilter() {
             {t("searchFilter.applyFilters")}
           </Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardStickyFooter>
     </View>
   );
 }

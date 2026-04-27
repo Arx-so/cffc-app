@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
 import ToastContainer from "react-native-toast-message";
 
@@ -180,11 +181,13 @@ const RootLayout = () => {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider mapping={eva.mapping} theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <RootLayoutNav />
-          <StatusBar style={effectiveTheme === "dark" ? "light" : "dark"} />
-          <ToastContainer bottomOffset={130} position="bottom" />
-        </QueryClientProvider>
+        <KeyboardProvider>
+          <QueryClientProvider client={queryClient}>
+            <RootLayoutNav />
+            <StatusBar style={effectiveTheme === "dark" ? "light" : "dark"} />
+            <ToastContainer bottomOffset={130} position="bottom" />
+          </QueryClientProvider>
+        </KeyboardProvider>
       </ApplicationProvider>
     </>
   );

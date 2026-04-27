@@ -1,3 +1,4 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { Brand } from "@/constants/theme";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { authStyles as S } from "@/styles/auth";
@@ -7,9 +8,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -27,10 +25,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <KeyboardAvoidingView
-      style={S.keyboardAvoid}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <View style={S.keyboardAvoid}>
       <Stack.Screen
         options={{
           title: t("login.title"),
@@ -45,11 +40,9 @@ const Login = () => {
         }}
       />
 
-      <ScrollView
+      <KeyboardAwareScreen
         style={S.container}
         contentContainerStyle={[S.scrollContent, { justifyContent: "center" }]}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
         <Text style={[S.heroSubtitle, { marginBottom: 6 }]}>
           {t("login.heroSubtitle")}
@@ -152,8 +145,8 @@ const Login = () => {
             <Text style={S.bottomLinkBold}>{t("auth.createAccount")}</Text>
           </Text>
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScreen>
+    </View>
   );
 };
 

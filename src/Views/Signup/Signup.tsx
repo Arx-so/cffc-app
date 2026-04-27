@@ -1,3 +1,4 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { Brand } from "@/constants/theme";
 import { authStyles as A } from "@/styles/auth";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,9 +7,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   Switch,
   Text,
   TextInput,
@@ -127,10 +125,7 @@ const Signup = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={A.keyboardAvoid}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <View style={A.keyboardAvoid}>
       <Stack.Screen
         options={{
           title: t("signup.title"),
@@ -145,11 +140,9 @@ const Signup = () => {
         }}
       />
 
-      <ScrollView
+      <KeyboardAwareScreen
         style={A.container}
         contentContainerStyle={S.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
         {/* Hero */}
         <Text style={A.heroSubtitle}>{t("signup.heroSubtitle")}</Text>
@@ -707,8 +700,8 @@ const Signup = () => {
             <Text style={A.bottomLinkBold}>{t("login.title")}</Text>
           </Text>
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScreen>
+    </View>
   );
 };
 

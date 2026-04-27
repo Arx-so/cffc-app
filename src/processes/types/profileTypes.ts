@@ -69,6 +69,11 @@ export interface AthleteSearchResult {
   validationCount: number;
   videoCount: number;
   contactCount: number;
+  isShortlisted: boolean;
+}
+
+export interface ShortlistedAthlete extends AthleteSearchResult {
+  phone: string | null;
 }
 
 export interface SearchFilters {

@@ -1,3 +1,4 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { Brand } from "@/constants/theme";
 import { ClubHistoryEntry } from "@/processes/types/profileTypes";
 import { Icon, Spinner, Text, useTheme } from "@ui-kitten/components";
@@ -8,12 +9,12 @@ import {
   ActivityIndicator,
   Image,
   Modal,
-  ScrollView,
   Switch,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { styles } from "./EditProfile.styles";
 import { useEditProfile } from "./useEditProfile";
 
@@ -63,43 +64,48 @@ const AddItemModal = ({
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      <TouchableOpacity
-        style={styles.modalOverlay}
-        activeOpacity={1}
-        onPress={onClose}
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={styles.modalKeyboardAvoid}
       >
         <TouchableOpacity
-          style={styles.modalContent}
+          style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => {}}
+          onPress={onClose}
         >
-          <Text style={styles.modalTitle}>{title}</Text>
-          <TextInput
-            style={styles.modalInput}
-            value={value}
-            onChangeText={setValue}
-            placeholder={t("editProfile.modalPlaceholder")}
-            placeholderTextColor="#444"
-            autoFocus
-          />
-          <View style={styles.modalActions}>
-            <TouchableOpacity
-              style={styles.modalCancelButton}
-              onPress={onClose}
-            >
-              <Text style={styles.modalCancelText}>{t("common.cancel")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalConfirmButton}
-              onPress={handleConfirm}
-            >
-              <Text style={styles.modalConfirmText}>
-                {t("editProfile.modalAdd")}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.modalContent}
+            activeOpacity={1}
+            onPress={() => {}}
+          >
+            <Text style={styles.modalTitle}>{title}</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={value}
+              onChangeText={setValue}
+              placeholder={t("editProfile.modalPlaceholder")}
+              placeholderTextColor="#444"
+              autoFocus
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.modalCancelButton}
+                onPress={onClose}
+              >
+                <Text style={styles.modalCancelText}>{t("common.cancel")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalConfirmButton}
+                onPress={handleConfirm}
+              >
+                <Text style={styles.modalConfirmText}>
+                  {t("editProfile.modalAdd")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -316,11 +322,9 @@ const EditProfile = () => {
   return (
     <>
       <Stack.Screen options={{ ...headerOptions, headerRight }} />
-      <ScrollView
+      <KeyboardAwareScreen
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
         {/* ── Avatar ── */}
         <TouchableOpacity
@@ -880,7 +884,7 @@ const EditProfile = () => {
             onSelect={(v) => setAthleteField("availability", v)}
           />
         )}
-      </ScrollView>
+      </KeyboardAwareScreen>
     </>
   );
 };

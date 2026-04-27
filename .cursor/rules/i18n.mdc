@@ -21,15 +21,17 @@ Toast.show({ type: "success", text1: "Perfil atualizado!" });
 
 As traduções ficam em `src/locales/`:
 
-| Arquivo | Idioma |
-|---------|--------|
-| `src/locales/en.ts` | Inglês |
+| Arquivo                | Idioma             |
+| ---------------------- | ------------------ |
+| `src/locales/en.ts`    | Inglês             |
 | `src/locales/pt-br.ts` | Português (Brasil) |
-| `src/locales/ja.ts` | Japonês |
+| `src/locales/ja.ts`    | Japonês            |
 
 ## Ao Adicionar Novas Strings
 
-1. Adicionar a chave em **todos os 3 arquivos** simultaneamente
+**Sempre que criar qualquer texto visível ao usuário (label, placeholder, título, botão, toast, mensagem de erro, etc.), é obrigatório atualizar os 3 arquivos de tradução no mesmo momento.**
+
+1. Adicionar a chave em **todos os 3 arquivos** simultaneamente: `en.ts`, `pt-br.ts` e `ja.ts`
 2. Agrupar por feature/tela (ex: `editProfile.`, `profile.`, `settings.`)
 3. Manter consistência de nomenclatura com chaves existentes
 4. Placeholders numéricos e nomes de campos técnicos podem permanecer sem tradução (ex: "185", "@username")
