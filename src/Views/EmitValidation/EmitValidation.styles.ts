@@ -1,0 +1,125 @@
+import { Brand } from "@/constants/theme";
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Brand.bg,
+  },
+  progressBarTrack: {
+    height: 3,
+    backgroundColor: Brand.border,
+  },
+  progressBarFill: {
+    height: 3,
+    backgroundColor: Brand.green,
+  },
+  stepHeader: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 8,
+  },
+  stepCounter: {
+    fontSize: 11,
+    fontWeight: "700",
+    letterSpacing: 1,
+    color: Brand.gray,
+    marginBottom: 4,
+  },
+  stepTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: Brand.white,
+  },
+  skipHint: {
+    fontSize: 12,
+    color: Brand.gray,
+    paddingHorizontal: 24,
+    marginBottom: 16,
+  },
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+  },
+  footer: {
+    flexDirection: "row",
+    gap: 12,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 32,
+    borderTopWidth: 1,
+    borderTopColor: Brand.border,
+    backgroundColor: Brand.bg,
+  },
+  footerButton: {
+    flex: 1,
+    borderRadius: 24,
+    borderWidth: 0,
+  },
+  fieldLabel: {
+    fontSize: 11,
+    fontWeight: "700",
+    letterSpacing: 0.8,
+    color: Brand.gray,
+    marginBottom: 6,
+    marginTop: 14,
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: Brand.border,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: Brand.white,
+    fontSize: 15,
+  },
+  checkboxRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Brand.border,
+  },
+  checkboxLabel: {
+    fontSize: 14,
+    color: Brand.white,
+    flex: 1,
+  },
+  segmentRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 4,
+  },
+  segmentOption: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    alignItems: "center",
+  },
+  segmentOptionActive: {
+    borderColor: Brand.green,
+    backgroundColor: `${Brand.green}22`,
+  },
+  segmentOptionText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Brand.gray,
+  },
+  segmentOptionTextActive: {
+    color: Brand.green,
+  },
+  notesInput: {
+    borderWidth: 1,
+    borderColor: Brand.border,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    color: Brand.white,
+    fontSize: 15,
+    minHeight: 160,
+    textAlignVertical: "top",
+  },
+});
