@@ -65,11 +65,17 @@ export const useVisitorProfile = (
     [videos, userId, username]
   );
 
+  const handleEmitValidation = useCallback(() => {
+    const name = encodeURIComponent(profileData?.name ?? "");
+    router.push(`/emit-validation?athleteId=${userId}&athleteName=${name}` as any);
+  }, [userId, profileData?.name]);
+
   return {
     profileData: profileData ?? null,
     videos,
     isLoading: isProfileLoading,
     isError: isProfileError,
     handleVideoPress,
+    handleEmitValidation,
   };
 };

@@ -1,11 +1,13 @@
 import {
   AthleteProfileHeader,
   ProfileVideo,
+  UserRole,
 } from "@/processes/types/profileTypes";
 
 export interface VisitorProfileProps {
   userId: string;
   username: string | null;
+  viewerRole?: UserRole | null;
 }
 
 export interface UseVisitorProfileReturn {
@@ -14,4 +16,5 @@ export interface UseVisitorProfileReturn {
   isLoading: boolean;
   isError: boolean;
   handleVideoPress: (item: ProfileVideo) => void;
+  handleEmitValidation: () => void;
 }

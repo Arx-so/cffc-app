@@ -1,15 +1,15 @@
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { VideosSection } from "@/components/VideosSection";
 import { Brand } from "@/constants/theme";
-import { Layout, Spinner, Text } from "@ui-kitten/components";
+import { Button, Layout, Spinner, Text } from "@ui-kitten/components";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { styles } from "./VisitorProfile.styles";
 import { VisitorProfileProps } from "./VisitorProfile.types";
 import { useVisitorProfile } from "./useVisitorProfile";
 
-const VisitorProfile = ({ userId, username }: VisitorProfileProps) => {
-  const { profileData, videos, isLoading, isError, handleVideoPress } =
+const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) => {
+  const { profileData, videos, isLoading, isError, handleVideoPress, handleEmitValidation } =
     useVisitorProfile(userId, username);
   const { t } = useTranslation();
 
@@ -35,7 +35,7 @@ const VisitorProfile = ({ userId, username }: VisitorProfileProps) => {
         <ProfileHeader
           profile={profileData}
           isOwnProfile={false}
-          viewerRole="athlete"
+          viewerRole={viewerRole ?? "athlete"}
         />
         <VideosSection
           videos={videos}
@@ -43,6 +43,17 @@ const VisitorProfile = ({ userId, username }: VisitorProfileProps) => {
           onVideoPress={handleVideoPress}
         />
       </ScrollView>
+      {viewerRole === "pro" && (
+        <Layout style={[styles.emitButtonContainer, { backgroundColor: Brand.bg }]}>
+          <Button
+            status="success"
+            style={{ borderRadius: 24, borderWidth: 0 }}
+            onPress={handleEmitValidation}
+          >
+            {t("emitValidation.emitButton")}
+          </Button>
+        </Layout>
+      )}
     </Layout>
   );
 };

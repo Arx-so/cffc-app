@@ -152,6 +152,13 @@ const RootLayoutNav = () => {
         options={{ headerShown: false, presentation: "fullScreenModal" }}
       />
       <Stack.Screen
+        name="emit-validation"
+        options={{
+          headerShown: false,
+          presentation: "fullScreenModal",
+        }}
+      />
+      <Stack.Screen
         name="settings"
         options={{
           headerShown: true,
