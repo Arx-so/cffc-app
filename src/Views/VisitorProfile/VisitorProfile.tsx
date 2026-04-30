@@ -44,7 +44,7 @@ const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) =
         />
       </ScrollView>
       {viewerRole === "pro" && (
-        <Layout style={[styles.emitButtonContainer, { backgroundColor: Brand.bg }]}>
+        <Layout style={styles.emitButtonContainer}>
           <Button
             status="success"
             style={{ borderRadius: 24, borderWidth: 0 }}
