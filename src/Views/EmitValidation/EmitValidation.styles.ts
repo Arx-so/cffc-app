@@ -122,4 +122,28 @@ export const styles = StyleSheet.create({
     minHeight: 160,
     textAlignVertical: "top",
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingTop: 52,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Brand.border,
+    backgroundColor: Brand.bg,
+  },
+  headerBackButton: {
+    marginRight: 12,
+    padding: 4,
+  },
+  headerBackText: {
+    fontSize: 22,
+    color: Brand.white,
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "700" as const,
+    color: Brand.white,
+    flex: 1,
+  },
 });

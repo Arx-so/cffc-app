@@ -24,12 +24,11 @@ import { StepOdontologia } from "./steps/StepOdontologia";
 import { StepPsicologia } from "./steps/StepPsicologia";
 import { StepNotes } from "./steps/StepNotes";
 import { ValidationChecklist } from "@/processes/types/profileTypes";
-import { Brand } from "@/constants/theme";
 
 export const EmitValidation = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { athleteId, athleteName } = useLocalSearchParams<{
+  const { athleteName } = useLocalSearchParams<{
     athleteId: string;
     athleteName: string;
   }>();
@@ -263,36 +262,20 @@ export const EmitValidation = () => {
     }
   };
 
-  const progressWidth = `${Math.round((currentStep / totalSteps) * 100)}%` as const;
+  const progressWidth = `${Math.round(((currentStep + 1) / totalSteps) * 100)}%` as const;
 
   return (
     <Layout style={styles.container}>
       {/* Header */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          paddingHorizontal: 16,
-          paddingTop: 52,
-          paddingBottom: 12,
-        }}
-      >
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
-          style={{ marginRight: 12 }}
+          style={styles.headerBackButton}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={{ fontSize: 22, color: Brand.green }}>{"←"}</Text>
+          <Text style={styles.headerBackText}>{"←"}</Text>
         </TouchableOpacity>
-        <Text
-          style={{
-            flex: 1,
-            fontSize: 16,
-            fontWeight: "700",
-            color: Brand.white,
-          }}
-          numberOfLines={1}
-        >
+        <Text style={styles.headerTitle} numberOfLines={1}>
           {decodedAthleteName}
         </Text>
       </View>
