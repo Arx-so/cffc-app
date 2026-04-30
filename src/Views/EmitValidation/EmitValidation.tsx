@@ -2,7 +2,7 @@ import { Layout, Text, Button, Spinner, Icon } from "@ui-kitten/components";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View, TouchableOpacity } from "react-native";
+import { ScrollView, View, TouchableOpacity, DimensionValue } from "react-native";
 
 import { Brand } from "@/constants/theme";
 import { useEmitValidation } from "./useEmitValidation";
@@ -261,7 +261,7 @@ export const EmitValidation = () => {
     }
   }, [stepKey, checklist, note, updateCategory, setNote]);
 
-  const progressWidth = `${Math.round(((currentStep + 1) / totalSteps) * 100)}%`;
+  const progressWidth: DimensionValue = `${Math.round(((currentStep + 1) / totalSteps) * 100)}%`;
 
   return (
     <Layout style={styles.container}>
