@@ -146,4 +146,7 @@ export const styles = StyleSheet.create({
     color: Brand.white,
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
 });

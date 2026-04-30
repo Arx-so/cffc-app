@@ -301,7 +301,7 @@ export const EmitValidation = () => {
 
       {/* Step content */}
       <ScrollView
-        style={{ flex: 1 }}
+        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
