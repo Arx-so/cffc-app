@@ -509,5 +509,9 @@ export default {
     notesLabel: "Observa\u00e7\u00f5es Gerais",
     notesPlaceholder: "Adicione observa\u00e7\u00f5es gerais ou coment\u00e1rios...",
   },
+  proValidationHistory: {
+    title: "Atletas Validados",
+    empty: "Voc\u00ea ainda n\u00e3o validou nenhum atleta.",
+  },
 } as const;
 

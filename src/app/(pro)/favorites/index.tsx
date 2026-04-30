@@ -1,10 +1,5 @@
-import { RoleTabPlaceholder } from "@/Views/RoleTabPlaceholder";
+import { ProValidationHistory } from "@/Views/ProValidationHistory";
 
 export default function ProFavoritesTab() {
-  return (
-    <RoleTabPlaceholder
-      titleKey="rolePlaceholders.pro.favoritesTitle"
-      bodyKey="rolePlaceholders.pro.favoritesBody"
-    />
-  );
+  return <ProValidationHistory />;
 }

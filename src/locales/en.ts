@@ -506,4 +506,8 @@ export default {
     notesLabel: "General Observations",
     notesPlaceholder: "Add any overall notes or observations...",
   },
+  proValidationHistory: {
+    title: "Validated Athletes",
+    empty: "You haven't validated any athletes yet.",
+  },
 } as const;

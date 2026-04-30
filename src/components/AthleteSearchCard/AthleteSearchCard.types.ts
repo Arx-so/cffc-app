@@ -7,5 +7,6 @@ export interface AthleteSearchCardProps {
   onAddFavorite?: () => void;
   isShortlisted?: boolean;
   isAddingToShortlist?: boolean;
+  badge?: React.ReactNode;
   footer?: React.ReactNode;
 }

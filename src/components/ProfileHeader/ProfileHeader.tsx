@@ -160,13 +160,15 @@ export const ProfileHeader = ({
           </Button>
         ) : viewerRole === "pro" ? (
           <View style={styles.visitorActions}>
-            <Button
-              style={styles.primaryButtonFlex}
-              size="large"
-              onPress={onValidateProfilePress}
-            >
-              {t("profile.validateProfile")}
-            </Button>
+            {onValidateProfilePress && (
+              <Button
+                style={styles.primaryButtonFlex}
+                size="large"
+                onPress={onValidateProfilePress}
+              >
+                {t("profile.validateProfile")}
+              </Button>
+            )}
             <Button
               style={[
                 styles.iconButton,

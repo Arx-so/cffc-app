@@ -15,6 +15,7 @@ export interface UseVisitorProfileReturn {
   videos: ProfileVideo[];
   isLoading: boolean;
   isError: boolean;
+  hasExistingValidation: boolean;
   handleVideoPress: (item: ProfileVideo) => void;
   handleEmitValidation: () => void;
 }

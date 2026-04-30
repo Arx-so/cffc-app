@@ -3,7 +3,9 @@ import {
   fetchProfileVideos,
 } from "@/processes/profile";
 import { fetchUserVideoFeed } from "@/processes/feed";
+import { hasExistingValidation } from "@/processes/validation";
 import { ProfileVideo } from "@/processes/types/profileTypes";
+import { useAuthStore } from "@/stores/authStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback } from "react";
@@ -17,6 +19,7 @@ export const useVisitorProfile = (
   username: string | null
 ): UseVisitorProfileReturn => {
   const queryClient = useQueryClient();
+  const proUserId = useAuthStore((state) => state.user?.id);
 
   useFocusEffect(
     useCallback(() => {
@@ -53,6 +56,13 @@ export const useVisitorProfile = (
     gcTime: 5 * 60 * 1000,
   });
 
+  const { data: validationExists = false } = useQuery({
+    queryKey: ["validation-exists", userId, proUserId],
+    queryFn: () => hasExistingValidation(userId, proUserId!),
+    enabled: !!userId && !!proUserId,
+    staleTime: 60 * 1000,
+  });
+
   const videos = videosData ?? [];
 
   const handleVideoPress = useCallback(
@@ -75,6 +85,7 @@ export const useVisitorProfile = (
     videos,
     isLoading: isProfileLoading,
     isError: isProfileError,
+    hasExistingValidation: validationExists,
     handleVideoPress,
     handleEmitValidation,
   };

@@ -27,6 +27,7 @@ export function AthleteSearchCard({
   onAddFavorite,
   isShortlisted = false,
   isAddingToShortlist = false,
+  badge,
   footer,
 }: AthleteSearchCardProps) {
   const { t } = useTranslation();
@@ -77,6 +78,7 @@ export function AthleteSearchCard({
               </Text>
               <Text style={styles.statValue}>{athlete.validationCount}</Text>
             </View>
+            {badge}
           </View>
         </View>
         {isShortlisted && (

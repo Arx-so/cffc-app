@@ -5,7 +5,16 @@
       "mcp__ide__getDiagnostics",
       "mcp__supabase__execute_sql",
       "mcp__supabase__list_migrations",
-      "mcp__supabase__apply_migration"
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__list_projects",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(grep -h \"export const Step\" src/Views/EmitValidation/steps/Step*.tsx)",
+      "Bash(grep -h \"import { ValidationChecklist }\" src/Views/EmitValidation/steps/Step[A-Z]*.tsx)",
+      "Bash(grep -h \"from \"\"react-i18next\"\"\" src/Views/EmitValidation/steps/Step[A-Z]*.tsx)",
+      "Bash(grep \"type Props\" src/Views/EmitValidation/steps/Step[A-Z]*.tsx)",
+      "Bash(bun run:*)",
+      "Bash(npx tsc:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

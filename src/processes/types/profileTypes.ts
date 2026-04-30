@@ -72,6 +72,12 @@ export interface AthleteSearchResult {
   isShortlisted: boolean;
 }
 
+export type ValidationStatus = "pending" | "approved" | "rejected";
+
+export interface ValidatedAthleteResult extends AthleteSearchResult {
+  validationStatus: ValidationStatus;
+}
+
 export interface ShortlistedAthlete extends AthleteSearchResult {
   phone: string | null;
 }
