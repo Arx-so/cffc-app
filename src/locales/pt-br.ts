@@ -405,7 +405,7 @@ export default {
     skipHint: "Todos os campos s\u00e3o opcionais",
     steps: {
       antropometria: "Antropometria",
-      bioimpedancia: "Bioimpед\u00e2ncia",
+      bioimpedancia: "Bioimpedância",
       dinamometria: "Dinamometria",
       bioquimica: "Bioqu\u00edmica",
       vo2max: "Capacidade Aer\u00f3bia (VO\u2082 m\u00e1x)",
