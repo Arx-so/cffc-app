@@ -132,6 +132,7 @@ export interface ProProfileScreenData {
   recentValidations: ProIssuedValidationRow[];
 }
 
+/** JSONB checklist of sports-science assessment fields stored in the `validation` table. All categories and fields are optional — only evaluated sections are filled in. */
 export interface ValidationChecklist {
   antropometria?: {
     height_cm?: number;
