@@ -136,13 +136,13 @@ export const styles = StyleSheet.create({
     marginRight: 12,
     padding: 4,
   },
-  headerBackText: {
-    fontSize: 22,
-    color: Brand.white,
+  headerBackIcon: {
+    width: 24,
+    height: 24,
   },
   headerTitle: {
     fontSize: 16,
-    fontWeight: "700" as const,
+    fontWeight: "700",
     color: Brand.white,
     flex: 1,
   },

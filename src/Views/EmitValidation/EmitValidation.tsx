@@ -1,8 +1,10 @@
-import { Layout, Text, Button, Spinner } from "@ui-kitten/components";
+import { Layout, Text, Button, Spinner, Icon } from "@ui-kitten/components";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View, TouchableOpacity } from "react-native";
 
+import { Brand } from "@/constants/theme";
 import { useEmitValidation } from "./useEmitValidation";
 import { styles } from "./EmitValidation.styles";
 import { StepAntropometria } from "./steps/StepAntropometria";
@@ -28,10 +30,7 @@ import { ValidationChecklist } from "@/processes/types/profileTypes";
 export const EmitValidation = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { athleteName } = useLocalSearchParams<{
-    athleteId: string;
-    athleteName: string;
-  }>();
+  const { athleteName } = useLocalSearchParams<{ athleteName: string }>();
 
   const decodedAthleteName = athleteName ? decodeURIComponent(athleteName) : "";
 
@@ -49,7 +48,7 @@ export const EmitValidation = () => {
     isSubmitting,
   } = useEmitValidation();
 
-  const renderStep = () => {
+  const renderStep = useCallback(() => {
     switch (stepKey) {
       case "antropometria":
         return (
@@ -260,9 +259,9 @@ export const EmitValidation = () => {
       default:
         return null;
     }
-  };
+  }, [stepKey, checklist, note, updateCategory, setNote]);
 
-  const progressWidth = `${Math.round(((currentStep + 1) / totalSteps) * 100)}%` as const;
+  const progressWidth = `${Math.round(((currentStep + 1) / totalSteps) * 100)}%`;
 
   return (
     <Layout style={styles.container}>
@@ -273,7 +272,7 @@ export const EmitValidation = () => {
           style={styles.headerBackButton}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={styles.headerBackText}>{"←"}</Text>
+          <Icon name="arrow-back-outline" style={styles.headerBackIcon} fill={Brand.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           {decodedAthleteName}

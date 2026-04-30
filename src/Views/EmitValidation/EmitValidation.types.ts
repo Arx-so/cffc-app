@@ -10,7 +10,7 @@ export interface UseEmitValidationReturn {
   setNote: (note: string) => void;
   currentStep: number;
   totalSteps: number;
-  stepKey: string;
+  stepKey: keyof ValidationChecklist | "notes";
   goNext: () => void;
   goPrevious: () => void;
   handleSubmit: () => void;
