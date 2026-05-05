@@ -8,7 +8,7 @@ import * as eva from "@eva-design/eva";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Stack, usePathname, useRouter, useSegments } from "expo-router";
 import { HeaderBar } from "@/components/HeaderBar";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -58,6 +58,7 @@ const RootLayoutNav = () => {
   const { isAuthenticated, isLoading, role, checkAuth } = useAuthStore();
   const router = useRouter();
   const segments = useSegments();
+  const pathname = usePathname();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -73,16 +74,18 @@ const RootLayoutNav = () => {
       segments[0] as string,
     );
 
-    const onUnauthenticatedScreen = (UNAUTHENTICATED_SCREENS as readonly string[]).includes(
-      segments[0] as string,
-    );
+    // Root welcome is `app/index.tsx`; Expo Router strips the trailing `index` segment,
+    // so `segments` is [] and `segments[0]` is never `"index"` — detect via pathname.
+    const onUnauthenticatedScreen =
+      pathname === "/" ||
+      (UNAUTHENTICATED_SCREENS as readonly string[]).includes(segments[0] as string);
 
     if (isAuthenticated && role && onUnauthenticatedScreen) {
       router.replace(ROLE_ROUTES[role] as any);
     } else if (!isAuthenticated && inRoleGroup) {
       router.replace("/");
     }
-  }, [isAuthenticated, isLoading, role, segments, router]);
+  }, [isAuthenticated, isLoading, pathname, role, segments, router]);
 
   if (isLoading) {
     return (
