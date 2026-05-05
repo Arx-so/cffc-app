@@ -1,5 +1,8 @@
 import { supabase } from "@/config/supabase";
-import { fetchApprovedValidationCountsByAthleteIds } from "@/processes/validationStats";
+import {
+  fetchApprovedValidationCountsByAthleteIds,
+  validationCountsMapGet,
+} from "@/processes/validationStats";
 import { getSignedUrl } from "@/utils/supabaseStorage";
 import type { AthleteSearchResult, ValidatedAthleteResult, ValidationChecklist, ValidationStatus } from "@/processes/types/profileTypes";
 
@@ -101,7 +104,7 @@ export const fetchValidatedAthletes = async (
         verified: p.verified ?? false,
         positions: posMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: validationCountByAthlete.get(p.id) ?? 0,
+        validationCount: validationCountsMapGet(validationCountByAthlete, p.id),
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: false,
         validationStatus: statusByAthlete.get(p.id) ?? "pending",

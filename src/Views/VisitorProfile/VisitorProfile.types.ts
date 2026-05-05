@@ -3,6 +3,7 @@ import {
   ProfileVideo,
   UserRole,
 } from "@/processes/types/profileTypes";
+import type { AthleteOwnProfileExtraSlice } from "@/Views/Profile/Profile.types";
 
 export interface VisitorProfileProps {
   userId: string;
@@ -18,4 +19,6 @@ export interface UseVisitorProfileReturn {
   hasExistingValidation: boolean;
   handleVideoPress: (item: ProfileVideo) => void;
   handleEmitValidation: () => void;
+  /** Same fields as “Meu perfil” details card; null when visited user is not an athlete. */
+  visitorAthleteDetailsExtra: AthleteOwnProfileExtraSlice | null;
 }

@@ -313,7 +313,7 @@ export const EmitValidation = () => {
           <Button
             style={styles.footerButton}
             appearance="outline"
-            status="basic"
+            status="primary"
             onPress={goPrevious}
           >
             {t("emitValidation.previous")}
@@ -323,7 +323,7 @@ export const EmitValidation = () => {
         {currentStep < totalSteps - 1 ? (
           <Button
             style={styles.footerButton}
-            status="success"
+            status="primary"
             onPress={goNext}
           >
             {t("emitValidation.next")}
@@ -331,7 +331,7 @@ export const EmitValidation = () => {
         ) : (
           <Button
             style={styles.footerButton}
-            status="success"
+            status="primary"
             onPress={handleSubmit}
             disabled={isSubmitting}
             accessoryLeft={

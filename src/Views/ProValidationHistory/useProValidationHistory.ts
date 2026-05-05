@@ -1,13 +1,14 @@
 import { fetchValidatedAthletes } from "@/processes/validation";
 import { ValidatedAthleteResult } from "@/processes/types/profileTypes";
 import { useAuthStore } from "@/stores/authStore";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { UseProValidationHistoryReturn } from "./ProValidationHistory.types";
 
 export function useProValidationHistory(): UseProValidationHistoryReturn {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const proUserId = useAuthStore((state) => state.user?.id);
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -17,6 +18,15 @@ export function useProValidationHistory(): UseProValidationHistoryReturn {
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!proUserId) return;
+      void queryClient.invalidateQueries({
+        queryKey: ["validated-athletes", proUserId],
+      });
+    }, [proUserId, queryClient]),
+  );
 
   const handleViewProfile = useCallback(
     (athlete: ValidatedAthleteResult) => {

@@ -34,7 +34,9 @@ export function useSearch(): UseSearchReturn {
   useFocusEffect(
     useCallback(() => {
       setQuery("");
-    }, [])
+      // Search uses 5m staleTime; refetch on tab focus so counts (e.g. validations) stay current.
+      queryClient.invalidateQueries({ queryKey: ["search-athletes"], exact: false });
+    }, [queryClient])
   );
 
   const { data, isLoading, isError, refetch } = useQuery({

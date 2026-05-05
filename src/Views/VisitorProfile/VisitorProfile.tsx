@@ -1,3 +1,4 @@
+import { AthleteOwnDetailsCard } from "@/components/AthleteOwnDetailsCard/AthleteOwnDetailsCard";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { VideosSection } from "@/components/VideosSection";
 import { Brand } from "@/constants/theme";
@@ -9,8 +10,16 @@ import { VisitorProfileProps } from "./VisitorProfile.types";
 import { useVisitorProfile } from "./useVisitorProfile";
 
 const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) => {
-  const { profileData, videos, isLoading, isError, hasExistingValidation, handleVideoPress, handleEmitValidation } =
-    useVisitorProfile(userId, username);
+  const {
+    profileData,
+    videos,
+    isLoading,
+    isError,
+    hasExistingValidation,
+    visitorAthleteDetailsExtra,
+    handleVideoPress,
+    handleEmitValidation,
+  } = useVisitorProfile(userId, username);
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -38,6 +47,16 @@ const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) =
           viewerRole={viewerRole ?? "athlete"}
           onValidateProfilePress={hasExistingValidation ? undefined : handleEmitValidation}
         />
+        {profileData.role === "athlete" && visitorAthleteDetailsExtra !== null ? (
+          <AthleteOwnDetailsCard
+            city={profileData.city}
+            state={profileData.state}
+            birthDate={visitorAthleteDetailsExtra.birthDate}
+            phone={visitorAthleteDetailsExtra.phone}
+            athleteRow={visitorAthleteDetailsExtra.athleteProfile}
+            isLoading={visitorAthleteDetailsExtra.isLoading}
+          />
+        ) : null}
         <VideosSection
           videos={videos}
           isOwnProfile={false}

@@ -1,5 +1,7 @@
 import {
   fetchAthleteProfile,
+  fetchAthleteProfileData,
+  fetchProfilePersonalFields,
   fetchProfileVideos,
 } from "@/processes/profile";
 import { fetchUserVideoFeed } from "@/processes/feed";
@@ -25,6 +27,8 @@ export const useVisitorProfile = (
     useCallback(() => {
       queryClient.invalidateQueries({ queryKey: ["visitor-profile", userId] });
       queryClient.invalidateQueries({ queryKey: ["visitor-profile-videos", userId] });
+      queryClient.invalidateQueries({ queryKey: ["visitor-profile-personal", userId] });
+      queryClient.invalidateQueries({ queryKey: ["visitor-athlete-profile-extra", userId] });
     }, [userId, queryClient])
   );
 
@@ -36,6 +40,28 @@ export const useVisitorProfile = (
     queryKey: ["visitor-profile", userId],
     queryFn: () => fetchAthleteProfile(userId),
     enabled: !!userId,
+    staleTime: VISITOR_PROFILE_STALE,
+    gcTime: VISITOR_PROFILE_GC,
+  });
+
+  const viewingAthlete = profileData?.role === "athlete";
+
+  const { data: visitorPersonalFields, isLoading: visitorPersonalLoading } =
+    useQuery({
+      queryKey: ["visitor-profile-personal", userId],
+      queryFn: () => fetchProfilePersonalFields(userId),
+      enabled: !!userId && viewingAthlete,
+      staleTime: VISITOR_PROFILE_STALE,
+      gcTime: VISITOR_PROFILE_GC,
+    });
+
+  const {
+    data: visitorAthleteProfileRow,
+    isLoading: visitorAthleteRowLoading,
+  } = useQuery({
+    queryKey: ["visitor-athlete-profile-extra", userId],
+    queryFn: () => fetchAthleteProfileData(userId),
+    enabled: !!userId && viewingAthlete,
     staleTime: VISITOR_PROFILE_STALE,
     gcTime: VISITOR_PROFILE_GC,
   });
@@ -65,6 +91,15 @@ export const useVisitorProfile = (
 
   const videos = videosData ?? [];
 
+  const visitorAthleteDetailsExtra = viewingAthlete
+    ? {
+        isLoading: visitorPersonalLoading || visitorAthleteRowLoading,
+        birthDate: visitorPersonalFields?.birth_date ?? null,
+        phone: visitorPersonalFields?.phone ?? null,
+        athleteProfile: visitorAthleteProfileRow ?? null,
+      }
+    : null;
+
   const handleVideoPress = useCallback(
     (item: ProfileVideo) => {
       const index = videos.findIndex((v) => v.id === item.id);
@@ -88,5 +123,6 @@ export const useVisitorProfile = (
     hasExistingValidation: validationExists,
     handleVideoPress,
     handleEmitValidation,
+    visitorAthleteDetailsExtra,
   };
 };

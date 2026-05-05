@@ -71,7 +71,13 @@ export const useEmitValidation = (): UseEmitValidationReturn => {
         checklist,
         note,
       });
-      await queryClient.invalidateQueries({ queryKey: ["pro-profile"] });
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["proProfile", user.id] }),
+        queryClient.refetchQueries({ queryKey: ["validated-athletes", user.id] }),
+        queryClient.invalidateQueries({
+          queryKey: ["validation-exists", athleteId],
+        }),
+      ]);
       Toast.show({ type: "success", text1: t("emitValidation.submitSuccess") });
       router.back();
     } catch {

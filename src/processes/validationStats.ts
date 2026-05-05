@@ -1,11 +1,19 @@
 import { supabase } from "@/config/supabase";
 
-type RpcCountRow = { athlete_user_id: string; approved_count: number | string };
+type RpcApprovedRow = { athlete_user_id: string; approved_count: number | string };
+
+/** Single canonical key for Map lookups — avoids RPC vs profile id casing mismatches. */
+function athleteIdMapKey(id: string): string {
+  return String(id).trim().toLowerCase();
+}
+
+/** Use when reading counts from maps built by fetch*ValidationCountsByAthleteIds. */
+export function validationCountsMapGet(map: Map<string, number>, athleteId: string): number {
+  return map.get(athleteIdMapKey(athleteId)) ?? 0;
+}
 
 /**
- * Approved validation counts per athlete. Uses SECURITY DEFINER RPC so scouts,
- * athletes, and clubs see the same totals as on the profile — not limited by RLS
- * that hides other users' validation rows from direct SELECT.
+ * Approved-only counts — matches profile/header stats (`status = approved`).
  */
 export async function fetchApprovedValidationCountsByAthleteIds(
   athleteIds: string[],
@@ -19,8 +27,11 @@ export async function fetchApprovedValidationCountsByAthleteIds(
 
   if (error) throw error;
 
-  for (const raw of (data ?? []) as RpcCountRow[]) {
-    map.set(raw.athlete_user_id, Number(raw.approved_count));
+  for (const raw of (data ?? []) as RpcApprovedRow[]) {
+    map.set(athleteIdMapKey(String(raw.athlete_user_id)), Number(raw.approved_count));
   }
   return map;
 }
+
+// Pending+approved discovery counts live in RPC `cffc_public_discovery_validation_counts`
+// if we ever want scouts to see not-yet-moderated activity on cards again.

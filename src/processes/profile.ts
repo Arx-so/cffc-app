@@ -1,5 +1,8 @@
 import { supabase } from "@/config/supabase";
-import { fetchApprovedValidationCountsByAthleteIds } from "@/processes/validationStats";
+import {
+  fetchApprovedValidationCountsByAthleteIds,
+  validationCountsMapGet,
+} from "@/processes/validationStats";
 import { getSignedUrl } from "@/utils/supabaseStorage";
 import {
     AthleteProfile,
@@ -55,7 +58,7 @@ export const fetchAthleteProfile = async (
     state: profile.state,
     stats: {
       videoCount: videoResult.count ?? 0,
-      validationCount: validationCountByAthlete.get(userId) ?? 0,
+      validationCount: validationCountsMapGet(validationCountByAthlete, userId),
       contactCount: contactResult.count ?? 0,
     },
   };
@@ -492,7 +495,7 @@ export async function searchAthletes(
         verified: p.verified ?? false,
         positions: positionsMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: validationCountByAthlete.get(p.id) ?? 0,
+        validationCount: validationCountsMapGet(validationCountByAthlete, p.id),
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: shortlistedIds.has(p.id),
       };
@@ -587,7 +590,7 @@ export async function fetchClubShortlist(
         verified: p.verified ?? false,
         positions: positionsMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: validationCountByAthlete.get(p.id) ?? 0,
+        validationCount: validationCountsMapGet(validationCountByAthlete, p.id),
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: true,
         phone: p.phone ?? null,
