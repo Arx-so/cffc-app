@@ -1,3 +1,5 @@
+import { AthleteOwnDetailsCard } from "@/components/AthleteOwnDetailsCard/AthleteOwnDetailsCard";
+import { TAB_BAR_BOTTOM_INSET } from "@/components/KeyboardAwareScreen";
 import { VideosSection } from "@/components/VideosSection";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Brand } from "@/constants/theme";
@@ -5,6 +7,7 @@ import { Layout, Spinner, Text } from "@ui-kitten/components";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./Profile.styles";
 import { useProfile } from "./useProfile";
 
@@ -16,8 +19,12 @@ const Profile = () => {
     isError,
     handleAddVideoPress,
     handleVideoPress,
+    athleteOwnProfileExtra,
   } = useProfile();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const scrollBottomPadding =
+    TAB_BAR_BOTTOM_INSET + Math.max(insets.bottom, 0);
 
   if (isLoading) {
     return (
@@ -37,13 +44,29 @@ const Profile = () => {
 
   return (
     <Layout style={[styles.container, { backgroundColor: Brand.bg }]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: scrollBottomPadding,
+        }}
+      >
         <ProfileHeader
           profile={profileData}
           isOwnProfile={true}
           viewerRole={profileData.role}
           onEditProfilePress={() => router.push("/edit-profile")}
         />
+        {profileData.role === "athlete" && athleteOwnProfileExtra !== null ? (
+          <AthleteOwnDetailsCard
+            city={profileData.city}
+            state={profileData.state}
+            birthDate={athleteOwnProfileExtra.birthDate}
+            phone={athleteOwnProfileExtra.phone}
+            athleteRow={athleteOwnProfileExtra.athleteProfile}
+            isLoading={athleteOwnProfileExtra.isLoading}
+          />
+        ) : null}
         {profileData.role === "athlete" && (
           <VideosSection
             videos={videos}

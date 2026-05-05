@@ -51,16 +51,18 @@ function TabBarButton({
 }
 
 type RoleGroupTabsLayoutProps =
-  | { addVideosMode: "picker"; showAddVideos?: boolean }
+  | { addVideosMode: "picker"; showAddVideos?: boolean; showFavorites?: boolean }
   | {
       addVideosMode: "navigate";
       groupBasePath: "/(pro)" | "/(club)";
       showAddVideos?: boolean;
+      showFavorites?: boolean;
     };
 
 export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
   const { t } = useTranslation();
   const showAddVideos = props.showAddVideos ?? true;
+  const showFavorites = props.showFavorites ?? true;
   const addVideosNavigateBase =
     props.addVideosMode === "navigate" ? props.groupBasePath : null;
 
@@ -145,18 +147,22 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
       />
       <Tabs.Screen
         name="favorites/index"
-        options={{
-          title: t("tabs.favorites"),
-          tabBarLabel: t("tabs.favorites"),
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? "star" : "star-outline"}
-              size={22}
-              color={color}
-            />
-          ),
-          tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
-        }}
+        options={
+          showFavorites
+            ? {
+                title: t("tabs.favorites"),
+                tabBarLabel: t("tabs.favorites"),
+                tabBarIcon: ({ focused, color }) => (
+                  <Ionicons
+                    name={focused ? "star" : "star-outline"}
+                    size={22}
+                    color={color}
+                  />
+                ),
+                tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
+              }
+            : { href: null }
+        }
       />
       <Tabs.Screen
         name="profile/index"

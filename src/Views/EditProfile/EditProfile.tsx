@@ -1,4 +1,8 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import {
+  ATHLETE_AVAILABILITY_KEYS,
+  AVAILABILITY_VALUE_BY_TRANSLATION_KEY,
+} from "@/constants/athleteAvailability";
 import { Brand } from "@/constants/theme";
 import { ClubHistoryEntry } from "@/processes/types/profileTypes";
 import { Icon, Spinner, Text, useTheme } from "@ui-kitten/components";
@@ -19,21 +23,6 @@ import { styles } from "./EditProfile.styles";
 import { useEditProfile } from "./useEditProfile";
 
 const FOOT_KEYS = ["right", "left", "both"] as const;
-
-const AVAILABILITY_KEYS = [
-  "availabilityLookingForClub",
-  "availabilityNegotiating",
-  "availabilityContracted",
-  "availabilityFreeAgent",
-] as const;
-
-const AVAILABILITY_VALUES: Record<(typeof AVAILABILITY_KEYS)[number], string> =
-  {
-    availabilityLookingForClub: "Em busca de clube",
-    availabilityNegotiating: "Em negociação",
-    availabilityContracted: "Contratado",
-    availabilityFreeAgent: "Livre no mercado",
-  };
 
 const SectionHeader = ({ title }: { title: string }) => (
   <View style={styles.sectionHeader}>
@@ -136,14 +125,15 @@ const AvailabilityModal = ({
           onPress={() => {}}
         >
           <Text style={styles.modalTitle}>{t("editProfile.availability")}</Text>
-          {AVAILABILITY_KEYS.map((key, idx) => {
-            const val = AVAILABILITY_VALUES[key];
+          {ATHLETE_AVAILABILITY_KEYS.map((key, idx) => {
+            const val = AVAILABILITY_VALUE_BY_TRANSLATION_KEY[key];
             return (
               <TouchableOpacity
                 key={key}
                 style={[
                   styles.optionRow,
-                  idx === AVAILABILITY_KEYS.length - 1 && styles.optionRowLast,
+                  idx === ATHLETE_AVAILABILITY_KEYS.length - 1 &&
+                    styles.optionRowLast,
                 ]}
                 onPress={() => {
                   onSelect(val);
@@ -314,8 +304,9 @@ const EditProfile = () => {
     : "";
 
   const displayAvailability = athleteForm?.availability
-    ? AVAILABILITY_KEYS.find(
-        (k) => AVAILABILITY_VALUES[k] === athleteForm.availability
+    ? ATHLETE_AVAILABILITY_KEYS.find(
+        (k) =>
+          AVAILABILITY_VALUE_BY_TRANSLATION_KEY[k] === athleteForm.availability,
       )
     : null;
 

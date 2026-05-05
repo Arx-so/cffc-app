@@ -1,4 +1,5 @@
 import { supabase } from "@/config/supabase";
+import { fetchApprovedValidationCountsByAthleteIds } from "@/processes/validationStats";
 import { getSignedUrl } from "@/utils/supabaseStorage";
 import {
     AthleteProfile,
@@ -26,25 +27,22 @@ export const fetchAthleteProfile = async (
   if (error) throw error;
   if (!profile) throw new Error("Profile not found");
 
-  const [avatarUrl, videoResult, validationResult, contactResult] = await Promise.all([
-    getSignedUrl(MEDIA_BUCKET, profile.avatar_url),
-    supabase
-      .from("media")
-      .select("id", { count: "exact", head: true })
-      .eq("athlete_user_id", userId)
-      .eq("type", "video")
-      .eq("status", "approved"),
-    supabase
-      .from("validation")
-      .select("id", { count: "exact", head: true })
-      .eq("athlete_user_id", userId)
-      .eq("status", "approved"),
-    supabase
-      .from("contact_request")
-      .select("id", { count: "exact", head: true })
-      .eq("athlete_user_id", userId)
-      .eq("status", "accepted"),
-  ]);
+  const [avatarUrl, videoResult, validationCountByAthlete, contactResult] =
+    await Promise.all([
+      getSignedUrl(MEDIA_BUCKET, profile.avatar_url),
+      supabase
+        .from("media")
+        .select("id", { count: "exact", head: true })
+        .eq("athlete_user_id", userId)
+        .eq("type", "video")
+        .eq("status", "approved"),
+      fetchApprovedValidationCountsByAthleteIds([userId]),
+      supabase
+        .from("contact_request")
+        .select("id", { count: "exact", head: true })
+        .eq("athlete_user_id", userId)
+        .eq("status", "accepted"),
+    ]);
 
   return {
     id: profile.id,
@@ -57,7 +55,7 @@ export const fetchAthleteProfile = async (
     state: profile.state,
     stats: {
       videoCount: videoResult.count ?? 0,
-      validationCount: validationResult.count ?? 0,
+      validationCount: validationCountByAthlete.get(userId) ?? 0,
       contactCount: contactResult.count ?? 0,
     },
   };
@@ -115,6 +113,25 @@ export const fetchProfileForEdit = async (
     phone: data.phone,
   };
 };
+
+/** Birth and phone only — avoids signing avatar URLs on profile home. */
+export async function fetchProfilePersonalFields(
+  userId: string
+): Promise<{ birth_date: string | null; phone: string | null }> {
+  const { data, error } = await supabase
+    .from("profile")
+    .select("birth_date, phone")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+  if (!data) throw new Error("Profile not found");
+
+  return {
+    birth_date: data.birth_date,
+    phone: data.phone,
+  };
+}
 
 export const updateProfile = async (
   userId: string,
@@ -344,20 +361,23 @@ const DEFAULT_FILTERS: SearchFilters = {
   strengths: [],
 };
 
+/** When set, that profile id is omitted from results (viewer must not see their own row). */
 export async function searchAthletes(
   query: string,
   filters: SearchFilters = DEFAULT_FILTERS,
-  clubUserId?: string
+  clubUserId?: string,
+  excludeViewerId?: string | null
 ): Promise<AthleteSearchResult[]> {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  const excludeId = excludeViewerId ?? authUser?.id;
 
   let profileQuery = supabase
     .from("profile")
     .select("id, name, username, avatar_url, verified")
     .eq("role", "athlete");
 
-  if (user) {
-    profileQuery = profileQuery.neq("id", user.id);
+  if (excludeId) {
+    profileQuery = profileQuery.neq("id", excludeId);
   }
 
   if (query.length >= 3) {
@@ -407,7 +427,7 @@ export async function searchAthletes(
         .in("athlete_user_id", userIds)
     : null;
 
-  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts, shortlistResult] =
+  const [athleteProfilesResult, videoCounts, contactCounts, shortlistResult, validationCountByAthlete] =
     await Promise.all([
       athleteProfileQuery,
       supabase
@@ -417,16 +437,12 @@ export async function searchAthletes(
         .eq("type", "video")
         .eq("status", "approved"),
       supabase
-        .from("validation")
-        .select("athlete_user_id")
-        .in("athlete_user_id", userIds)
-        .eq("status", "approved"),
-      supabase
         .from("contact_request")
         .select("athlete_user_id")
         .in("athlete_user_id", userIds)
         .eq("status", "accepted"),
       shortlistQuery ?? Promise.resolve({ data: [] }),
+      fetchApprovedValidationCountsByAthleteIds(userIds),
     ]);
 
   const shortlistedIds = new Set(
@@ -476,14 +492,14 @@ export async function searchAthletes(
         verified: p.verified ?? false,
         positions: positionsMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: countByUser(validationCounts.data, p.id),
+        validationCount: validationCountByAthlete.get(p.id) ?? 0,
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: shortlistedIds.has(p.id),
       };
     })
   );
 
-  return results;
+  return excludeId ? results.filter((r) => r.id !== excludeId) : results;
 }
 
 export async function addToClubShortlist(athleteUserId: string): Promise<void> {
@@ -530,7 +546,7 @@ export async function fetchClubShortlist(
 
   const profileIds = profiles.map((p: { id: string }) => p.id);
 
-  const [athleteProfilesResult, videoCounts, validationCounts, contactCounts] =
+  const [athleteProfilesResult, videoCounts, contactCounts, validationCountByAthlete] =
     await Promise.all([
       supabase
         .from("athlete_profile")
@@ -543,15 +559,11 @@ export async function fetchClubShortlist(
         .eq("type", "video")
         .eq("status", "approved"),
       supabase
-        .from("validation")
-        .select("athlete_user_id")
-        .in("athlete_user_id", profileIds)
-        .eq("status", "approved"),
-      supabase
         .from("contact_request")
         .select("athlete_user_id")
         .in("athlete_user_id", profileIds)
         .eq("status", "accepted"),
+      fetchApprovedValidationCountsByAthleteIds(profileIds),
     ]);
 
   const positionsMap = new Map(
@@ -575,7 +587,7 @@ export async function fetchClubShortlist(
         verified: p.verified ?? false,
         positions: positionsMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: countByUser(validationCounts.data, p.id),
+        validationCount: validationCountByAthlete.get(p.id) ?? 0,
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: true,
         phone: p.phone ?? null,

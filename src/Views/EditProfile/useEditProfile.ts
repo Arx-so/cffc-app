@@ -5,6 +5,7 @@ import {
   uploadAvatar,
   upsertAthleteProfile,
 } from "@/processes/profile";
+import { formatPhonePtBrInput } from "@/utils/brazilianPhone";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
@@ -41,15 +42,6 @@ const INITIAL_ATHLETE: AthleteFormState = {
   clubHistory: [],
   isSearchable: true,
   contactVisibility: "clubs_agents",
-};
-
-// Auto-format input as Brazilian phone while restricting to digits.
-const formatPhonePtBrInput = (raw: string): string => {
-  const digits = raw.replace(/\D/g, "").slice(0, 11);
-  if (!digits) return "";
-  if (digits.length <= 2) return `(${digits}`;
-  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 };
 
 export const useEditProfile = (): UseEditProfileReturn => {
@@ -252,6 +244,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
       isSavedRef.current = true;
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
       queryClient.invalidateQueries({ queryKey: ["profileEdit", userId] });
+      queryClient.invalidateQueries({ queryKey: ["profilePersonal", userId] });
       queryClient.invalidateQueries({
         queryKey: ["athleteProfileEdit", userId],
       });

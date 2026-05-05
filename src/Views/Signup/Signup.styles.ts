@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
-    marginTop: 4,
+    marginTop: 16,
     marginBottom: 10,
   },
   secondaryButtonText: { color: Brand.green, fontSize: 12, fontWeight: "700" },

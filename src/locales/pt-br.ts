@@ -84,6 +84,16 @@ export default {
     noVideosHint: 'Mostre seus melhores momentos para scouts e clubes',
     addFirstVideo: 'Adicione seu primeiro vídeo',
     noVideosVisitor: 'Este atleta ainda não cadastrou nenhum vídeo',
+    notInformed: 'Não informado',
+    athleteDetailsTitle: 'Detalhes do atleta',
+    athleteDetailsSubtitle:
+      'Toque para ver físico, dados táticos e histórico de clubes.',
+    detailsExpandA11y: 'Expandir detalhes do atleta',
+    detailsCollapseA11y: 'Ocultar detalhes do atleta',
+    clubBaseCategoryLabel: 'BASE',
+    detailsPreviewPhysique: 'Altura · peso',
+    detailsPreviewPositions: 'Posições',
+    detailsPreviewCategoryOrAvailability: 'Categoria / disponibilidade',
   },
   proProfile: {
     active: 'Ativo',

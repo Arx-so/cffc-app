@@ -28,7 +28,8 @@ export function useSearch(): UseSearchReturn {
   };
 
   const clubUserId = role === "club" ? (user?.id ?? undefined) : undefined;
-  const queryKey = ["search-athletes", query, filters, clubUserId ?? null];
+  const viewerProfileId = user?.id ?? null;
+  const queryKey = ["search-athletes", query, filters, clubUserId ?? null, viewerProfileId];
 
   useFocusEffect(
     useCallback(() => {
@@ -38,7 +39,8 @@ export function useSearch(): UseSearchReturn {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey,
-    queryFn: () => searchAthletes(query, filters, clubUserId),
+    queryFn: () =>
+      searchAthletes(query, filters, clubUserId, viewerProfileId),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });

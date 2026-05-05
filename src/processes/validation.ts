@@ -1,4 +1,5 @@
 import { supabase } from "@/config/supabase";
+import { fetchApprovedValidationCountsByAthleteIds } from "@/processes/validationStats";
 import { getSignedUrl } from "@/utils/supabaseStorage";
 import type { AthleteSearchResult, ValidatedAthleteResult, ValidationChecklist, ValidationStatus } from "@/processes/types/profileTypes";
 
@@ -57,7 +58,7 @@ export const fetchValidatedAthletes = async (
   }
   const userIds = [...statusByAthlete.keys()];
 
-  const [profilesResult, athleteProfilesResult, videoCounts, validationCounts, contactCounts] =
+  const [profilesResult, athleteProfilesResult, videoCounts, contactCounts, validationCountByAthlete] =
     await Promise.all([
       supabase
         .from("profile")
@@ -74,15 +75,11 @@ export const fetchValidatedAthletes = async (
         .eq("type", "video")
         .eq("status", "approved"),
       supabase
-        .from("validation")
-        .select("athlete_user_id")
-        .in("athlete_user_id", userIds)
-        .eq("status", "approved"),
-      supabase
         .from("contact_request")
         .select("athlete_user_id")
         .in("athlete_user_id", userIds)
         .eq("status", "accepted"),
+      fetchApprovedValidationCountsByAthleteIds(userIds),
     ]);
 
   if (profilesResult.error) throw profilesResult.error;
@@ -104,7 +101,7 @@ export const fetchValidatedAthletes = async (
         verified: p.verified ?? false,
         positions: posMap.get(p.id) ?? [],
         videoCount: countByUser(videoCounts.data, p.id),
-        validationCount: countByUser(validationCounts.data, p.id),
+        validationCount: validationCountByAthlete.get(p.id) ?? 0,
         contactCount: countByUser(contactCounts.data, p.id),
         isShortlisted: false,
         validationStatus: statusByAthlete.get(p.id) ?? "pending",
