@@ -7,6 +7,7 @@ import {
   View,
   Text,
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { Brand } from "@/constants/theme";
@@ -35,6 +36,7 @@ export function Search() {
   return (
     <View style={styles.container}>
       <HeaderBar title={t("tabs.search")} />
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
       <View style={styles.searchBarWrapper}>
         <Ionicons
           name="search"
@@ -98,6 +100,7 @@ export function Search() {
           }
         />
       )}
+      </KeyboardAvoidingView>
     </View>
   );
 }

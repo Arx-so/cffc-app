@@ -1,3 +1,4 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { ProProfileHeader } from "@/components/ProProfileHeader/ProProfileHeader";
 import {
   documentDisplayName,
@@ -8,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button, Layout, Spinner, Text } from "@ui-kitten/components";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { Linking, Pressable, ScrollView, TextInput, View } from "react-native";
+import { Linking, Pressable, TextInput, View } from "react-native";
 import { styles } from "./ProProfile.styles";
 import { useProProfile } from "./useProProfile";
 
@@ -97,9 +98,11 @@ const ProProfile = () => {
 
   return (
     <Layout style={styles.container}>
-      <ScrollView
+      <KeyboardAwareScreen
+        style={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        withTabBarInset
       >
         <ProProfileHeader
           name={profileData.name}
@@ -316,7 +319,7 @@ const ProProfile = () => {
             ))}
           </View>
         )}
-      </ScrollView>
+      </KeyboardAwareScreen>
     </Layout>
   );
 };

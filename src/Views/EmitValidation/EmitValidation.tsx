@@ -1,8 +1,10 @@
+import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
 import { Layout, Text, Button, Spinner, Icon } from "@ui-kitten/components";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View, TouchableOpacity, DimensionValue } from "react-native";
+import { View, TouchableOpacity, DimensionValue } from "react-native";
 
 import { Brand } from "@/constants/theme";
 import { useEmitValidation } from "./useEmitValidation";
@@ -299,16 +301,16 @@ export const EmitValidation = () => {
       <Text style={styles.skipHint}>{t("emitValidation.skipHint")}</Text>
 
       {/* Step content */}
-      <ScrollView
+      <KeyboardAwareScreen
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
         {renderStep()}
-      </ScrollView>
+      </KeyboardAwareScreen>
 
       {/* Footer */}
-      <View style={styles.footer}>
+      <KeyboardStickyFooter style={styles.footer}>
         {currentStep > 0 && (
           <Button
             style={styles.footerButton}
@@ -343,7 +345,7 @@ export const EmitValidation = () => {
               : t("emitValidation.submit")}
           </Button>
         )}
-      </View>
+      </KeyboardStickyFooter>
     </Layout>
   );
 };

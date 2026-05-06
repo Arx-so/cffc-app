@@ -13,6 +13,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { styles } from "./Favorites.styles";
 import { useFavorites } from "./useFavorites";
 
@@ -93,6 +94,7 @@ export function Favorites() {
         }
       />
 
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
       <View style={styles.searchBarWrapper}>
         <Ionicons
           name="search"
@@ -138,6 +140,7 @@ export function Favorites() {
           }
         />
       )}
+      </KeyboardAvoidingView>
     </View>
   );
 }
