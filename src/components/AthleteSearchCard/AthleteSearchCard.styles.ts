@@ -4,9 +4,75 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   card: {
     backgroundColor: Brand.card,
-    borderRadius: 12,
+    borderRadius: 8,
     padding: 16,
     marginBottom: 12,
+  },
+  shortlistCard: {
+    backgroundColor: Brand.inputBg,
+    borderWidth: 0,
+  },
+  compactRow: {
+    minHeight: 44,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  compactAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+    overflow: "hidden",
+    backgroundColor: Brand.cardAlt,
+  },
+  compactAvatarImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+  },
+  compactInitials: {
+    color: Brand.white,
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  compactInfo: {
+    flex: 1,
+    minWidth: 0,
+  },
+  compactNameRow: {
+    height: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  compactName: {
+    color: Brand.white,
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "700",
+    maxWidth: "58%",
+  },
+  compactDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Brand.gray,
+  },
+  compactVideos: {
+    color: Brand.gray,
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  compactPosition: {
+    color: Brand.gray,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  compactStar: {
+    marginLeft: 12,
   },
   cardHeader: {
     flexDirection: "row",
@@ -24,6 +90,10 @@ export const styles = StyleSheet.create({
     marginRight: 12,
     overflow: "hidden",
     backgroundColor: Brand.border,
+  },
+  shortlistAvatarContainer: {
+    borderColor: Brand.inputBorder,
+    backgroundColor: Brand.inputBg,
   },
   avatarImage: {
     width: 70,
@@ -51,7 +121,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   verifiedBadge: {
-    backgroundColor: "#000",
+    backgroundColor: Brand.bg,
     borderWidth: 1,
     borderColor: Brand.white,
     borderRadius: 4,
@@ -69,6 +139,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: "uppercase",
     // letterSpacing: 0.5,
+  },
+  shortlistPositionText: {
+    color: Brand.white,
   },
   statsRow: {
     flexDirection: "row",
@@ -125,7 +198,7 @@ export const styles = StyleSheet.create({
     opacity: 0.7,
   },
   addFavoriteText: {
-    color: Brand.bg,
+    color: Brand.buttonPrimaryText,
     fontSize: 12,
     fontWeight: "bold",
     letterSpacing: 0.5,

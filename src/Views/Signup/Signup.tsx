@@ -192,7 +192,7 @@ const Signup = () => {
           value={fullName}
           onChangeText={setFullName}
           placeholder={t("signup.fullNamePlaceholder")}
-          placeholderTextColor="#444"
+          placeholderTextColor={Brand.formInputPlaceholder}
           autoCapitalize="words"
           editable={!isLoading}
         />
@@ -204,7 +204,7 @@ const Signup = () => {
           value={username}
           onChangeText={setUsername}
           placeholder={t("editProfile.usernamePlaceholder")}
-          placeholderTextColor="#444"
+          placeholderTextColor={Brand.formInputPlaceholder}
           autoCapitalize="none"
           editable={!isLoading}
         />
@@ -217,7 +217,7 @@ const Signup = () => {
           onChangeText={setEmail}
           onBlur={() => setEmailTouched(true)}
           placeholder={t("auth.emailPlaceholder")}
-          placeholderTextColor="#444"
+          placeholderTextColor={Brand.formInputPlaceholder}
           autoCapitalize="none"
           keyboardType="email-address"
           editable={!isLoading}
@@ -232,7 +232,7 @@ const Signup = () => {
             value={password}
             onChangeText={setPassword}
             placeholder={t("auth.passwordPlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoCorrect={false}
@@ -263,7 +263,7 @@ const Signup = () => {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             placeholder={t("auth.confirmPasswordPlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             secureTextEntry={!showConfirmPassword}
             autoCapitalize="none"
             autoCorrect={false}
@@ -294,7 +294,7 @@ const Signup = () => {
             value={birthDateText}
             onChangeText={onBirthDateChange}
             placeholder={t("signup.birthDatePlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             keyboardType="number-pad"
             maxLength={10}
             editable={!isLoading}
@@ -313,7 +313,7 @@ const Signup = () => {
           value={city}
           onChangeText={setCity}
           placeholder={t("editProfile.cityPlaceholder")}
-          placeholderTextColor="#444"
+          placeholderTextColor={Brand.formInputPlaceholder}
           editable={!isLoading}
         />
 
@@ -325,7 +325,7 @@ const Signup = () => {
               value={state}
               onChangeText={setState}
               placeholder={t("editProfile.statePlaceholder")}
-              placeholderTextColor="#444"
+              placeholderTextColor={Brand.formInputPlaceholder}
               editable={!isLoading}
               autoCapitalize="characters"
               maxLength={2}
@@ -338,7 +338,7 @@ const Signup = () => {
               value={phone}
               onChangeText={onPhoneChange}
               placeholder={t("editProfile.phonePlaceholder")}
-              placeholderTextColor="#444"
+              placeholderTextColor={Brand.formInputPlaceholder}
               editable={!isLoading}
               keyboardType="phone-pad"
             />
@@ -378,7 +378,7 @@ const Signup = () => {
                       value={athleteHeight}
                       onChangeText={setAthleteHeight}
                       placeholder="185"
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                       editable={!isLoading}
                       keyboardType="number-pad"
                       maxLength={3}
@@ -391,7 +391,7 @@ const Signup = () => {
                       value={athleteWeight}
                       onChangeText={setAthleteWeight}
                       placeholder="78"
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                       editable={!isLoading}
                       keyboardType="number-pad"
                       maxLength={3}
@@ -429,7 +429,7 @@ const Signup = () => {
                   value={athletePositionsText}
                   onChangeText={setAthletePositionsText}
                   placeholder={t("signup.positionsPlaceholder")}
-                  placeholderTextColor="#444"
+                  placeholderTextColor={Brand.formInputPlaceholder}
                   editable={!isLoading}
                 />
 
@@ -439,7 +439,7 @@ const Signup = () => {
                   value={athleteStrengthsText}
                   onChangeText={setAthleteStrengthsText}
                   placeholder={t("signup.strengthsPlaceholder")}
-                  placeholderTextColor="#444"
+                  placeholderTextColor={Brand.formInputPlaceholder}
                   editable={!isLoading}
                 />
 
@@ -449,7 +449,7 @@ const Signup = () => {
                   value={athleteCurrentCategory}
                   onChangeText={setAthleteCurrentCategory}
                   placeholder={t("editProfile.categoryPlaceholder")}
-                  placeholderTextColor="#444"
+                  placeholderTextColor={Brand.formInputPlaceholder}
                   editable={!isLoading}
                 />
 
@@ -506,7 +506,7 @@ const Signup = () => {
                     setAthleteClubDraft({ ...athleteClubDraft, club: value })
                   }
                   placeholder={t("editProfile.clubNamePlaceholder")}
-                  placeholderTextColor="#444"
+                  placeholderTextColor={Brand.formInputPlaceholder}
                   editable={!isLoading}
                 />
                 <TextInput
@@ -516,7 +516,7 @@ const Signup = () => {
                     setAthleteClubDraft({ ...athleteClubDraft, category: value })
                   }
                   placeholder={t("editProfile.clubCategoryPlaceholder")}
-                  placeholderTextColor="#444"
+                  placeholderTextColor={Brand.formInputPlaceholder}
                   editable={!isLoading}
                 />
                 <View style={[S.inlineRow, S.clubDraftPeriodRow]}>
@@ -528,7 +528,7 @@ const Signup = () => {
                         setAthleteClubDraft({ ...athleteClubDraft, start: value })
                       }
                       placeholder={t("editProfile.clubStartPlaceholder")}
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                       editable={!isLoading}
                     />
                   </View>
@@ -540,7 +540,7 @@ const Signup = () => {
                         setAthleteClubDraft({ ...athleteClubDraft, end: value })
                       }
                       placeholder={t("editProfile.clubEndPlaceholder")}
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                       editable={!isLoading}
                     />
                   </View>
@@ -628,7 +628,7 @@ const Signup = () => {
               value={guardianEmail}
               onChangeText={setGuardianEmail}
               placeholder={t("signup.guardianEmailPlaceholder")}
-              placeholderTextColor="#444"
+              placeholderTextColor={Brand.formInputPlaceholder}
               autoCapitalize="none"
               keyboardType="email-address"
               editable={!isLoading}
@@ -644,7 +644,7 @@ const Signup = () => {
         >
           <View style={[S.checkboxBox, acceptedTerms && S.checkboxBoxChecked]}>
             {acceptedTerms && (
-              <Ionicons name="checkmark" size={13} color="#000" />
+              <Ionicons name="checkmark" size={13} color={Brand.buttonPrimaryText} />
             )}
           </View>
           <Text style={S.checkboxLabel}>
@@ -663,7 +663,7 @@ const Signup = () => {
             style={[S.checkboxBox, acceptedPrivacy && S.checkboxBoxChecked]}
           >
             {acceptedPrivacy && (
-              <Ionicons name="checkmark" size={13} color="#000" />
+              <Ionicons name="checkmark" size={13} color={Brand.buttonPrimaryText} />
             )}
           </View>
           <Text style={S.checkboxLabel}>
@@ -684,7 +684,7 @@ const Signup = () => {
           activeOpacity={0.85}
         >
           {isLoading ? (
-            <ActivityIndicator color="#000" />
+            <ActivityIndicator color={Brand.buttonPrimaryText} />
           ) : (
             <Text style={A.submitButtonText}>{t("auth.createAccount")} →</Text>
           )}

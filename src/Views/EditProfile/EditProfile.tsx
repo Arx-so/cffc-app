@@ -73,7 +73,7 @@ const AddItemModal = ({
               value={value}
               onChangeText={setValue}
               placeholder={t("editProfile.modalPlaceholder")}
-              placeholderTextColor="#444"
+              placeholderTextColor={Brand.formInputPlaceholder}
               autoFocus
             />
             <View style={styles.modalActions}>
@@ -263,7 +263,7 @@ const EditProfile = () => {
 
   const headerOptions = {
     title: t("editProfile.title"),
-    headerStyle: { backgroundColor: Brand.card },
+    headerStyle: { backgroundColor: Brand.bg },
     headerTintColor: Brand.white,
     headerTitleStyle: {
       color: Brand.white,
@@ -358,7 +358,7 @@ const EditProfile = () => {
               <View style={styles.cameraBadge}>
                 <Icon
                   name="camera-outline"
-                  fill="#000"
+                  fill={Brand.buttonPrimaryText}
                   style={{ width: 16, height: 16 }}
                 />
               </View>
@@ -381,7 +381,7 @@ const EditProfile = () => {
             value={profileForm.name}
             onChangeText={(v) => setProfileField("name", v)}
             placeholder={t("editProfile.namePlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             autoCapitalize="words"
           />
 
@@ -394,7 +394,7 @@ const EditProfile = () => {
             value={profileForm.username}
             onChangeText={(v) => setProfileField("username", v)}
             placeholder={t("editProfile.usernamePlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             autoCapitalize="none"
           />
 
@@ -409,7 +409,7 @@ const EditProfile = () => {
                 value={profileForm.city}
                 onChangeText={(v) => setProfileField("city", v)}
                 placeholder={t("editProfile.cityPlaceholder")}
-                placeholderTextColor="#444"
+                placeholderTextColor={Brand.formInputPlaceholder}
               />
             </View>
             <View style={styles.rowItem}>
@@ -424,7 +424,7 @@ const EditProfile = () => {
                 value={profileForm.state}
                 onChangeText={(v) => setProfileField("state", v)}
                 placeholder={t("editProfile.statePlaceholder")}
-                placeholderTextColor="#444"
+                placeholderTextColor={Brand.formInputPlaceholder}
                 maxLength={2}
                 autoCapitalize="characters"
               />
@@ -440,7 +440,7 @@ const EditProfile = () => {
             value={profileForm.birthDate}
             onChangeText={(v) => setProfileField("birthDate", v)}
             placeholder={t("editProfile.birthDatePlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             keyboardType="number-pad"
             maxLength={10}
           />
@@ -454,7 +454,7 @@ const EditProfile = () => {
             value={profileForm.phone}
             onChangeText={(v) => setProfileField("phone", v)}
             placeholder={t("editProfile.phonePlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             keyboardType="phone-pad"
           />
         </View>
@@ -477,7 +477,7 @@ const EditProfile = () => {
                     value={athleteForm.height}
                     onChangeText={(v) => setAthleteField("height", v)}
                     placeholder="185"
-                    placeholderTextColor="#444"
+                    placeholderTextColor={Brand.formInputPlaceholder}
                     keyboardType="number-pad"
                     maxLength={3}
                   />
@@ -491,7 +491,7 @@ const EditProfile = () => {
                     value={athleteForm.weight}
                     onChangeText={(v) => setAthleteField("weight", v)}
                     placeholder="78"
-                    placeholderTextColor="#444"
+                    placeholderTextColor={Brand.formInputPlaceholder}
                     keyboardType="number-pad"
                     maxLength={3}
                   />
@@ -546,7 +546,7 @@ const EditProfile = () => {
                     >
                       <Icon
                         name="close-outline"
-                        fill="#000"
+                        fill={Brand.formControlActiveText}
                         style={styles.chipRemove}
                       />
                     </TouchableOpacity>
@@ -614,7 +614,7 @@ const EditProfile = () => {
                 value={athleteForm.currentCategory}
                 onChangeText={(v) => setAthleteField("currentCategory", v)}
                 placeholder={t("editProfile.categoryPlaceholder")}
-                placeholderTextColor="#444"
+                placeholderTextColor={Brand.formInputPlaceholder}
               />
 
               <Text style={styles.fieldLabel}>
@@ -667,7 +667,7 @@ const EditProfile = () => {
                         setClubDraft((d) => ({ ...d, club: v }))
                       }
                       placeholder={t("editProfile.clubNamePlaceholder")}
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                       autoFocus
                     />
                   </View>
@@ -683,7 +683,7 @@ const EditProfile = () => {
                         setClubDraft((d) => ({ ...d, category: v }))
                       }
                       placeholder={t("editProfile.clubCategoryPlaceholder")}
-                      placeholderTextColor="#444"
+                      placeholderTextColor={Brand.formInputPlaceholder}
                     />
                   </View>
 
@@ -699,7 +699,7 @@ const EditProfile = () => {
                           setClubDraft((d) => ({ ...d, start: v }))
                         }
                         placeholder={t("editProfile.clubStartPlaceholder")}
-                        placeholderTextColor="#444"
+                        placeholderTextColor={Brand.formInputPlaceholder}
                       />
                     </View>
                     <View style={styles.clubFormField}>
@@ -713,7 +713,7 @@ const EditProfile = () => {
                           setClubDraft((d) => ({ ...d, end: v }))
                         }
                         placeholder={t("editProfile.clubEndPlaceholder")}
-                        placeholderTextColor="#444"
+                        placeholderTextColor={Brand.formInputPlaceholder}
                       />
                     </View>
                   </View>

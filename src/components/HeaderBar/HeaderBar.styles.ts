@@ -16,4 +16,8 @@ export const styles = StyleSheet.create({
   navigation: {
     backgroundColor: "transparent",
   },
+  navigationCompact: {
+    minHeight: 44,
+    height: 44,
+  },
 });

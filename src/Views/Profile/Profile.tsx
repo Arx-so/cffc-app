@@ -53,6 +53,8 @@ const Profile = () => {
       >
         <ProfileHeader
           profile={profileData}
+          subtitle={athleteOwnProfileExtra?.athleteProfile?.positions?.[0] ?? null}
+          topSpacing={8}
           isOwnProfile={true}
           viewerRole={profileData.role}
           onEditProfilePress={() => router.push("/edit-profile")}

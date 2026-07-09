@@ -9,4 +9,5 @@ export interface AthleteSearchCardProps {
   isAddingToShortlist?: boolean;
   badge?: React.ReactNode;
   footer?: React.ReactNode;
+  variant?: "card" | "compact" | "shortlist";
 }

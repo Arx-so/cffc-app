@@ -68,6 +68,7 @@ export function Favorites() {
     <AthleteSearchCard
       athlete={item}
       isShortlisted
+      variant="shortlist"
       onViewProfile={() => handleViewProfile(item)}
       footer={
         <ContactFooter
@@ -82,6 +83,7 @@ export function Favorites() {
     <View style={styles.container}>
       <HeaderBar
         title={t("favorites.title")}
+        backgroundColor={Brand.bg}
         rightIcon={
           <View style={styles.totalBadge}>
             {isLoading ? (
@@ -105,7 +107,7 @@ export function Favorites() {
         <TextInput
           style={styles.searchInput}
           placeholder={t("favorites.searchPlaceholder")}
-          placeholderTextColor={Brand.gray}
+          placeholderTextColor={Brand.inputPlaceholder}
           value={query}
           onChangeText={setQuery}
           autoCorrect={false}

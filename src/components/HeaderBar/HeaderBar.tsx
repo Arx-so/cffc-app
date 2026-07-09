@@ -4,6 +4,7 @@ import {
   TopNavigation,
   useTheme,
 } from "@ui-kitten/components";
+import { Brand } from "@/constants/theme";
 import { ReactElement } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +16,8 @@ export const HeaderBar = ({
   leftIcon,
   rightIcon,
   onLeftPress,
+  backgroundColor,
+  compact,
 }: HeaderBarProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -52,14 +55,14 @@ export const HeaderBar = ({
     <View
       style={{
         paddingTop: insets.top,
-        backgroundColor: theme["background-basic-color-2"],
+        backgroundColor: backgroundColor ?? Brand.bg,
       }}
     >
       <TopNavigation
         alignment="start"
         title={renderTitle}
         accessoryRight={renderRight}
-        style={styles.navigation}
+        style={[styles.navigation, compact && styles.navigationCompact]}
       />
     </View>
   );

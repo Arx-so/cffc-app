@@ -5,4 +5,6 @@ export interface HeaderBarProps {
   leftIcon?: string;
   rightIcon?: ReactNode;
   onLeftPress?: () => void;
+  backgroundColor?: string;
+  compact?: boolean;
 }

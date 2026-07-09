@@ -75,13 +75,13 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.formInputBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.formInputBorder,
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    color: Brand.white,
+    color: Brand.formInputText,
     fontSize: 15,
   },
 
@@ -96,21 +96,21 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: Brand.border,
-    backgroundColor: Brand.card,
+    borderColor: Brand.formControlBorder,
+    backgroundColor: Brand.formControlBg,
   },
   chipActive: {
-    borderColor: Brand.green,
-    backgroundColor: "transparent",
+    borderColor: Brand.formControlActiveBorder,
+    backgroundColor: Brand.formControlActiveBg,
   },
   chipText: {
-    color: Brand.gray,
+    color: Brand.formControlText,
     fontSize: 12,
     fontWeight: "600",
     letterSpacing: 0.5,
   },
   chipTextActive: {
-    color: Brand.green,
+    color: Brand.formControlActiveText,
   },
 
   // ── Age / Physical rows ──
@@ -134,9 +134,9 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 6,
     paddingVertical: 12,
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.formControlBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.formControlBorder,
   },
   footButtonFirst: {
     borderTopLeftRadius: 10,
@@ -147,17 +147,17 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   footButtonActive: {
-    backgroundColor: Brand.white,
-    borderColor: Brand.white,
+    backgroundColor: Brand.formControlActiveBg,
+    borderColor: Brand.formControlActiveBorder,
   },
   footButtonText: {
-    color: Brand.gray,
+    color: Brand.formControlText,
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 1,
   },
   footButtonTextActive: {
-    color: "#000",
+    color: Brand.formControlActiveText,
   },
 
   // ── Footer ──
@@ -179,12 +179,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: Brand.gray,
+    borderWidth: 0,
+    backgroundColor: Brand.buttonSecondaryBg,
     alignItems: "center",
   },
   clearButtonText: {
-    color: Brand.gray,
+    color: Brand.buttonSecondaryText,
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 1,

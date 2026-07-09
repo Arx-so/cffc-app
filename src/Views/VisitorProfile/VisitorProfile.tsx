@@ -43,6 +43,7 @@ const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) =
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileHeader
           profile={profileData}
+          subtitle={visitorAthleteDetailsExtra?.athleteProfile?.positions?.[0] ?? null}
           isOwnProfile={false}
           viewerRole={viewerRole ?? "athlete"}
           onValidateProfilePress={hasExistingValidation ? undefined : handleEmitValidation}

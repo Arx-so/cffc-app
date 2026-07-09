@@ -1,12 +1,6 @@
 import { AthleteProfileHeader, UserRole } from "@/processes/types/profileTypes";
 import { Brand } from "@/constants/theme";
-import {
-  Avatar,
-  Button,
-  Icon,
-  Text,
-  useTheme,
-} from "@ui-kitten/components";
+import { Avatar, Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { styles } from "./ProfileHeader.styles";
@@ -15,6 +9,8 @@ export interface ProfileHeaderProps {
   profile: AthleteProfileHeader;
   isOwnProfile: boolean;
   viewerRole: UserRole;
+  subtitle?: string | null;
+  topSpacing?: number;
   onEditProfilePress?: () => void;
   onValidateProfilePress?: () => void;
   onMessagePress?: () => void;
@@ -39,6 +35,8 @@ export const ProfileHeader = ({
   profile,
   isOwnProfile,
   viewerRole,
+  subtitle,
+  topSpacing,
   onEditProfilePress,
   onValidateProfilePress,
   onMessagePress,
@@ -47,10 +45,18 @@ export const ProfileHeader = ({
   const { t } = useTranslation();
 
   const initials = getInitials(profile.name);
+  const secondaryText =
+    subtitle?.trim() ||
+    (profile.username ? `@${profile.username}` : t(`roles.${profile.role}`));
 
   return (
-    <View>
-      <View style={styles.avatarSection}>
+    <View
+      style={[
+        styles.container,
+        topSpacing !== undefined && { paddingTop: topSpacing },
+      ]}
+    >
+      <View style={styles.identityRow}>
         <View style={styles.avatarContainer}>
           <View
             style={[
@@ -90,75 +96,79 @@ export const ProfileHeader = ({
             >
               <Icon
                 name="checkmark"
-                fill="#fff"
+                fill={Brand.buttonPrimaryText}
                 style={{ width: 14, height: 14 }}
               />
             </View>
           )}
         </View>
-      </View>
 
-      {/* Name & Username */}
-      <View style={styles.infoSection}>
-        <Text category="h5">{profile.name}</Text>
-        {profile.username && (
-          <Text category="s2" appearance="hint">
-            @{profile.username}
+        <View style={styles.infoSection}>
+          <Text style={styles.nameText} numberOfLines={1}>
+            {profile.name}
           </Text>
+          <Text style={styles.metaText} numberOfLines={1}>
+            {secondaryText}
+          </Text>
+        </View>
+
+        {isOwnProfile ? (
+          <Button
+            style={styles.headerIconButton}
+            appearance="ghost"
+            accessoryLeft={(props) => <Icon {...props} name="edit-2-outline" />}
+            onPress={onEditProfilePress}
+          />
+        ) : (
+          <Button
+            style={styles.headerIconButton}
+            appearance="ghost"
+            accessoryLeft={(props) => <Icon {...props} name="compass-outline" />}
+            onPress={onMessagePress}
+          />
         )}
       </View>
 
-      {/* Stats Card */}
       <View style={styles.statsCardWrapper}>
         <View
           style={[
             styles.statsCard,
             {
-              backgroundColor: Brand.card,
-              borderColor: theme["color-primary-500"],
+              backgroundColor: "transparent",
             },
           ]}
         >
           <View style={styles.statItem}>
-            <Text category="h6" style={{ color: theme["color-primary-500"] }}>
+            <Text category="h6" style={styles.statValue}>
               {formatStat(profile.stats.validationCount)}
             </Text>
-            <Text category="c2" appearance="hint">
-              {t("profile.validations").toUpperCase()}
+            <Text category="c2" style={styles.statLabel}>
+              {t("profile.validations")}
             </Text>
           </View>
 
           <View style={styles.statItem}>
-            <Text category="h6" style={{ color: theme["color-primary-500"] }}>
+            <Text category="h6" style={styles.statValue}>
               {formatStat(profile.stats.videoCount)}
             </Text>
-            <Text category="c2" appearance="hint">
-              {t("profile.videos").toUpperCase()}
+            <Text category="c2" style={styles.statLabel}>
+              {t("profile.videos")}
             </Text>
           </View>
 
           <View style={styles.statItem}>
-            <Text category="h6" style={{ color: theme["color-primary-500"] }}>
+            <Text category="h6" style={styles.statValue}>
               {formatStat(profile.stats.contactCount)}
             </Text>
-            <Text category="c2" appearance="hint">
-              {t("profile.contacts").toUpperCase()}
+            <Text category="c2" style={styles.statLabel}>
+              {t("profile.contacts")}
             </Text>
           </View>
         </View>
       </View>
 
-      {/* Action Buttons */}
-      <View style={styles.actionsSection}>
-        {isOwnProfile ? (
-          <Button
-            style={styles.primaryButton}
-            size="large"
-            onPress={onEditProfilePress}
-          >
-            {t("profile.editProfile")}
-          </Button>
-        ) : viewerRole === "pro" ? (
+      {viewerRole === "pro" && !isOwnProfile ? (
+        <View style={styles.actionsSection}>
           <View style={styles.visitorActions}>
             {onValidateProfilePress && (
               <Button
@@ -172,7 +182,7 @@ export const ProfileHeader = ({
             <Button
               style={[
                 styles.iconButton,
-                { backgroundColor: Brand.card },
+                { backgroundColor: Brand.buttonSecondaryBg },
               ]}
               size="large"
               appearance="ghost"
@@ -182,8 +192,8 @@ export const ProfileHeader = ({
               onPress={onMessagePress}
             />
           </View>
-        ) : null}
-      </View>
+        </View>
+      ) : null}
     </View>
   );
 };

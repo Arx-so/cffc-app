@@ -1,16 +1,17 @@
+import { Brand } from "@/constants/theme";
 import { HeaderBar } from "@/components/HeaderBar";
 import { SettingsAction } from "@/components/SettingsAction";
-import { Brand } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router, Tabs } from "expo-router";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, type PressableProps, StyleSheet, View } from "react-native";
+import { Pressable, type PressableProps, StyleSheet, Text, View } from "react-native";
 
 type TabBarButtonProps = PressableProps & {
   children: React.ReactNode;
   isAddTab?: boolean;
+  label?: string;
   accessibilityState?: { selected?: boolean };
 };
 
@@ -20,6 +21,7 @@ function TabBarButton({
   onLongPress,
   accessibilityState,
   isAddTab,
+  label,
 }: TabBarButtonProps) {
   const isSelected = accessibilityState?.selected ?? false;
 
@@ -28,10 +30,10 @@ function TabBarButton({
       <Pressable
         onPress={onPress}
         onLongPress={onLongPress}
-        style={styles.addTabButton}
+        style={styles.tabButton}
       >
         <View style={styles.addCircle}>
-          <Ionicons name="add" size={24} color={Brand.bg} />
+          <Ionicons name="add" size={30} color={Brand.buttonPrimaryText} />
         </View>
       </Pressable>
     );
@@ -45,6 +47,11 @@ function TabBarButton({
     >
       <View style={[styles.tabInner, isSelected && styles.tabInnerActive]}>
         {children}
+        {isSelected && label ? (
+          <Text style={styles.activeLabel} numberOfLines={1}>
+            {label}
+          </Text>
+        ) : null}
       </View>
     </Pressable>
   );
@@ -94,7 +101,7 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
         headerShown: false,
         tabBarStyle: styles.tabBar,
         tabBarActiveTintColor: Brand.green,
-        tabBarInactiveTintColor: Brand.gray,
+        tabBarInactiveTintColor: Brand.white,
         tabBarShowLabel: false,
       }}
     >
@@ -127,7 +134,9 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
               color={color}
             />
           ),
-          tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
+          tabBarButton: (tabProps) => (
+            <TabBarButton {...tabProps} label={t("tabs.home")} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -142,7 +151,9 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
               color={color}
             />
           ),
-          tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
+          tabBarButton: (tabProps) => (
+            <TabBarButton {...tabProps} label={t("tabs.search")} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -159,7 +170,9 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
                     color={color}
                   />
                 ),
-                tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
+                tabBarButton: (tabProps) => (
+                  <TabBarButton {...tabProps} label={t("tabs.favorites")} />
+                ),
               }
             : { href: null }
         }
@@ -169,10 +182,7 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
         options={{
           headerShown: true,
           header: () => (
-            <HeaderBar
-              title={t("profile.title")}
-              rightIcon={<SettingsAction />}
-            />
+            <HeaderBar compact rightIcon={<SettingsAction />} />
           ),
           title: t("tabs.profile"),
           tabBarLabel: t("tabs.profile"),
@@ -183,7 +193,9 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
               color={color}
             />
           ),
-          tabBarButton: (tabProps) => <TabBarButton {...tabProps} />,
+          tabBarButton: (tabProps) => (
+            <TabBarButton {...tabProps} label={t("tabs.profile")} />
+          ),
         }}
       />
     </Tabs>
@@ -192,18 +204,18 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.tabBarBg,
     borderTopWidth: 0,
-    borderRadius: 24,
-    marginHorizontal: 16,
-    marginBottom: 20,
+    borderRadius: 28,
+    marginHorizontal: 8,
+    marginBottom: 22,
     height: 64,
     paddingBottom: 0,
-    elevation: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: -4 },
+    elevation: 8,
+    shadowColor: Brand.black,
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
     position: "absolute",
     overflow: "visible",
   },
@@ -211,34 +223,34 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  tabInner: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  tabInnerActive: {
-    backgroundColor: Brand.card,
-  },
-  addTabButton: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     overflow: "visible",
   },
-  addCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 28,
-    backgroundColor: Brand.green,
+  tabInner: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: Brand.green,
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
+    minWidth: 56,
+    height: 56,
+    paddingHorizontal: 12,
+    borderRadius: 28,
+    gap: 10,
+  },
+  tabInnerActive: {
+    backgroundColor: "transparent",
+  },
+  addCircle: {
+    width: 100,
+    height: 64,
+    borderRadius: 28,
+    backgroundColor: Brand.tabBarActiveBg,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+  activeLabel: {
+    color: Brand.green,
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 24,
   },
 });

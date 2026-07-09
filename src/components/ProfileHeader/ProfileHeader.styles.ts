@@ -1,24 +1,33 @@
 import { StyleSheet } from "react-native";
 
-const AVATAR_SIZE = 100;
-const AVATAR_RING_SIZE = AVATAR_SIZE + 10;
-const VERIFIED_SIZE = 24;
+import { Brand } from "@/constants/theme";
+
+const AVATAR_SIZE = 72;
+const AVATAR_RING_SIZE = AVATAR_SIZE;
+const VERIFIED_SIZE = 22;
 
 export const styles = StyleSheet.create({
-  avatarSection: {
-    alignItems: "center",
-    marginTop: 16,
+  container: {
+    paddingTop: 24,
+  },
+  identityRow: {
+    minHeight: 72,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginHorizontal: 24,
   },
   avatarContainer: {
     position: "relative",
+    marginRight: 16,
   },
   avatarRing: {
     width: AVATAR_RING_SIZE,
     height: AVATAR_RING_SIZE,
     borderRadius: AVATAR_RING_SIZE / 2,
-    borderWidth: 3,
+    borderWidth: 0,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   avatarImage: {
     width: AVATAR_SIZE,
@@ -33,8 +42,8 @@ export const styles = StyleSheet.create({
   },
   verifiedBadge: {
     position: "absolute",
-    bottom: 2,
-    right: 2,
+    bottom: -2,
+    right: -2,
     width: VERIFIED_SIZE,
     height: VERIFIED_SIZE,
     borderRadius: VERIFIED_SIZE / 2,
@@ -42,9 +51,29 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoSection: {
-    alignItems: "center",
-    marginTop: 12,
-    paddingHorizontal: 24,
+    flex: 1,
+    minWidth: 0,
+    paddingTop: 2,
+  },
+  nameText: {
+    color: Brand.white,
+    fontSize: 24,
+    lineHeight: 32,
+    fontWeight: "700",
+  },
+  metaText: {
+    color: Brand.gray,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  headerIconButton: {
+    width: 40,
+    height: 40,
+    marginTop: -4,
+    marginRight: -8,
+    borderRadius: 8,
+    backgroundColor: "transparent",
+    borderWidth: 0,
   },
   statsCardWrapper: {
     paddingHorizontal: 24,
@@ -52,22 +81,36 @@ export const styles = StyleSheet.create({
   },
   statsCard: {
     flexDirection: "row",
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
+    minHeight: 82,
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Brand.cardAlt,
   },
   statItem: {
-    flex: 1,
-    alignItems: "center",
-    gap: 4,
+    width: 83,
+    alignItems: "flex-start",
+    gap: 0,
+  },
+  statValue: {
+    color: Brand.white,
+    fontSize: 23,
+    lineHeight: 29,
+    fontWeight: "700",
+  },
+  statLabel: {
+    color: Brand.gray,
+    fontSize: 14,
+    lineHeight: 18,
   },
   actionsSection: {
     paddingHorizontal: 24,
     marginTop: 24,
-    marginBottom: 24,
+    marginBottom: 8,
   },
   primaryButton: {
-    borderRadius: 24,
+    borderRadius: 8,
     borderWidth: 0,
   },
   visitorActions: {
@@ -76,12 +119,12 @@ export const styles = StyleSheet.create({
   },
   primaryButtonFlex: {
     flex: 1,
-    borderRadius: 24,
+    borderRadius: 8,
     borderWidth: 0,
   },
   iconButton: {
     width: 50,
-    borderRadius: 25,
+    borderRadius: 8,
     borderWidth: 0,
   },
 });
