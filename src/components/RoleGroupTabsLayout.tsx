@@ -1,18 +1,22 @@
 import { Brand } from "@/constants/theme";
 import { HeaderBar } from "@/components/HeaderBar";
 import { SettingsAction } from "@/components/SettingsAction";
+import { fetchCurrentUserAvatar } from "@/processes/profile";
+import { useAuthStore } from "@/stores/authStore";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { router, Tabs } from "expo-router";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, type PressableProps, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, type PressableProps, StyleSheet, Text, View } from "react-native";
 
 type TabBarButtonProps = PressableProps & {
   children: React.ReactNode;
   isAddTab?: boolean;
   label?: string;
   accessibilityState?: { selected?: boolean };
+  "aria-selected"?: boolean;
 };
 
 function TabBarButton({
@@ -20,10 +24,11 @@ function TabBarButton({
   onPress,
   onLongPress,
   accessibilityState,
+  "aria-selected": ariaSelected,
   isAddTab,
   label,
 }: TabBarButtonProps) {
-  const isSelected = accessibilityState?.selected ?? false;
+  const isSelected = ariaSelected ?? accessibilityState?.selected ?? false;
 
   if (isAddTab) {
     return (
@@ -72,6 +77,13 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
   const showFavorites = props.showFavorites ?? true;
   const addVideosNavigateBase =
     props.addVideosMode === "navigate" ? props.groupBasePath : null;
+
+  const userId = useAuthStore((state) => state.user?.id);
+  const { data: avatarUrl } = useQuery({
+    queryKey: ["tabBarAvatar", userId],
+    queryFn: () => fetchCurrentUserAvatar(userId!),
+    enabled: !!userId,
+  });
 
   const handleAddVideosPress = useCallback(async () => {
     if (addVideosNavigateBase) {
@@ -186,13 +198,16 @@ export function RoleGroupTabsLayout(props: RoleGroupTabsLayoutProps) {
           ),
           title: t("tabs.profile"),
           tabBarLabel: t("tabs.profile"),
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? "person" : "person-outline"}
-              size={22}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ focused, color }) =>
+            avatarUrl ? (
+              <Image source={{ uri: avatarUrl }} style={styles.avatarIcon} />
+            ) : (
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                size={22}
+                color={color}
+              />
+            ),
           tabBarButton: (tabProps) => (
             <TabBarButton {...tabProps} label={t("tabs.profile")} />
           ),
@@ -252,5 +267,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 24,
+  },
+  avatarIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
   },
 });
