@@ -40,16 +40,16 @@ export const styles = StyleSheet.create({
   passwordRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.formInputBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.formInputBorder,
     borderRadius: 10,
   },
   passwordInput: {
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    color: Brand.white,
+    color: Brand.formInputText,
     fontSize: 15,
   },
   passwordEyeButton: { paddingHorizontal: 14, paddingVertical: 10 },
@@ -65,16 +65,16 @@ export const styles = StyleSheet.create({
     marginBottom: 2,
   },
   optionButton: {
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.formControlBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.formControlBorder,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  optionButtonSelected: { borderColor: Brand.green },
-  optionButtonText: { color: Brand.gray, fontSize: 13, fontWeight: "600" },
-  optionButtonTextSelected: { color: Brand.white },
+  optionButtonSelected: { backgroundColor: Brand.formControlActiveBg, borderColor: Brand.formControlActiveBorder },
+  optionButtonText: { color: Brand.formControlText, fontSize: 13, fontWeight: "600" },
+  optionButtonTextSelected: { color: Brand.formControlActiveText },
   clubCard: {
     backgroundColor: Brand.card,
     borderWidth: 1,
@@ -108,17 +108,17 @@ export const styles = StyleSheet.create({
   },
 
   // Date input with inline calendar icon
-  dateRow:  { flexDirection: 'row', alignItems: 'center', backgroundColor: Brand.card, borderWidth: 1, borderColor: Brand.border, borderRadius: 10 },
-  dateInput:{ flex: 1, paddingHorizontal: 16, paddingVertical: 14, color: Brand.white, fontSize: 15 },
+  dateRow:  { flexDirection: 'row', alignItems: 'center', backgroundColor: Brand.formInputBg, borderWidth: 1, borderColor: Brand.formInputBorder, borderRadius: 10 },
+  dateInput:{ flex: 1, paddingHorizontal: 16, paddingVertical: 14, color: Brand.formInputText, fontSize: 15 },
   dateIcon: { paddingHorizontal: 14 },
 
   // Profile type card selector
-  profileCard:         { backgroundColor: Brand.card, borderWidth: 1.5, borderColor: Brand.border, borderRadius: 12, paddingVertical: 20, alignItems: 'center', marginBottom: 10 },
-  profileCardSelected: { borderColor: Brand.green, borderWidth: 2 },
+  profileCard:         { backgroundColor: Brand.formControlBg, borderWidth: 1.5, borderColor: Brand.formControlBorder, borderRadius: 12, paddingVertical: 20, alignItems: 'center', marginBottom: 10 },
+  profileCardSelected: { backgroundColor: Brand.formControlActiveBg, borderColor: Brand.formControlActiveBorder, borderWidth: 2 },
   profileCardError: { borderColor: Brand.error, borderWidth: 2 },
   profileCardIcon:     { marginBottom: 6 },
-  profileCardLabel:    { color: Brand.gray, fontSize: 14, fontWeight: '600' },
-  profileCardLabelSelected: { color: Brand.white },
+  profileCardLabel:    { color: Brand.formControlText, fontSize: 14, fontWeight: '600' },
+  profileCardLabelSelected: { color: Brand.formControlActiveText },
 
   // Minor protection banner
   minorBanner:    { flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 4 },
@@ -126,7 +126,7 @@ export const styles = StyleSheet.create({
 
   // Custom checkboxes
   checkboxRow:       { flexDirection: 'row', alignItems: 'center', marginTop: 18 },
-  checkboxBox:       { width: 20, height: 20, borderRadius: 4, borderWidth: 1.5, borderColor: Brand.border, alignItems: 'center', justifyContent: 'center', marginRight: 10, backgroundColor: Brand.card },
+  checkboxBox:       { width: 20, height: 20, borderRadius: 4, borderWidth: 1.5, borderColor: Brand.formControlBorder, alignItems: 'center', justifyContent: 'center', marginRight: 10, backgroundColor: Brand.formControlBg },
   checkboxBoxChecked:{ backgroundColor: Brand.green, borderColor: Brand.green },
   checkboxLabel:     { color: Brand.gray, fontSize: 13, flex: 1, lineHeight: 19 },
   checkboxLink:      { color: Brand.white, fontWeight: '700' },

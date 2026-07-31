@@ -3,13 +3,13 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    marginBottom: 24,
-    borderRadius: 16,
-    backgroundColor: Brand.card,
+    marginHorizontal: 24,
+    marginTop: 32,
+    marginBottom: 28,
+    borderRadius: 8,
+    backgroundColor: Brand.detailsCardBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.detailsCardBorder,
     overflow: "hidden",
   },
   header: {
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 16,
     gap: 12,
   },
   headerTexts: {
@@ -25,13 +25,13 @@ export const styles = StyleSheet.create({
   },
   title: {
     color: Brand.white,
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "700",
-    letterSpacing: 0.5,
+    letterSpacing: 0,
   },
   subtitle: {
-    color: Brand.gray,
-    fontSize: 12,
+    color: Brand.white,
+    fontSize: 14,
     marginTop: 4,
     lineHeight: 17,
   },
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
   },
   clubCard: {
     backgroundColor: Brand.bg,
-    borderRadius: 10,
+    borderRadius: 8,
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: Brand.border,
+    backgroundColor: Brand.detailsCardBorder,
     marginHorizontal: 16,
   },
 });

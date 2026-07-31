@@ -172,40 +172,39 @@ export function AthleteOwnDetailsCard({
           <Ionicons
             name={expanded ? "chevron-up" : "chevron-down"}
             size={22}
-            color={Brand.green}
+            color={Brand.white}
           />
         </View>
       </Pressable>
 
-      <View style={styles.previewBlock}>
-        <View style={styles.previewRow}>
-          <Text style={styles.previewCaption}>
-            {t("profile.detailsPreviewPhysique")}
-          </Text>
-          <Text style={styles.previewLine}>
-            {physicalPreview || notInformed}
-          </Text>
-        </View>
-        <View style={styles.previewRow}>
-          <Text style={styles.previewCaption}>
-            {t("profile.detailsPreviewPositions")}
-          </Text>
-          <Text style={styles.previewLine}>
-            {positionsCollapsed ? positionsCollapsed : notInformed}
-          </Text>
-        </View>
-        <View style={styles.previewRow}>
-          <Text style={styles.previewCaption}>
-            {t("profile.detailsPreviewCategoryOrAvailability")}
-          </Text>
-          <Text style={styles.previewLine}>
-            {(categoryPreview || availabilityLabel.trim()) || notInformed}
-          </Text>
-        </View>
-      </View>
-
       {expanded ? (
         <>
+          <View style={styles.previewBlock}>
+            <View style={styles.previewRow}>
+              <Text style={styles.previewCaption}>
+                {t("profile.detailsPreviewPhysique")}
+              </Text>
+              <Text style={styles.previewLine}>
+                {physicalPreview || notInformed}
+              </Text>
+            </View>
+            <View style={styles.previewRow}>
+              <Text style={styles.previewCaption}>
+                {t("profile.detailsPreviewPositions")}
+              </Text>
+              <Text style={styles.previewLine}>
+                {positionsCollapsed ? positionsCollapsed : notInformed}
+              </Text>
+            </View>
+            <View style={styles.previewRow}>
+              <Text style={styles.previewCaption}>
+                {t("profile.detailsPreviewCategoryOrAvailability")}
+              </Text>
+              <Text style={styles.previewLine}>
+                {(categoryPreview || availabilityLabel.trim()) || notInformed}
+              </Text>
+            </View>
+          </View>
           <View style={styles.divider} />
           <View style={[styles.expandedSection, { paddingBottom: 16 }]}>
             <Text style={styles.sectionLabel}>{t("editProfile.personalData")}</Text>

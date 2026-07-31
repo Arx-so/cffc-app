@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.graySurfaceDark,
+    borderWidth: 0,
     borderRadius: 50,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -29,8 +30,10 @@ export const styles = StyleSheet.create({
   searchBarWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Brand.card,
-    borderRadius: 50,
+    backgroundColor: Brand.inputBg,
+    borderWidth: 1,
+    borderColor: Brand.inputBorder,
+    borderRadius: 12,
     marginHorizontal: 16,
     marginTop: 24,
     marginBottom: 24,
@@ -42,7 +45,7 @@ export const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    color: Brand.white,
+    color: Brand.inputText,
     fontSize: 14,
     paddingVertical: 10,
   },
@@ -71,7 +74,7 @@ export const styles = StyleSheet.create({
     backgroundColor: Brand.green,
   },
   contactButtonDisabled: {
-    backgroundColor: Brand.border,
+    backgroundColor: Brand.neutralText,
   },
   contactButtonText: {
     color: Brand.bg,

@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.16)",
+    backgroundColor: "rgba(19, 21, 23, 0.18)",
   },
   centerIconWrapper: {
     ...StyleSheet.absoluteFillObject,
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.42)",
+    backgroundColor: "rgba(19, 21, 23, 0.62)",
   },
   centerIcon: {
     width: 30,
@@ -86,21 +86,24 @@ export const styles = StyleSheet.create({
   },
   captionContainer: {
     position: "absolute",
-    left: 16,
-    right: 16,
+    left: 24,
+    right: 24,
     bottom: 68,
   },
   captionText: {
-    color: Brand.white,
+    color: Brand.searchSurface,
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: "400",
   },
   progressTrack: {
     position: "absolute",
-    left: 16,
-    right: 16,
+    left: 24,
+    right: 24,
     bottom: 54,
-    height: 6,
+    height: 8,
     borderRadius: 999,
-    backgroundColor: "rgba(57, 255, 20, 0.28)",
+    backgroundColor: "rgba(212, 255, 0, 0.24)",
     overflow: "hidden",
   },
   progressFill: {
@@ -110,10 +113,10 @@ export const styles = StyleSheet.create({
   },
   progressThumb: {
     position: "absolute",
-    top: -2,
-    marginLeft: -5,
-    width: 10,
-    height: 10,
+    top: -3,
+    marginLeft: -7,
+    width: 14,
+    height: 14,
     borderRadius: 999,
     backgroundColor: Brand.green,
   },
@@ -127,7 +130,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     paddingBottom: 12,
-    backgroundColor: "rgba(0, 0, 0, 0.45)",
+    backgroundColor: "rgba(19, 21, 23, 0.72)",
   },
   headerBackButton: {
     width: 40,

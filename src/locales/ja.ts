@@ -269,9 +269,22 @@ export default {
     favorites: "お気に入り",
     profile: "プロフィール",
   },
+  roles: {
+    athlete: "アスリート",
+    pro: "プロフェッショナル",
+    club: "クラブ",
+    admin: "管理者",
+  },
   search: {
     placeholder: "アスリート名で検索...",
     filterButton: "フィルター",
+    filterTabs: {
+      all: "すべて",
+      attackers: "FW",
+      midfielders: "MF",
+      defenders: "DF",
+      goalkeepers: "GK",
+    },
     stats: {
       validations: "認証",
       videos: "動画",

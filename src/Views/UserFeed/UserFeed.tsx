@@ -135,7 +135,7 @@ const UserFeedVideoSlide = ({
         )}
         {!!video.title && (
           <View style={styles.captionContainer}>
-            <Text category="s1" style={styles.captionText}>
+            <Text style={styles.captionText}>
               {video.title}
             </Text>
           </View>

@@ -125,13 +125,13 @@ const FeedVideoSlide = ({
           <View style={styles.captionContainer}>
             {!!video.username && (
               <TouchableOpacity onPress={onUsernamePress} activeOpacity={0.7}>
-                <Text category="h6" style={styles.usernameText}>
+                <Text style={styles.usernameText}>
                   @{video.username}
                 </Text>
               </TouchableOpacity>
             )}
             {!!video.title && (
-              <Text category="s1" style={styles.captionText}>
+              <Text style={styles.captionText}>
                 {video.title}
               </Text>
             )}

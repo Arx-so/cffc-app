@@ -28,7 +28,7 @@ export const StepNumericField = ({
         }}
         keyboardType="numeric"
         placeholder="—"
-        placeholderTextColor={Brand.gray}
+        placeholderTextColor={Brand.formInputPlaceholder}
       />
     </>
   );
@@ -53,7 +53,7 @@ export const StepTextField = ({
       value={value ?? ""}
       onChangeText={onChangeText}
       placeholder="—"
-      placeholderTextColor={Brand.gray}
+      placeholderTextColor={Brand.formInputPlaceholder}
       multiline={multiline}
     />
   </>

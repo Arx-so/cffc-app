@@ -143,7 +143,7 @@ const ProProfile = () => {
                 value={specialty}
                 onChangeText={setSpecialty}
                 placeholder={t("proProfile.specialtyPlaceholder")}
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
               />
               <Text style={styles.fieldLabel}>{t("proProfile.registration")}</Text>
               <TextInput
@@ -151,7 +151,7 @@ const ProProfile = () => {
                 value={registrationNumber}
                 onChangeText={setRegistrationNumber}
                 placeholder={t("proProfile.registrationPlaceholder")}
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
               />
               <Text style={styles.fieldLabel}>{t("proProfile.institution")}</Text>
               <TextInput
@@ -159,7 +159,7 @@ const ProProfile = () => {
                 value={institution}
                 onChangeText={setInstitution}
                 placeholder={t("proProfile.institutionPlaceholder")}
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
               />
               <Button
                 style={styles.saveButton}

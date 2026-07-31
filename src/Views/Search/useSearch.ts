@@ -72,6 +72,13 @@ export function useSearch(): UseSearchReturn {
     router.push("/search-filter" as any);
   };
 
+  const handlePositionFilterPress = useCallback(
+    (position: string | null) => {
+      store.setFilters({ positions: position ? [position] : [] });
+    },
+    [store]
+  );
+
   const handleViewProfile = useCallback(
     (athlete: AthleteSearchResult) => {
       router.push(
@@ -98,6 +105,8 @@ export function useSearch(): UseSearchReturn {
     refetch,
     openFilter,
     hasActiveFilters: store.hasActiveFilters(),
+    activePositionFilters: store.positions,
+    handlePositionFilterPress,
     handleViewProfile,
     handleAddFavorite,
     addingAthleteId,

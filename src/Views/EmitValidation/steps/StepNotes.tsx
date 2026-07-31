@@ -19,7 +19,7 @@ export const StepNotes = ({ note, onChangeNote }: Props) => {
         value={note}
         onChangeText={onChangeNote}
         placeholder={t("emitValidation.notesPlaceholder")}
-        placeholderTextColor={Brand.gray}
+        placeholderTextColor={Brand.formInputPlaceholder}
         multiline
       />
     </View>

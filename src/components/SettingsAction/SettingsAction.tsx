@@ -10,7 +10,7 @@ export const SettingsAction = () => {
       icon={(props) => (
         <Icon
           {...props}
-          name="settings-2-outline"
+          name="menu-2-outline"
           fill={theme["color-primary-500"]}
         />
       )}

@@ -272,9 +272,22 @@ export default {
     favorites: 'Favoritos',
     profile: 'Perfil',
   },
+  roles: {
+    athlete: "Atleta",
+    pro: "Profissional",
+    club: "Clube",
+    admin: "Admin",
+  },
   search: {
     placeholder: "Buscar por nome do atleta...",
     filterButton: "Filtro",
+    filterTabs: {
+      all: "Todos",
+      attackers: "Atacantes",
+      midfielders: "Meias",
+      defenders: "Defensores",
+      goalkeepers: "Goleiros",
+    },
     stats: {
       validations: "VALIDAÇÕES",
       videos: "VÍDEOS",
@@ -532,4 +545,3 @@ export default {
     empty: "Voc\u00ea ainda n\u00e3o validou nenhum atleta.",
   },
 } as const;
-

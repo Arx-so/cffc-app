@@ -59,7 +59,7 @@ const Login = () => {
           value={email}
           onChangeText={setEmail}
           placeholder={t("auth.emailPlaceholder")}
-          placeholderTextColor="#444"
+          placeholderTextColor={Brand.formInputPlaceholder}
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -73,7 +73,7 @@ const Login = () => {
             value={password}
             onChangeText={setPassword}
             placeholder={t("auth.passwordPlaceholder")}
-            placeholderTextColor="#444"
+            placeholderTextColor={Brand.formInputPlaceholder}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             textContentType="password"
@@ -154,16 +154,16 @@ const ls = StyleSheet.create({
   passwordRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.formInputBg,
     borderWidth: 1,
-    borderColor: Brand.border,
+    borderColor: Brand.formInputBorder,
     borderRadius: 10,
   },
   passwordInput: {
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    color: Brand.white,
+    color: Brand.formInputText,
     fontSize: 15,
   },
   passwordEyeButton: { paddingHorizontal: 14, paddingVertical: 10 },

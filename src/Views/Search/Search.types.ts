@@ -9,6 +9,8 @@ export interface UseSearchReturn {
   refetch: () => void;
   openFilter: () => void;
   hasActiveFilters: boolean;
+  activePositionFilters: string[];
+  handlePositionFilterPress: (position: string | null) => void;
   handleViewProfile: (athlete: AthleteSearchResult) => void;
   handleAddFavorite: (athleteId: string) => void;
   addingAthleteId: string | null;

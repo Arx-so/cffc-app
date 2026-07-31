@@ -129,7 +129,7 @@ export function SearchFilter() {
                 value={ageMin}
                 onChangeText={setAgeMin}
                 placeholder="18"
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
                 maxLength={3}
               />
             </View>
@@ -141,7 +141,7 @@ export function SearchFilter() {
                 value={ageMax}
                 onChangeText={setAgeMax}
                 placeholder="35"
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
                 maxLength={3}
               />
             </View>
@@ -198,7 +198,7 @@ export function SearchFilter() {
                 value={minHeight}
                 onChangeText={setMinHeight}
                 placeholder="160"
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
                 maxLength={3}
               />
             </View>
@@ -212,7 +212,7 @@ export function SearchFilter() {
                 value={maxWeight}
                 onChangeText={setMaxWeight}
                 placeholder="90"
-                placeholderTextColor={Brand.gray}
+                placeholderTextColor={Brand.formInputPlaceholder}
                 maxLength={3}
               />
             </View>

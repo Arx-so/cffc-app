@@ -39,7 +39,7 @@ const AddVideo = () => {
 
   const headerOptions = {
     title: t("addVideo.title"),
-    headerStyle: { backgroundColor: Brand.card },
+    headerStyle: { backgroundColor: Brand.bg },
     headerTintColor: Brand.white,
     headerTitleStyle: {
       color: Brand.white,
@@ -165,7 +165,7 @@ const AddVideo = () => {
             value={caption}
             onChangeText={handleCaptionChange}
             placeholder={t("addVideo.captionPlaceholder")}
-            placeholderTextColor={Brand.gray}
+            placeholderTextColor={Brand.formInputPlaceholder}
             multiline
             maxLength={2200}
             autoCapitalize="sentences"

@@ -2,6 +2,10 @@ import { RoleGroupTabsLayout } from "@/components/RoleGroupTabsLayout";
 
 export default function TabLayout() {
   return (
-    <RoleGroupTabsLayout addVideosMode="picker" showFavorites={false} />
+    <RoleGroupTabsLayout
+      addVideosMode="picker"
+      showAddVideos
+      showFavorites={false}
+    />
   );
 }

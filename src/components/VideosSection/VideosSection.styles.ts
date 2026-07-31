@@ -1,7 +1,8 @@
+import { Brand } from "@/constants/theme";
 import { Dimensions, StyleSheet } from "react-native";
 
-const GRID_PADDING = 0;
-const GRID_GAP = 2;
+const GRID_PADDING = 24;
+const GRID_GAP = 8;
 const COLUMNS = 3;
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const ITEM_SIZE =
@@ -12,17 +13,19 @@ export const VIDEO_ITEM_SIZE = ITEM_SIZE;
 export const styles = StyleSheet.create({
   container: {
     paddingHorizontal: GRID_PADDING,
-    marginTop: 8,
+    marginTop: 0,
     paddingBottom: 24,
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
-    paddingHorizontal: 16,
+    marginBottom: 28,
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: Brand.white,
+    fontSize: 16,
+    lineHeight: 20,
   },
   filterLabel: {
     marginLeft: 8,
@@ -43,6 +46,7 @@ export const styles = StyleSheet.create({
   itemContainer: {
     width: ITEM_SIZE,
     height: ITEM_SIZE,
+    borderRadius: 0,
     overflow: "hidden",
   },
   thumbnail: {
@@ -60,6 +64,7 @@ export const styles = StyleSheet.create({
   addPlaceholder: {
     width: ITEM_SIZE,
     height: ITEM_SIZE,
+    borderRadius: 0,
     justifyContent: "center",
     alignItems: "center",
   },

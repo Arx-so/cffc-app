@@ -268,9 +268,22 @@ export default {
     favorites: "Favorites",
     profile: "Profile",
   },
+  roles: {
+    athlete: "Athlete",
+    pro: "Professional",
+    club: "Club",
+    admin: "Admin",
+  },
   search: {
     placeholder: "Search athlete by name...",
     filterButton: "Filter",
+    filterTabs: {
+      all: "All",
+      attackers: "Attackers",
+      midfielders: "Midfielders",
+      defenders: "Defenders",
+      goalkeepers: "Goalkeepers",
+    },
     stats: {
       validations: "VALIDATIONS",
       videos: "VIDEOS",

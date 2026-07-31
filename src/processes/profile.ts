@@ -117,6 +117,20 @@ export const fetchProfileForEdit = async (
   };
 };
 
+export const fetchCurrentUserAvatar = async (
+  userId: string
+): Promise<string | null> => {
+  const { data, error } = await supabase
+    .from("profile")
+    .select("avatar_url")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return getSignedUrl(MEDIA_BUCKET, data?.avatar_url ?? null);
+};
+
 /** Birth and phone only — avoids signing avatar URLs on profile home. */
 export async function fetchProfilePersonalFields(
   userId: string
