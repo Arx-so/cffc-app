@@ -1,4 +1,5 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import { LegalUrls } from "@/constants/legal";
 import { Brand } from "@/constants/theme";
 import { authStyles as A } from "@/styles/auth";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import { styles as S } from "./Signup.styles";
 import { useSignup } from "./useSignup";
 
@@ -649,7 +651,12 @@ const Signup = () => {
           </View>
           <Text style={S.checkboxLabel}>
             {`${t("signup.acceptTermsPrefix")} `}
-            <Text style={S.checkboxLink}>{t("signup.termsOfUse")}</Text>
+            <Text
+              style={S.checkboxLink}
+              onPress={() => WebBrowser.openBrowserAsync(LegalUrls.termsOfUse)}
+            >
+              {t("signup.termsOfUse")}
+            </Text>
             {` ${t("signup.acceptTermsSuffix")}`}
           </Text>
         </TouchableOpacity>
@@ -668,7 +675,12 @@ const Signup = () => {
           </View>
           <Text style={S.checkboxLabel}>
             {`${t("signup.acceptPrivacyPrefix")} `}
-            <Text style={S.checkboxLink}>{t("signup.privacyPolicy")}</Text>
+            <Text
+              style={S.checkboxLink}
+              onPress={() => WebBrowser.openBrowserAsync(LegalUrls.privacyPolicy)}
+            >
+              {t("signup.privacyPolicy")}
+            </Text>
             {` ${t("signup.acceptPrivacySuffix")}`}
           </Text>
         </TouchableOpacity>

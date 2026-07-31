@@ -1,9 +1,13 @@
+import { LegalUrls } from "@/constants/legal";
+import { deleteAccount } from "@/processes/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { Language, useLanguageStore } from "@/stores/languageStore";
+import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
+import Toast from "react-native-toast-message";
 import { SettingItem, UseSettingsReturn } from "./Settings.types";
 
 export const useSettings = (): UseSettingsReturn => {
@@ -11,6 +15,7 @@ export const useSettings = (): UseSettingsReturn => {
   const signOut = useAuthStore((state) => state.signOut);
   const language = useLanguageStore((state) => state.language);
   const setLanguage = useLanguageStore((state) => state.setLanguage);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   const languageLabelMap: Record<Language, string> = {
     en: t("settings.langEn"),
@@ -42,6 +47,32 @@ export const useSettings = (): UseSettingsReturn => {
     ]);
   }, [setLanguage, t]);
 
+  const handleDeleteAccount = useCallback(() => {
+    Alert.alert(
+      t("settings.deleteAccountConfirmTitle"),
+      t("settings.deleteAccountConfirmMessage"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        {
+          text: t("settings.deleteAccountConfirmButton"),
+          style: "destructive",
+          onPress: async () => {
+            setIsDeletingAccount(true);
+            try {
+              await deleteAccount();
+              await signOut();
+              router.replace("/login");
+            } catch {
+              Toast.show({ type: "error", text1: t("settings.deleteAccountError") });
+            } finally {
+              setIsDeletingAccount(false);
+            }
+          },
+        },
+      ]
+    );
+  }, [signOut, t]);
+
   const items: SettingItem[] = [
     {
       icon: "globe-2-outline",
@@ -50,9 +81,32 @@ export const useSettings = (): UseSettingsReturn => {
       onPress: handleLanguageSelect,
     },
     {
+      icon: "shield-outline",
+      label: t("signup.privacyPolicy"),
+      onPress: () => WebBrowser.openBrowserAsync(LegalUrls.privacyPolicy),
+    },
+    {
+      icon: "file-text-outline",
+      label: t("signup.termsOfUse"),
+      onPress: () => WebBrowser.openBrowserAsync(LegalUrls.termsOfUse),
+    },
+    {
+      icon: "question-mark-circle-outline",
+      label: t("settings.support"),
+      onPress: () => WebBrowser.openBrowserAsync(LegalUrls.support),
+    },
+    {
       icon: "log-out-outline",
       label: t("settings.signOut"),
       onPress: handleSignOut,
+      destructive: true,
+    },
+    {
+      icon: "trash-2-outline",
+      label: isDeletingAccount
+        ? t("settings.deleteAccountInProgress")
+        : t("settings.deleteAccount"),
+      onPress: isDeletingAccount ? () => {} : handleDeleteAccount,
       destructive: true,
     },
   ];

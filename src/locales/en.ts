@@ -19,6 +19,14 @@ export default {
     langEn: "English",
     langJa: "日本語",
     langPtBr: "Português (Brasil)",
+    support: "Support",
+    deleteAccount: "Delete account",
+    deleteAccountInProgress: "Deleting account...",
+    deleteAccountConfirmTitle: "Delete account",
+    deleteAccountConfirmMessage:
+      "This will permanently delete your account and all your data (profile, videos, evaluations, documents). This cannot be undone.",
+    deleteAccountConfirmButton: "Delete permanently",
+    deleteAccountError: "Couldn't delete your account. Please try again.",
   },
   inbox: {
     title: "Inbox",
