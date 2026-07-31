@@ -20,6 +20,14 @@ export default {
     langJa: '日本語',
     // Keep explicit BR label for clarity.
     langPtBr: 'Português (Brasil)',
+    support: 'Suporte',
+    deleteAccount: 'Excluir conta',
+    deleteAccountInProgress: 'Excluindo conta...',
+    deleteAccountConfirmTitle: 'Excluir conta',
+    deleteAccountConfirmMessage:
+      'Isso vai excluir permanentemente sua conta e todos os seus dados (perfil, vídeos, avaliações, documentos). Essa ação não pode ser desfeita.',
+    deleteAccountConfirmButton: 'Excluir permanentemente',
+    deleteAccountError: 'Não foi possível excluir sua conta. Tente novamente.',
   },
   inbox: {
     title: 'Inbox',

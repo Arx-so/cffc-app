@@ -123,6 +123,11 @@ export const signup = async (body: {
   };
 };
 
+export const deleteAccount = async (): Promise<void> => {
+  const { error } = await supabase.rpc("cffc_delete_own_account");
+  if (error) throw error;
+};
+
 export const signInWithGoogle = async (): Promise<LoginResponse | null> => {
   // The redirect URI must match one of the Allowed Redirect URLs in Supabase dashboard.
   // makeRedirectUri uses cffc:// in production and exp:// in Expo Go automatically.

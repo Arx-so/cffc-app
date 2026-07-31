@@ -19,6 +19,14 @@ export default {
     langEn: "English",
     langJa: "日本語",
     langPtBr: "ポルトガル語（ブラジル）",
+    support: "サポート",
+    deleteAccount: "アカウントを削除",
+    deleteAccountInProgress: "アカウントを削除しています...",
+    deleteAccountConfirmTitle: "アカウントを削除",
+    deleteAccountConfirmMessage:
+      "アカウントとすべてのデータ（プロフィール、動画、評価、書類）が完全に削除されます。この操作は取り消せません。",
+    deleteAccountConfirmButton: "完全に削除する",
+    deleteAccountError: "アカウントを削除できませんでした。もう一度お試しください。",
   },
   inbox: {
     title: "受信箱",
