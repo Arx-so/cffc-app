@@ -49,29 +49,9 @@ export const styles = StyleSheet.create({
     gap: 14,
     marginBottom: 72,
   },
-  iconWrapper: {
+  logoMark: {
     width: 54,
     height: 54,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoRingOuter: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    borderWidth: 4,
-    borderColor: Brand.welcomeLogo,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoRingInner: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    borderWidth: 3,
-    borderColor: Brand.welcomeLogo,
-    alignItems: "center",
-    justifyContent: "center",
   },
   logoText: {
     color: Brand.welcomeLogo,

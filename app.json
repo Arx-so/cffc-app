@@ -1,26 +1,30 @@
 {
   "expo": {
-    "name": "cffc",
-    "slug": "cffc",
+    "name": "BIG EYE",
+    "slug": "cffc-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "cffc",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.rafa-bob.cffc"
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "com.cffc.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#050706",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
       "softwareKeyboardLayoutMode": "resize",
-      "package": "com.rafa_bob.cffc"
+      "package": "com.cffc.app"
     },
     "web": {
       "output": "static",
@@ -31,7 +35,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#050706",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
@@ -45,6 +49,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8703b4c9-7a54-49fa-818a-714f2f65dfb6"
+      }
+    },
+    "owner": "mlcarvalho1"
   }
 }

@@ -96,7 +96,8 @@ export default {
     emptyHint: "Tap + to create a space and organize your recordings",
   },
   welcome: {
-    title: "Welcome to CFFC",
+    title: "Welcome to BIG EYE",
+    brandName: "BIG EYE",
     signIn: "Sign in",
     signUp: "Sign up",
     heroSubtitle: "JOIN THE ELITE",

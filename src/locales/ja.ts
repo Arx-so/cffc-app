@@ -96,7 +96,8 @@ export default {
     emptyHint: "+ をタップしてスペースを作成し、録音を整理しましょう",
   },
   welcome: {
-    title: "CFFCへようこそ",
+    title: "BIG EYEへようこそ",
+    brandName: "BIG EYE",
     signIn: "サインイン",
     signUp: "サインアップ",
     heroSubtitle: "エリートに参加",
