@@ -1,5 +1,10 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import {
+  ATHLETE_STRENGTHS,
+  POSITIONS_BY_SECTOR,
+  POSITION_SECTORS,
+} from "@/constants/athleteAttributes";
+import {
   ATHLETE_AVAILABILITY_KEYS,
   AVAILABILITY_VALUE_BY_TRANSLATION_KEY,
 } from "@/constants/athleteAvailability";
@@ -18,7 +23,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { styles } from "./EditProfile.styles";
 import { useEditProfile } from "./useEditProfile";
 
@@ -30,74 +34,6 @@ const SectionHeader = ({ title }: { title: string }) => (
     <Text style={styles.sectionTitle}>{title}</Text>
   </View>
 );
-
-const AddItemModal = ({
-  visible,
-  title,
-  onClose,
-  onConfirm,
-}: {
-  visible: boolean;
-  title: string;
-  onClose: () => void;
-  onConfirm: (value: string) => void;
-}) => {
-  const { t } = useTranslation();
-  const [value, setValue] = useState("");
-
-  const handleConfirm = () => {
-    onConfirm(value);
-    setValue("");
-    onClose();
-  };
-
-  return (
-    <Modal visible={visible} transparent animationType="fade">
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={styles.modalKeyboardAvoid}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={onClose}
-        >
-          <TouchableOpacity
-            style={styles.modalContent}
-            activeOpacity={1}
-            onPress={() => {}}
-          >
-            <Text style={styles.modalTitle}>{title}</Text>
-            <TextInput
-              style={styles.modalInput}
-              value={value}
-              onChangeText={setValue}
-              placeholder={t("editProfile.modalPlaceholder")}
-              placeholderTextColor={Brand.formInputPlaceholder}
-              autoFocus
-            />
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={styles.modalCancelButton}
-                onPress={onClose}
-              >
-                <Text style={styles.modalCancelText}>{t("common.cancel")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalConfirmButton}
-                onPress={handleConfirm}
-              >
-                <Text style={styles.modalConfirmText}>
-                  {t("editProfile.modalAdd")}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </Modal>
-  );
-};
 
 const AvailabilityModal = ({
   visible,
@@ -207,10 +143,8 @@ const EditProfile = () => {
     setAthleteField,
     handlePickAvatar,
     onAvatarLoaded,
-    handleAddPosition,
-    handleRemovePosition,
-    handleAddStrength,
-    handleRemoveStrength,
+    handleTogglePosition,
+    handleToggleStrength,
     handleAddClub,
     handleRemoveClub,
     handleSave,
@@ -219,8 +153,6 @@ const EditProfile = () => {
     requiredFieldErrors,
   } = useEditProfile();
 
-  const [positionModalVisible, setPositionModalVisible] = useState(false);
-  const [strengthModalVisible, setStrengthModalVisible] = useState(false);
   const [availabilityModalVisible, setAvailabilityModalVisible] =
     useState(false);
   const [showClubForm, setShowClubForm] = useState(false);
@@ -537,69 +469,58 @@ const EditProfile = () => {
               <Text style={[styles.fieldLabel, { marginTop: 0 }]}>
                 {t("editProfile.positions")}
               </Text>
-              <View style={styles.chipsContainer}>
-                {athleteForm.positions.map((pos) => (
-                  <View key={pos} style={styles.chip}>
-                    <Text style={styles.chipText}>{pos}</Text>
-                    <TouchableOpacity
-                      onPress={() => handleRemovePosition(pos)}
-                    >
-                      <Icon
-                        name="close-outline"
-                        fill={Brand.formControlActiveText}
-                        style={styles.chipRemove}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-                <TouchableOpacity
-                  style={styles.addChipButton}
-                  onPress={() => setPositionModalVisible(true)}
-                >
-                  <Icon
-                    name="plus-outline"
-                    fill={Brand.gray}
-                    style={{ width: 16, height: 16 }}
-                  />
-                  <Text style={styles.addChipText}>
-                    {t("editProfile.addPosition")}
+              {POSITION_SECTORS.map((sector) => (
+                <View key={sector} style={styles.chipsGroup}>
+                  <Text style={styles.chipsGroupLabel}>
+                    {t(`athlete.positionSectors.${sector}`)}
                   </Text>
-                </TouchableOpacity>
-              </View>
+                  <View style={styles.chipsContainer}>
+                    {POSITIONS_BY_SECTOR[sector].map((position) => {
+                      const active = athleteForm.positions.includes(position);
+                      return (
+                        <TouchableOpacity
+                          key={position}
+                          style={[styles.chip, active && styles.chipActive]}
+                          onPress={() => handleTogglePosition(position)}
+                        >
+                          <Text
+                            style={[
+                              styles.chipText,
+                              active && styles.chipTextActive,
+                            ]}
+                          >
+                            {t(`athlete.positions.${position}`)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </View>
+              ))}
 
               <Text style={styles.fieldLabel}>
                 {t("editProfile.strengths")}
               </Text>
               <View style={styles.chipsContainer}>
-                {athleteForm.strengths.map((str) => (
-                  <TouchableOpacity
-                    key={str}
-                    style={styles.strengthChip}
-                    onPress={() => handleRemoveStrength(str)}
-                  >
-                    <Text style={styles.strengthChipText}>
-                      {str.toUpperCase()}
-                    </Text>
-                    <Icon
-                      name="close-outline"
-                      fill={Brand.gray}
-                      style={{ width: 14, height: 14 }}
-                    />
-                  </TouchableOpacity>
-                ))}
-                <TouchableOpacity
-                  style={styles.addChipButton}
-                  onPress={() => setStrengthModalVisible(true)}
-                >
-                  <Icon
-                    name="plus-outline"
-                    fill={Brand.gray}
-                    style={{ width: 16, height: 16 }}
-                  />
-                  <Text style={styles.addChipText}>
-                    {t("editProfile.addStrength")}
-                  </Text>
-                </TouchableOpacity>
+                {ATHLETE_STRENGTHS.map((strength) => {
+                  const active = athleteForm.strengths.includes(strength);
+                  return (
+                    <TouchableOpacity
+                      key={strength}
+                      style={[styles.chip, active && styles.chipActive]}
+                      onPress={() => handleToggleStrength(strength)}
+                    >
+                      <Text
+                        style={[
+                          styles.chipText,
+                          active && styles.chipTextActive,
+                        ]}
+                      >
+                        {t(`athlete.strengths.${strength}`)}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
@@ -855,18 +776,6 @@ const EditProfile = () => {
         )}
 
         {/* ── Modals ── */}
-        <AddItemModal
-          visible={positionModalVisible}
-          title={t("editProfile.addPositionTitle")}
-          onClose={() => setPositionModalVisible(false)}
-          onConfirm={handleAddPosition}
-        />
-        <AddItemModal
-          visible={strengthModalVisible}
-          title={t("editProfile.addStrengthTitle")}
-          onClose={() => setStrengthModalVisible(false)}
-          onConfirm={handleAddStrength}
-        />
         {isAthlete && athleteForm && (
           <AvailabilityModal
             visible={availabilityModalVisible}

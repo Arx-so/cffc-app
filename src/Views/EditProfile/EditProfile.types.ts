@@ -50,10 +50,8 @@ export interface UseEditProfileReturn {
 
   handlePickAvatar: () => Promise<void>;
   onAvatarLoaded: () => void;
-  handleAddPosition: (position: string) => void;
-  handleRemovePosition: (position: string) => void;
-  handleAddStrength: (strength: string) => void;
-  handleRemoveStrength: (strength: string) => void;
+  handleTogglePosition: (position: string) => void;
+  handleToggleStrength: (strength: string) => void;
   handleAddClub: (entry: ClubHistoryEntry) => void;
   handleRemoveClub: (index: number) => void;
   isDirty: boolean;

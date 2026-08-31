@@ -2,6 +2,7 @@ import { Brand } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { positionLabel } from "@/utils/athleteAttributeLabels";
 import {
     ActivityIndicator,
     Image,
@@ -32,7 +33,7 @@ export function AthleteSearchCard({
   variant = "card",
 }: AthleteSearchCardProps) {
   const { t } = useTranslation();
-  const position = athlete.positions[0] ?? "";
+  const position = athlete.positions[0] ? positionLabel(t, athlete.positions[0]) : "";
   const isShortlistVariant = variant === "shortlist";
 
   if (variant === "compact") {

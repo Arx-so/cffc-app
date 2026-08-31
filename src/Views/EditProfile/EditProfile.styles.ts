@@ -177,61 +177,36 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 8,
   },
+  chipsGroup: {
+    marginBottom: 16,
+  },
+  chipsGroupLabel: {
+    color: Brand.gray,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.2,
+    marginBottom: 8,
+  },
   chip: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Brand.formControlActiveBg,
-    borderWidth: 1,
-    borderColor: Brand.formControlActiveBorder,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    gap: 6,
+    borderWidth: 1,
+    borderColor: Brand.formControlBorder,
+    backgroundColor: Brand.formControlBg,
+  },
+  chipActive: {
+    borderColor: Brand.formControlActiveBorder,
+    backgroundColor: Brand.formControlActiveBg,
   },
   chipText: {
-    color: Brand.formControlActiveText,
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  chipRemove: {
-    width: 16,
-    height: 16,
-  },
-  addChipButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Brand.formControlBg,
-    borderWidth: 1,
-    borderColor: Brand.formControlBorder,
-    borderStyle: "dashed",
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    gap: 4,
-  },
-  addChipText: {
-    color: Brand.formControlText,
-    fontSize: 13,
-    fontWeight: "600",
-  },
-
-  // ── Strength chips (darker style) ──
-  strengthChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Brand.formControlActiveBg,
-    borderWidth: 1,
-    borderColor: Brand.formControlBorder,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 8,
-    gap: 6,
-  },
-  strengthChipText: {
     color: Brand.formControlText,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     letterSpacing: 0.5,
+  },
+  chipTextActive: {
+    color: Brand.formControlActiveText,
   },
 
   // ── Select / Dropdown ──
@@ -438,9 +413,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
   },
-  modalKeyboardAvoid: {
-    flex: 1,
-  },
   modalContent: {
     backgroundColor: Brand.card,
     borderRadius: 16,
@@ -453,42 +425,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 16,
-  },
-  modalInput: {
-    backgroundColor: Brand.formInputBg,
-    borderWidth: 1,
-    borderColor: Brand.formInputBorder,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    color: Brand.formInputText,
-    fontSize: 15,
-    marginBottom: 16,
-  },
-  modalActions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    gap: 12,
-  },
-  modalCancelButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  modalCancelText: {
-    color: Brand.gray,
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  modalConfirmButton: {
-    backgroundColor: Brand.green,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  modalConfirmText: {
-    color: Brand.buttonPrimaryText,
-    fontSize: 14,
-    fontWeight: "700",
   },
 
   // ── Availability options modal ──

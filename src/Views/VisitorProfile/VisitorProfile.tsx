@@ -4,6 +4,7 @@ import { VideosSection } from "@/components/VideosSection";
 import { Brand } from "@/constants/theme";
 import { Layout, Spinner, Text } from "@ui-kitten/components";
 import { useTranslation } from "react-i18next";
+import { positionLabel } from "@/utils/athleteAttributeLabels";
 import { ScrollView } from "react-native";
 import { styles } from "./VisitorProfile.styles";
 import { VisitorProfileProps } from "./VisitorProfile.types";
@@ -43,7 +44,11 @@ const VisitorProfile = ({ userId, username, viewerRole }: VisitorProfileProps) =
       <ScrollView showsVerticalScrollIndicator={false}>
         <ProfileHeader
           profile={profileData}
-          subtitle={visitorAthleteDetailsExtra?.athleteProfile?.positions?.[0] ?? null}
+          subtitle={
+            visitorAthleteDetailsExtra?.athleteProfile?.positions?.[0]
+              ? positionLabel(t, visitorAthleteDetailsExtra.athleteProfile.positions[0])
+              : null
+          }
           isOwnProfile={false}
           viewerRole={viewerRole ?? "athlete"}
           onValidateProfilePress={hasExistingValidation ? undefined : handleEmitValidation}

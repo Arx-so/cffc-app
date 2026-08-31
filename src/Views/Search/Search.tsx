@@ -12,6 +12,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
+import type { PositionSector } from "@/constants/athleteAttributes";
 import { Brand } from "@/constants/theme";
 import { AthleteSearchCard } from "@/components/AthleteSearchCard";
 import { useSearch } from "./useSearch";
@@ -25,11 +26,14 @@ const FILTER_TAB_KEYS = [
   "goalkeepers",
 ] as const;
 
-const FILTER_TAB_POSITION: Record<(typeof FILTER_TAB_KEYS)[number], string | null> = {
+const FILTER_TAB_POSITION: Record<
+  (typeof FILTER_TAB_KEYS)[number],
+  PositionSector | null
+> = {
   all: null,
-  attackers: "forward",
-  midfielders: "midfielder",
-  defenders: "defender",
+  attackers: "attack",
+  midfielders: "midfield",
+  defenders: "defense",
   goalkeepers: "goalkeeper",
 };
 

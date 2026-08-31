@@ -99,6 +99,17 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  thumbRemoveButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   thumbUploadIcon: {
     alignItems: "center",
     gap: 8,

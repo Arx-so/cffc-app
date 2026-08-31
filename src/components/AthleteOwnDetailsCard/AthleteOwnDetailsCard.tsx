@@ -11,6 +11,10 @@ import { Spinner, Text } from "@ui-kitten/components";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  positionLabels,
+  strengthLabels,
+} from "@/utils/athleteAttributeLabels";
+import {
   LayoutAnimation,
   Platform,
   Pressable,
@@ -131,7 +135,7 @@ export function AthleteOwnDetailsCard({
   const physicalPreview = [heightStr, weightStr].filter(Boolean).join(" · ");
 
   const positionsCollapsed = ath?.positions?.length
-    ? ath.positions.slice(0, 3).join(", ") +
+    ? positionLabels(t, ath.positions.slice(0, 3)).join(", ") +
       (ath.positions.length > 3 ? "…" : "")
     : "";
   const categoryPreview = (ath?.current_category ?? "").trim();
@@ -244,12 +248,12 @@ export function AthleteOwnDetailsCard({
             <Text style={styles.sectionLabel}>{t("editProfile.tactical")}</Text>
             <RowBlock
               label={t("editProfile.positions")}
-              value={(ath?.positions ?? []).join(", ")}
+              value={positionLabels(t, ath?.positions ?? []).join(", ")}
               notInformed={notInformed}
             />
             <RowBlock
               label={t("editProfile.strengths")}
-              value={(ath?.strengths ?? []).join(", ")}
+              value={strengthLabels(t, ath?.strengths ?? []).join(", ")}
               notInformed={notInformed}
             />
 

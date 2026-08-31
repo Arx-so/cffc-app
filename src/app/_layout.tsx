@@ -10,6 +10,7 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Stack, usePathname, useRouter, useSegments } from "expo-router";
 import { HeaderBar } from "@/components/HeaderBar";
+import { ToastHost } from "@/components/ToastHost";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -17,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
-import ToastContainer from "react-native-toast-message";
 
 import { darkTheme, lightTheme } from "@/config/themes";
 import { Brand } from "@/constants/theme";
@@ -97,89 +97,94 @@ const RootLayoutNav = () => {
 
   return (
     <Stack
-      initialRouteName="index"
       screenOptions={{
         headerBackTitle: "",
         contentStyle: { backgroundColor: Brand.bg },
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false, title: "" }} />
-      <Stack.Screen name="login" options={{ headerBackTitle: "" }} />
-      <Stack.Screen name="signup" options={{ headerBackTitle: "" }} />
-      <Stack.Screen name="forgot-password" options={{ headerBackTitle: "" }} />
-      {/* Deep link target of the recovery email. Deliberately absent from
-          UNAUTHENTICATED_SCREENS: the recovery link creates a session, and the
-          guard would otherwise bounce the user to their role home before they
-          can set a new password. */}
+      {/* Deep link target of the recovery email. Deliberately outside both
+          guards: the recovery link creates a session, so an unauthenticated
+          guard would unmount it exactly when the user needs to set a new
+          password, and the role guard is irrelevant here. */}
       <Stack.Screen name="reset-password" options={{ headerBackTitle: "" }} />
-      <Stack.Screen
-        name="(athlete)"
-        options={{ headerShown: false, gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name="(pro)"
-        options={{ headerShown: false, gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name="(club)"
-        options={{ headerShown: false, gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name="(admin)"
-        options={{ headerShown: false, gestureEnabled: false }}
-      />
-      <Stack.Screen
-        name="edit-profile"
-        options={{
-          headerShown: true,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="add-video"
-        options={{
-          headerShown: true,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="search-filter"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="visitor-profile"
-        options={{
-          headerShown: false,
-          presentation: "fullScreenModal",
-        }}
-      />
-      <Stack.Screen
-        name="user-feed"
-        options={{ headerShown: false, presentation: "fullScreenModal" }}
-      />
-      <Stack.Screen
-        name="emit-validation"
-        options={{
-          headerShown: false,
-          presentation: "fullScreenModal",
-        }}
-      />
-      <Stack.Screen
-        name="settings"
-        options={{
-          headerShown: true,
-          header: () => (
-            <HeaderBar
-              title={t("settings.title")}
-              leftIcon="arrow-back-outline"
-              onLeftPress={() => router.back()}
-            />
-          ),
-        }}
-      />
+
+      <Stack.Protected guard={!isAuthenticated}>
+        <Stack.Screen name="login" options={{ headerBackTitle: "" }} />
+        <Stack.Screen name="signup" options={{ headerBackTitle: "" }} />
+        <Stack.Screen name="forgot-password" options={{ headerBackTitle: "" }} />
+      </Stack.Protected>
+
+      <Stack.Protected guard={isAuthenticated}>
+        <Stack.Screen
+          name="(athlete)"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="(pro)"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="(club)"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="(admin)"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="edit-profile"
+          options={{
+            headerShown: true,
+            presentation: "modal",
+          }}
+        />
+        <Stack.Screen
+          name="add-video"
+          options={{
+            headerShown: true,
+            presentation: "modal",
+          }}
+        />
+        <Stack.Screen
+          name="search-filter"
+          options={{
+            headerShown: false,
+            presentation: "modal",
+          }}
+        />
+        <Stack.Screen
+          name="visitor-profile"
+          options={{
+            headerShown: false,
+            presentation: "fullScreenModal",
+          }}
+        />
+        <Stack.Screen
+          name="user-feed"
+          options={{ headerShown: false, presentation: "fullScreenModal" }}
+        />
+        <Stack.Screen
+          name="emit-validation"
+          options={{
+            headerShown: false,
+            presentation: "fullScreenModal",
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: true,
+            header: () => (
+              <HeaderBar
+                title={t("settings.title")}
+                leftIcon="arrow-back-outline"
+                onLeftPress={() => router.back()}
+              />
+            ),
+          }}
+        />
+      </Stack.Protected>
     </Stack>
   );
 };
@@ -201,7 +206,7 @@ const RootLayout = () => {
           <QueryClientProvider client={queryClient}>
             <RootLayoutNav />
             <StatusBar style={effectiveTheme === "dark" ? "light" : "dark"} />
-            <ToastContainer bottomOffset={130} position="bottom" />
+            <ToastHost />
           </QueryClientProvider>
         </KeyboardProvider>
       </ApplicationProvider>

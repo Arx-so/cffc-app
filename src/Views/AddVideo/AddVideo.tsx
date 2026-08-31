@@ -3,12 +3,13 @@ import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
 import { Brand } from "@/constants/theme";
 import { Icon } from "@ui-kitten/components";
 import { Stack } from "expo-router";
-import { useVideoPlayer, VideoView } from "expo-video";
-import { useState } from "react";
+import { VideoView } from "expo-video";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
+  Pressable,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -25,17 +26,16 @@ const AddVideo = () => {
     captionLength,
     isPosting,
     thumbUri,
+    player,
+    isPlaying,
+    handleTogglePlay,
     handlePickVideo,
     handlePickThumb,
+    handleRemoveThumb,
     handleCaptionChange,
     handlePost,
     handleClose,
   } = useAddVideo();
-
-  const player = useVideoPlayer(videoUri ?? null, (p) => {
-    p.loop = true;
-  });
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const headerOptions = {
     title: t("addVideo.title"),
@@ -70,19 +70,7 @@ const AddVideo = () => {
           bottomOffset={120}
         >
           {/* ── Video preview ── */}
-          <TouchableOpacity
-            style={styles.videoContainer}
-            onPress={() => {
-              if (!videoUri) return;
-              if (isPlaying) {
-                player.pause();
-              } else {
-                player.play();
-              }
-              setIsPlaying((p) => !p);
-            }}
-            activeOpacity={1}
-          >
+          <View style={styles.videoContainer}>
             {videoUri ? (
               <>
                 <VideoView
@@ -91,14 +79,23 @@ const AddVideo = () => {
                   contentFit="cover"
                   nativeControls={false}
                 />
-                {!isPlaying && (
-                  <View style={styles.playOverlay} pointerEvents="none">
-                    <View style={styles.playTriangle} />
-                  </View>
-                )}
+                <Pressable
+                  style={StyleSheet.absoluteFill}
+                  onPress={handleTogglePlay}
+                >
+                  {!isPlaying && (
+                    <View style={styles.playOverlay}>
+                      <View style={styles.playTriangle} />
+                    </View>
+                  )}
+                </Pressable>
               </>
             ) : (
-              <View style={styles.videoPlaceholder}>
+              <TouchableOpacity
+                style={styles.videoPlaceholder}
+                onPress={handlePickVideo}
+                activeOpacity={0.7}
+              >
                 <Icon
                   name="video-outline"
                   fill={Brand.gray}
@@ -107,9 +104,9 @@ const AddVideo = () => {
                 <Text style={styles.videoPlaceholderText}>
                   {t("addVideo.selectVideo").toUpperCase()}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
+          </View>
 
           {/* ── Change video button ── */}
           <TouchableOpacity
@@ -138,11 +135,25 @@ const AddVideo = () => {
               activeOpacity={0.7}
             >
               {thumbUri ? (
-                <Image
-                  source={{ uri: thumbUri }}
-                  style={styles.thumbPreviewImage}
-                  resizeMode="cover"
-                />
+                <>
+                  <Image
+                    source={{ uri: thumbUri }}
+                    style={styles.thumbPreviewImage}
+                    resizeMode="cover"
+                  />
+                  <TouchableOpacity
+                    style={styles.thumbRemoveButton}
+                    onPress={handleRemoveThumb}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    accessibilityLabel={t("addVideo.removeThumb")}
+                  >
+                    <Icon
+                      name="close-outline"
+                      fill={Brand.white}
+                      style={{ width: 18, height: 18 }}
+                    />
+                  </TouchableOpacity>
+                </>
               ) : (
                 <View style={styles.thumbUploadIcon}>
                   <Icon

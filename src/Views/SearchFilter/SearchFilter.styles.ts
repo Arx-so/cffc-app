@@ -113,6 +113,17 @@ export const styles = StyleSheet.create({
     color: Brand.formControlActiveText,
   },
 
+  positionGroupLabel: {
+    color: Brand.gray,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.2,
+    marginBottom: 8,
+  },
+  positionGroupSpacer: {
+    height: 16,
+  },
+
   // ── Age / Physical rows ──
   ageRow: {
     flexDirection: "row",

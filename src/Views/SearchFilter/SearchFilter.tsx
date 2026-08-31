@@ -1,5 +1,10 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
+import {
+  ATHLETE_POSITIONS,
+  ATHLETE_STRENGTHS,
+  POSITION_SECTORS,
+} from "@/constants/athleteAttributes";
 import { Brand } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -10,28 +15,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./SearchFilter.styles";
 import { useSearchFilter } from "./useSearchFilter";
-
-const POSITION_OPTIONS = [
-  { labelKey: "searchFilter.goalkeeper", value: "goalkeeper" },
-  { labelKey: "searchFilter.defender", value: "defender" },
-  { labelKey: "searchFilter.midfielder", value: "midfielder" },
-  { labelKey: "searchFilter.forward", value: "forward" },
-];
-
-const STRENGTH_OPTIONS = [
-  "speed",
-  "dribbling",
-  "finishing",
-  "passing",
-  "defending",
-  "heading",
-  "vision",
-  "stamina",
-  "strength",
-  "positioning",
-];
 
 const FOOT_OPTIONS = [
   {
@@ -56,6 +42,7 @@ const SectionHeader = ({ title }: { title: string }) => (
 
 export function SearchFilter() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const {
     positions,
     ageMin,
@@ -77,7 +64,7 @@ export function SearchFilter() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <View style={styles.headerSlot}>
           <TouchableOpacity style={styles.headerIconButton} onPress={handleClear}>
             <Ionicons name="close" size={22} color={Brand.white} />
@@ -97,19 +84,46 @@ export function SearchFilter() {
         {/* POSITION */}
         <SectionHeader title={t("searchFilter.position")} />
         <View style={styles.fieldGroup}>
+          <Text style={styles.positionGroupLabel}>
+            {t("searchFilter.positionSector")}
+          </Text>
           <View style={styles.chipsRow}>
-            {POSITION_OPTIONS.map((opt) => {
-              const active = positions.includes(opt.value);
+            {POSITION_SECTORS.map((sector) => {
+              const active = positions.includes(sector);
               return (
                 <TouchableOpacity
-                  key={opt.value}
+                  key={sector}
                   style={[styles.chip, active && styles.chipActive]}
-                  onPress={() => togglePosition(opt.value)}
+                  onPress={() => togglePosition(sector)}
                 >
                   <Text
                     style={[styles.chipText, active && styles.chipTextActive]}
                   >
-                    {t(opt.labelKey)}
+                    {t(`athlete.positionSectors.${sector}`)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <View style={styles.positionGroupSpacer} />
+
+          <Text style={styles.positionGroupLabel}>
+            {t("searchFilter.specificPosition")}
+          </Text>
+          <View style={styles.chipsRow}>
+            {ATHLETE_POSITIONS.map((position) => {
+              const active = positions.includes(position);
+              return (
+                <TouchableOpacity
+                  key={position}
+                  style={[styles.chip, active && styles.chipActive]}
+                  onPress={() => togglePosition(position)}
+                >
+                  <Text
+                    style={[styles.chipText, active && styles.chipTextActive]}
+                  >
+                    {t(`athlete.positions.${position}`)}
                   </Text>
                 </TouchableOpacity>
               );
@@ -223,7 +237,7 @@ export function SearchFilter() {
         <SectionHeader title={t("searchFilter.technicalAttributes")} />
         <View style={styles.fieldGroup}>
           <View style={styles.chipsRow}>
-            {STRENGTH_OPTIONS.map((str) => {
+            {ATHLETE_STRENGTHS.map((str) => {
               const active = strengths.includes(str);
               return (
                 <TouchableOpacity
@@ -234,7 +248,7 @@ export function SearchFilter() {
                   <Text
                     style={[styles.chipText, active && styles.chipTextActive]}
                   >
-                    {t(`searchFilter.strengths.${str}`)}
+                    {t(`athlete.strengths.${str}`)}
                   </Text>
                 </TouchableOpacity>
               );

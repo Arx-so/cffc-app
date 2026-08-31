@@ -1,4 +1,5 @@
 import { supabase } from "@/config/supabase";
+import { expandPositionFilter } from "@/constants/athleteAttributes";
 import {
   fetchApprovedValidationCountsByAthleteIds,
   validationCountsMapGet,
@@ -488,8 +489,9 @@ export async function searchAthletes(
   let filtered = profiles.filter((p) => searchableIds.has(p.id));
 
   if (filters.positions.length > 0) {
+    const wantedPositions = expandPositionFilter(filters.positions);
     filtered = filtered.filter((p) =>
-      filters.positions.some((pos) => positionsMap.get(p.id)?.includes(pos))
+      wantedPositions.some((pos) => positionsMap.get(p.id)?.includes(pos))
     );
   }
   if (filters.strengths.length > 0) {

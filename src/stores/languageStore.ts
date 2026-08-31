@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import * as SecureStore from 'expo-secure-store';
 
 import i18n from '@/config/i18n';
+import { secureStorage } from '@/utils/secureStorage';
 
 export type Language = 'en' | 'ja' | 'pt-BR';
 
@@ -15,12 +15,6 @@ const normalizeLanguage = (language: string): Language => {
   if (language === 'pt-br' || language === 'pt-BR') return 'pt-BR';
   if (language === 'ja') return 'ja';
   return 'en';
-};
-
-const secureStorage = {
-  getItem: (name: string) => SecureStore.getItemAsync(name),
-  setItem: (name: string, value: string) => SecureStore.setItemAsync(name, value),
-  removeItem: (name: string) => SecureStore.deleteItemAsync(name),
 };
 
 export const useLanguageStore = create<LanguageState>()(

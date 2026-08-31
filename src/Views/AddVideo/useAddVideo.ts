@@ -1,4 +1,6 @@
 import { createMediaRecord, uploadThumb, uploadVideo } from "@/processes/profile";
+import { useEvent } from "expo";
+import { useVideoPlayer } from "expo-video";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,6 +25,20 @@ export const useAddVideo = (): UseAddVideoReturn => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const isSavedRef = useRef(false);
+
+  const player = useVideoPlayer(videoUri || null, (instance) => {
+    instance.loop = true;
+  });
+
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
+
+  const handleTogglePlay = useCallback(() => {
+    if (!videoUri) return;
+    if (player.playing) player.pause();
+    else player.play();
+  }, [player, videoUri]);
 
   const isDirty = caption.trim() !== "";
 
@@ -66,6 +82,10 @@ export const useAddVideo = (): UseAddVideoReturn => {
     if (result.canceled || !result.assets[0]) return;
     setThumbUri(result.assets[0].uri);
   }, [t]);
+
+  const handleRemoveThumb = useCallback(() => {
+    setThumbUri(null);
+  }, []);
 
   const postMutation = useMutation({
     mutationFn: async () => {
@@ -146,8 +166,12 @@ export const useAddVideo = (): UseAddVideoReturn => {
     isPosting: postMutation.isPending,
     isDirty,
     thumbUri,
+    player,
+    isPlaying,
+    handleTogglePlay,
     handlePickVideo,
     handlePickThumb,
+    handleRemoveThumb,
     handleCaptionChange,
     handlePost,
     handleClose,

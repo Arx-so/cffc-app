@@ -167,41 +167,21 @@ export const useEditProfile = (): UseEditProfileReturn => {
     setIsUploadingAvatar(false);
   }, []);
 
-  const handleAddPosition = useCallback(
-    (position: string) => {
-      const trimmed = position.trim();
-      if (!trimmed) return;
-      setAthleteForm((prev) => {
-        if (prev.positions.includes(trimmed)) return prev;
-        return { ...prev, positions: [...prev.positions, trimmed] };
-      });
-    },
-    []
-  );
-
-  const handleRemovePosition = useCallback((position: string) => {
+  const handleTogglePosition = useCallback((position: string) => {
     setAthleteForm((prev) => ({
       ...prev,
-      positions: prev.positions.filter((p) => p !== position),
+      positions: prev.positions.includes(position)
+        ? prev.positions.filter((p) => p !== position)
+        : [...prev.positions, position],
     }));
   }, []);
 
-  const handleAddStrength = useCallback(
-    (strength: string) => {
-      const trimmed = strength.trim();
-      if (!trimmed) return;
-      setAthleteForm((prev) => {
-        if (prev.strengths.includes(trimmed)) return prev;
-        return { ...prev, strengths: [...prev.strengths, trimmed] };
-      });
-    },
-    []
-  );
-
-  const handleRemoveStrength = useCallback((strength: string) => {
+  const handleToggleStrength = useCallback((strength: string) => {
     setAthleteForm((prev) => ({
       ...prev,
-      strengths: prev.strengths.filter((s) => s !== strength),
+      strengths: prev.strengths.includes(strength)
+        ? prev.strengths.filter((s) => s !== strength)
+        : [...prev.strengths, strength],
     }));
   }, []);
 
@@ -270,7 +250,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
       Toast.show({
         type: "error",
         text1: isPolicyRecursionError
-          ? "Erro de permissão no banco (policy profile)."
+          ? t("editProfile.policyError")
           : t("editProfile.saveError"),
       });
     },
@@ -290,7 +270,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
     if (hasRequiredFieldError) {
       Toast.show({
         type: "error",
-        text1: "Preencha todos os campos obrigatórios.",
+        text1: t("editProfile.requiredFields"),
       });
       return;
     }
@@ -397,10 +377,8 @@ export const useEditProfile = (): UseEditProfileReturn => {
     setAthleteField,
     handlePickAvatar,
     onAvatarLoaded,
-    handleAddPosition,
-    handleRemovePosition,
-    handleAddStrength,
-    handleRemoveStrength,
+    handleTogglePosition,
+    handleToggleStrength,
     handleAddClub,
     handleRemoveClub,
     handleSave,

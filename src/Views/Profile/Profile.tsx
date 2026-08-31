@@ -6,6 +6,7 @@ import { Brand } from "@/constants/theme";
 import { Layout, Spinner, Text } from "@ui-kitten/components";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { positionLabel } from "@/utils/athleteAttributeLabels";
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./Profile.styles";
@@ -53,7 +54,11 @@ const Profile = () => {
       >
         <ProfileHeader
           profile={profileData}
-          subtitle={athleteOwnProfileExtra?.athleteProfile?.positions?.[0] ?? null}
+          subtitle={
+            athleteOwnProfileExtra?.athleteProfile?.positions?.[0]
+              ? positionLabel(t, athleteOwnProfileExtra.athleteProfile.positions[0])
+              : null
+          }
           topSpacing={8}
           isOwnProfile={true}
           viewerRole={profileData.role}
