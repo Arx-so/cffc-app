@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: Brand.card,
+    backgroundColor: Brand.bg,
   },
   iconContainer: {
     width: 32,
@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: Brand.border,
-    marginLeft: 66,
   },
   section: {
     marginTop: 24,

@@ -155,7 +155,7 @@ const Signup = () => {
         </Text>
 
         {/* ── Profile type ── */}
-        <Text style={[A.fieldLabel, { marginTop: 0 }]}>{t("signup.profileTypeLabel")}</Text>
+        <Text style={[A.fieldLabel, { marginTop: 0 }]}>{t("signup.profileTypeLabel")} <Text style={A.requiredMark}>*</Text></Text>
         {PROFILE_OPTIONS.map((opt) => {
           const selected = selectedRole === opt.key;
           return (
@@ -188,7 +188,7 @@ const Signup = () => {
         })}
 
         {/* ── Name ── */}
-        <Text style={A.fieldLabel}>{t("signup.fullNameLabel")}</Text>
+        <Text style={A.fieldLabel}>{t("signup.fullNameLabel")} <Text style={A.requiredMark}>*</Text></Text>
         <TextInput
           style={[A.input, fullNameError && A.inputError]}
           value={fullName}
@@ -200,7 +200,7 @@ const Signup = () => {
         />
 
         {/* ── Username ── */}
-        <Text style={A.fieldLabel}>{t("editProfile.username")}</Text>
+        <Text style={A.fieldLabel}>{t("editProfile.username")} <Text style={A.requiredMark}>*</Text></Text>
         <TextInput
           style={[A.input, usernameError && A.inputError]}
           value={username}
@@ -212,7 +212,7 @@ const Signup = () => {
         />
 
         {/* ── Email ── */}
-        <Text style={A.fieldLabel}>{t("auth.email")}</Text>
+        <Text style={A.fieldLabel}>{t("auth.email")} <Text style={A.requiredMark}>*</Text></Text>
         <TextInput
           style={[A.input, (emailError || emailRequiredError) && A.inputError]}
           value={email}
@@ -227,7 +227,7 @@ const Signup = () => {
         {emailError && <Text style={A.errorText}>{t("signup.invalidEmail")}</Text>}
 
         {/* ── Password ── */}
-        <Text style={A.fieldLabel}>{t("auth.password")}</Text>
+        <Text style={A.fieldLabel}>{t("auth.password")} <Text style={A.requiredMark}>*</Text></Text>
         <View style={[S.passwordRow, passwordError && A.inputError]}>
           <TextInput
             style={S.passwordInput}
@@ -258,7 +258,7 @@ const Signup = () => {
         </View>
 
         {/* ── Confirm password ── */}
-        <Text style={A.fieldLabel}>{t("auth.confirmPassword")}</Text>
+        <Text style={A.fieldLabel}>{t("auth.confirmPassword")} <Text style={A.requiredMark}>*</Text></Text>
         <View style={[S.passwordRow, confirmPasswordError && A.inputError]}>
           <TextInput
             style={S.passwordInput}
@@ -289,7 +289,7 @@ const Signup = () => {
         </View>
 
         {/* ── Date of birth ── */}
-        <Text style={A.fieldLabel}>{t("editProfile.birthDate")}</Text>
+        <Text style={A.fieldLabel}>{t("editProfile.birthDate")} <Text style={A.requiredMark}>*</Text></Text>
         <View style={[S.dateRow, birthDateError && A.inputError]}>
           <TextInput
             style={S.dateInput}
@@ -309,7 +309,7 @@ const Signup = () => {
           />
         </View>
 
-        <Text style={A.fieldLabel}>{t("editProfile.city")}</Text>
+        <Text style={A.fieldLabel}>{t("editProfile.city")} <Text style={A.requiredMark}>*</Text></Text>
         <TextInput
           style={[A.input, cityError && A.inputError]}
           value={city}
@@ -321,7 +321,7 @@ const Signup = () => {
 
         <View style={S.inlineRow}>
           <View style={S.inlineItem}>
-            <Text style={A.fieldLabel}>{t("editProfile.stateProv")}</Text>
+            <Text style={A.fieldLabel}>{t("editProfile.stateProv")} <Text style={A.requiredMark}>*</Text></Text>
             <TextInput
               style={[A.input, stateError && A.inputError]}
               value={state}
@@ -334,7 +334,7 @@ const Signup = () => {
             />
           </View>
           <View style={S.inlineItem}>
-            <Text style={A.fieldLabel}>{t("editProfile.phone")}</Text>
+            <Text style={A.fieldLabel}>{t("editProfile.phone")} <Text style={A.requiredMark}>*</Text></Text>
             <TextInput
               style={[A.input, phoneError && A.inputError]}
               value={phone}
@@ -624,7 +624,7 @@ const Signup = () => {
               />
               <Text style={S.minorBannerText}>{t("signup.minorProtectionEnabled")}</Text>
             </View>
-            <Text style={A.fieldLabel}>{t("signup.guardianEmailLabel")}</Text>
+            <Text style={A.fieldLabel}>{t("signup.guardianEmailLabel")} <Text style={A.requiredMark}>*</Text></Text>
             <TextInput
               style={A.input}
               value={guardianEmail}

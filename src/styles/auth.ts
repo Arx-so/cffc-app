@@ -16,6 +16,7 @@ export const authStyles = StyleSheet.create({
   input:      { backgroundColor: Brand.formInputBg, borderWidth: 1, borderColor: Brand.formInputBorder, borderRadius: 8, paddingHorizontal: 16, paddingVertical: 12, color: Brand.formInputText, fontSize: 16 },
   inputError: { borderColor: Brand.error },
   errorText:  { color: Brand.errorBg, fontSize: 12, fontWeight: '600', letterSpacing: 0, marginTop: 5 },
+  requiredMark: { color: Brand.errorBg },
 
   submitButton:         { backgroundColor: Brand.buttonPrimaryBg, borderRadius: 8, paddingVertical: 14, alignItems: 'center', marginTop: 32 },
   submitButtonDisabled: { opacity: 0.6 },
