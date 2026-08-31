@@ -6,6 +6,11 @@ import {
   upsertAthleteProfile,
 } from "@/processes/profile";
 import { formatPhonePtBrInput } from "@/utils/brazilianPhone";
+import {
+  ddmmyyyyToIso,
+  formatBirthDateInput,
+  isoToDDMMYYYY,
+} from "@/utils/birthDate";
 import { useAuthStore } from "@/stores/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
@@ -83,7 +88,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
       username: profileData.username ?? "",
       city: profileData.city ?? "",
       state: profileData.state ?? "",
-      birthDate: profileData.birth_date ?? "",
+      birthDate: isoToDDMMYYYY(profileData.birth_date),
       phone: formatPhonePtBrInput(profileData.phone ?? ""),
       avatarUrl: profileData.avatar_url,
     };
@@ -111,10 +116,14 @@ export const useEditProfile = (): UseEditProfileReturn => {
 
   const setProfileField = useCallback(
     <K extends keyof ProfileFormState>(key: K, value: ProfileFormState[K]) => {
-      const nextValue =
-        key === "phone" && typeof value === "string"
-          ? (formatPhonePtBrInput(value) as ProfileFormState[K])
-          : value;
+      let nextValue = value;
+      if (typeof value === "string") {
+        if (key === "phone") {
+          nextValue = formatPhonePtBrInput(value) as ProfileFormState[K];
+        } else if (key === "birthDate") {
+          nextValue = formatBirthDateInput(value) as ProfileFormState[K];
+        }
+      }
       setProfileForm((prev) => ({ ...prev, [key]: nextValue }));
     },
     []
@@ -221,7 +230,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
         username: profileForm.username || null,
         city: profileForm.city || null,
         state: profileForm.state || null,
-        birth_date: profileForm.birthDate || null,
+        birth_date: ddmmyyyyToIso(profileForm.birthDate),
         phone: profileForm.phone.replace(/\D/g, "") || null,
       });
 
@@ -286,12 +295,20 @@ export const useEditProfile = (): UseEditProfileReturn => {
       return;
     }
 
+    if (!ddmmyyyyToIso(profileForm.birthDate)) {
+      Toast.show({
+        type: "error",
+        text1: t("editProfile.toasts.invalidBirthDate"),
+      });
+      return;
+    }
+
     try {
       await saveMutation.mutateAsync();
     } catch {
       // Error feedback is handled in mutation onError.
     }
-  }, [profileForm, saveMutation]);
+  }, [profileForm, saveMutation, t]);
 
   const hasUnsavedChanges = useCallback((): boolean => {
     const orig = originalProfileRef.current;

@@ -16,6 +16,36 @@ const parseOAuthTokens = (url: string) => {
   };
 };
 
+// Supabase spreads auth redirect data across the query string AND the fragment
+// depending on the flow (implicit vs PKCE vs token_hash), so read both.
+const parseAuthRedirectParams = (url: string): Record<string, string> => {
+  const [beforeHash, hash = ''] = url.split('#');
+  const query = beforeHash.includes('?') ? beforeHash.split('?').slice(1).join('?') : '';
+  const params: Record<string, string> = {};
+
+  for (const chunk of [query, hash]) {
+    if (!chunk) continue;
+    new URLSearchParams(chunk).forEach((value, key) => {
+      if (value) params[key] = value;
+    });
+  }
+
+  return params;
+};
+
+// True when the URL carries anything the recovery flow can act on — lets the UI
+// tell "opened from the email link" apart from "landed here with no link".
+export const hasPasswordRecoveryParams = (url: string): boolean => {
+  const params = parseAuthRedirectParams(url);
+  return !!(
+    params.access_token ||
+    params.token_hash ||
+    params.code ||
+    params.error ||
+    params.error_description
+  );
+};
+
 export const login = async (body: {
   email: string;
   password: string;
@@ -170,4 +200,69 @@ export const signInWithGoogle = async (): Promise<LoginResponse | null> => {
       name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? '',
     },
   };
+};
+
+// --- Password recovery -------------------------------------------------------
+
+// Deep link the recovery email sends the user back to. It must be listed under
+// Authentication -> URL Configuration -> Redirect URLs in the Supabase dashboard.
+// makeRedirectUri yields cffc://reset-password in a build and exp://.../--/reset-password in Expo Go.
+export const getPasswordResetRedirectTo = (): string =>
+  makeRedirectUri({ scheme: 'cffc', path: 'reset-password' });
+
+// Sends the "reset your password" email. Supabase answers 200 even for unknown
+// addresses (by design, so the endpoint cannot be used to enumerate accounts).
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: getPasswordResetRedirectTo(),
+  });
+
+  if (error) throw error;
+};
+
+export const hasActiveAuthSession = async (): Promise<boolean> => {
+  const { data } = await supabase.auth.getSession();
+  return !!data.session;
+};
+
+// Turns the recovery deep link into a real session, which is what authorizes the
+// updateUser({ password }) call afterwards. Covers the three shapes Supabase can
+// send depending on how the email template is configured.
+export const startPasswordRecoverySession = async (url: string): Promise<void> => {
+  const params = parseAuthRedirectParams(url);
+
+  if (params.error || params.error_description) {
+    throw new Error(params.error_description ?? params.error);
+  }
+
+  if (params.access_token) {
+    const { error } = await supabase.auth.setSession({
+      access_token: params.access_token,
+      refresh_token: params.refresh_token ?? '',
+    });
+    if (error) throw error;
+    return;
+  }
+
+  if (params.token_hash) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: params.token_hash,
+      type: 'recovery',
+    });
+    if (error) throw error;
+    return;
+  }
+
+  if (params.code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(params.code);
+    if (error) throw error;
+    return;
+  }
+
+  throw new Error('MISSING_RECOVERY_TOKEN');
+};
+
+export const updatePassword = async (password: string): Promise<void> => {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw error;
 };

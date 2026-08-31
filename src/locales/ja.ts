@@ -153,7 +153,7 @@ export default {
     stateProv: "都道府県",
     statePlaceholder: "都道府県",
     birthDate: "生年月日",
-    birthDatePlaceholder: "YYYY-MM-DD",
+    birthDatePlaceholder: "DD/MM/YYYY",
     phone: "電話番号",
     phonePlaceholder: "(00) 00000-0000",
     physicalData: "フィジカルデータ",
@@ -209,6 +209,9 @@ export default {
       "保存されていない変更があります。破棄してもよろしいですか？",
     discardConfirm: "破棄",
     discardCancel: "編集を続ける",
+    toasts: {
+      invalidBirthDate: "生年月日が正しくありません。DD/MM/YYYY の形式で入力してください。",
+    },
   },
   addVideo: {
     title: "新しい動画",
@@ -340,9 +343,55 @@ export default {
     dividerOr: "または",
     googleButton: "Googleで続行",
     noAccountPrefix: "アカウントをお持ちでないですか？",
+    forgotPassword: "パスワードをお忘れですか？",
     toasts: {
       loginFailed: "ログインに失敗しました。もう一度お試しください。",
       missingCredentials: "メールアドレスとパスワードを入力してください。",
+    },
+  },
+
+  forgotPassword: {
+    title: "パスワード再設定",
+    heroSubtitle: "パスワードをお忘れの方",
+    heroTitlePrefix: "ピッチへ",
+    heroTitleHighlight: "戻りましょう",
+    description:
+      "登録したメールアドレスを入力してください。新しいパスワードを作成するためのリンクをお送りします。",
+    submitButton: "リンクを送信",
+    successTitle: "メールをご確認ください",
+    successDescription: "アカウントが存在する場合、再設定リンクを次の宛先に送信しました",
+    resendEmail: "メールを再送信",
+    rememberedPrefix: "パスワードを思い出しましたか？",
+    backToLogin: "ログインに戻る",
+    toasts: {
+      missingEmail: "メールアドレスを入力してください。",
+      invalidEmail: "有効なメールアドレスを入力してください。",
+      emailResent: "新しいリンクを送信しています...",
+      requestFailed: "再設定メールを送信できませんでした。もう一度お試しください。",
+    },
+  },
+
+  resetPassword: {
+    title: "新しいパスワード",
+    heroSubtitle: "あと少しです",
+    heroTitlePrefix: "新しいパスワードを",
+    heroTitleHighlight: "作成してください",
+    description: "アカウントの復旧を完了するために、新しいパスワードを設定してください。",
+    validating: "復旧リンクを確認しています...",
+    newPassword: "新しいパスワード",
+    newPasswordPlaceholder: "新しいパスワードを入力してください",
+    passwordHint: "6文字以上で入力してください。",
+    submitButton: "パスワードを保存",
+    invalidTitle: "リンクの有効期限が切れました",
+    invalidDescription:
+      "この復旧リンクは無効か、すでに使用されています。新しいリンクをリクエストしてください。",
+    requestNewLink: "新しいリンクをリクエスト",
+    toasts: {
+      requiredFields: "パスワードを両方の欄に入力してください。",
+      passwordTooShort: "パスワードは{{min}}文字以上で入力してください。",
+      passwordMismatch: "パスワードが一致しません。",
+      passwordUpdated: "パスワードを更新しました。新しいパスワードでログインしてください。",
+      updateFailed: "パスワードを更新できませんでした。もう一度お試しください。",
     },
   },
   signup: {

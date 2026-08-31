@@ -157,7 +157,7 @@ export default {
     stateProv: 'ESTADO',
     statePlaceholder: 'UF',
     birthDate: 'DATA DE NASCIMENTO',
-    birthDatePlaceholder: 'AAAA-MM-DD',
+    birthDatePlaceholder: 'DD/MM/AAAA',
     phone: 'TELEFONE',
     phonePlaceholder: '(00) 00000-0000',
     physicalData: 'DADOS FÍSICOS',
@@ -212,6 +212,9 @@ export default {
     discardMessage: 'Você tem alterações não salvas. Tem certeza que deseja descartá-las?',
     discardConfirm: 'Descartar',
     discardCancel: 'Continuar editando',
+    toasts: {
+      invalidBirthDate: "Data de nascimento inválida. Use DD/MM/AAAA.",
+    },
   },
   addVideo: {
     title: 'Novo Vídeo',
@@ -343,9 +346,55 @@ export default {
     dividerOr: "ou",
     googleButton: "Continuar com Google",
     noAccountPrefix: "Não tem conta?",
+    forgotPassword: "Esqueceu sua senha?",
     toasts: {
       loginFailed: "Falha no login. Tente novamente.",
       missingCredentials: "Preencha e-mail e senha.",
+    },
+  },
+
+  forgotPassword: {
+    title: "RECUPERAR SENHA",
+    heroSubtitle: "ESQUECEU A SENHA",
+    heroTitlePrefix: "VOLTE PARA",
+    heroTitleHighlight: "O GRAMADO",
+    description:
+      "Informe o e-mail cadastrado e enviaremos um link para você criar uma nova senha.",
+    submitButton: "ENVIAR LINK",
+    successTitle: "CONFIRA SEU E-MAIL",
+    successDescription: "Se existir uma conta, enviamos um link de recuperação para",
+    resendEmail: "Reenviar e-mail",
+    rememberedPrefix: "Lembrou sua senha?",
+    backToLogin: "VOLTAR PARA O LOGIN",
+    toasts: {
+      missingEmail: "Digite seu e-mail.",
+      invalidEmail: "Digite um e-mail válido.",
+      emailResent: "Enviando um novo link...",
+      requestFailed: "Não foi possível enviar o e-mail de recuperação. Tente novamente.",
+    },
+  },
+
+  resetPassword: {
+    title: "NOVA SENHA",
+    heroSubtitle: "QUASE LÁ",
+    heroTitlePrefix: "CRIE SUA",
+    heroTitleHighlight: "NOVA SENHA",
+    description: "Escolha uma nova senha para concluir a recuperação da sua conta.",
+    validating: "Validando seu link de recuperação...",
+    newPassword: "Nova senha",
+    newPasswordPlaceholder: "Digite sua nova senha",
+    passwordHint: "Mínimo de 6 caracteres.",
+    submitButton: "SALVAR SENHA",
+    invalidTitle: "LINK EXPIRADO",
+    invalidDescription:
+      "Este link de recuperação é inválido ou já foi utilizado. Solicite um novo para continuar.",
+    requestNewLink: "SOLICITAR NOVO LINK",
+    toasts: {
+      requiredFields: "Preencha os dois campos de senha.",
+      passwordTooShort: "A senha deve ter pelo menos {{min}} caracteres.",
+      passwordMismatch: "As senhas não coincidem.",
+      passwordUpdated: "Senha atualizada. Entre com a nova senha.",
+      updateFailed: "Não foi possível atualizar sua senha. Tente novamente.",
     },
   },
   signup: {

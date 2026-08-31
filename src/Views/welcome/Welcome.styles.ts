@@ -107,22 +107,6 @@ export const styles = StyleSheet.create({
     marginTop: 56,
     maxWidth: 320,
   },
-  dots: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 54,
-    gap: 10,
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: Brand.welcomeDot,
-  },
-  dotActive: {
-    width: 38,
-    backgroundColor: Brand.green,
-  },
   bottom: {
     marginTop: "auto",
     gap: 14,

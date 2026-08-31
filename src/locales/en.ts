@@ -153,7 +153,7 @@ export default {
     stateProv: "STATE",
     statePlaceholder: "ST",
     birthDate: "DATE OF BIRTH",
-    birthDatePlaceholder: "YYYY-MM-DD",
+    birthDatePlaceholder: "DD/MM/YYYY",
     phone: "PHONE",
     phonePlaceholder: "(00) 00000-0000",
     physicalData: "PHYSICAL DATA",
@@ -208,6 +208,9 @@ export default {
     discardMessage: "You have unsaved changes. Are you sure you want to discard them?",
     discardConfirm: "Discard",
     discardCancel: "Keep editing",
+    toasts: {
+      invalidBirthDate: "Invalid birth date. Use DD/MM/YYYY.",
+    },
   },
   addVideo: {
     title: "New Video",
@@ -339,9 +342,55 @@ export default {
     dividerOr: "or",
     googleButton: "Continue with Google",
     noAccountPrefix: "Don't have an account?",
+    forgotPassword: "Forgot your password?",
     toasts: {
       loginFailed: "Login failed. Please try again.",
       missingCredentials: "Please enter your email and password.",
+    },
+  },
+
+  forgotPassword: {
+    title: "RESET PASSWORD",
+    heroSubtitle: "FORGOT YOUR PASSWORD",
+    heroTitlePrefix: "GET BACK",
+    heroTitleHighlight: "ON THE PITCH",
+    description:
+      "Enter the email address you signed up with and we'll send you a link to create a new password.",
+    submitButton: "SEND LINK",
+    successTitle: "CHECK YOUR INBOX",
+    successDescription: "If an account exists, we've sent a reset link to",
+    resendEmail: "Resend email",
+    rememberedPrefix: "Remembered your password?",
+    backToLogin: "BACK TO SIGN IN",
+    toasts: {
+      missingEmail: "Please enter your email.",
+      invalidEmail: "Please enter a valid email address.",
+      emailResent: "Sending a new link...",
+      requestFailed: "Could not send the reset email. Please try again.",
+    },
+  },
+
+  resetPassword: {
+    title: "NEW PASSWORD",
+    heroSubtitle: "ALMOST THERE",
+    heroTitlePrefix: "CREATE YOUR",
+    heroTitleHighlight: "NEW PASSWORD",
+    description: "Choose a new password to finish recovering your account.",
+    validating: "Checking your recovery link...",
+    newPassword: "New password",
+    newPasswordPlaceholder: "Enter your new password",
+    passwordHint: "At least 6 characters.",
+    submitButton: "SAVE PASSWORD",
+    invalidTitle: "LINK EXPIRED",
+    invalidDescription:
+      "This recovery link is invalid or has already been used. Request a new one to continue.",
+    requestNewLink: "REQUEST NEW LINK",
+    toasts: {
+      requiredFields: "Please fill in both password fields.",
+      passwordTooShort: "Password must be at least {{min}} characters.",
+      passwordMismatch: "Passwords do not match.",
+      passwordUpdated: "Password updated. Sign in with your new password.",
+      updateFailed: "Could not update your password. Please try again.",
     },
   },
   signup: {

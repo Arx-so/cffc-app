@@ -94,6 +94,17 @@ const Login = () => {
         </View>
 
         <TouchableOpacity
+          style={ls.forgotPasswordLink}
+          onPress={() => router.push("/forgot-password")}
+          disabled={busy}
+          activeOpacity={0.75}
+        >
+          <Text style={ls.forgotPasswordText}>
+            {t("login.forgotPassword")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[S.submitButton, busy && S.submitButtonDisabled]}
           onPress={onLoginPress}
           disabled={busy}
@@ -167,6 +178,13 @@ const ls = StyleSheet.create({
     fontSize: 15,
   },
   passwordEyeButton: { paddingHorizontal: 14, paddingVertical: 10 },
+  forgotPasswordLink: { alignSelf: "flex-end", marginTop: 12, paddingVertical: 4 },
+  forgotPasswordText: {
+    color: Brand.green,
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.3,
+  },
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",

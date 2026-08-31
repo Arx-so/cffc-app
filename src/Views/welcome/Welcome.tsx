@@ -45,13 +45,6 @@ const Welcome = () => {
           {t("welcome.tagline")}
         </Text>
 
-        <View style={S.dots}>
-          <View style={[S.dot, S.dotActive]} />
-          <View style={S.dot} />
-          <View style={S.dot} />
-          <View style={S.dot} />
-        </View>
-
         <View style={S.bottom}>
           <TouchableOpacity
             style={S.primaryButton}

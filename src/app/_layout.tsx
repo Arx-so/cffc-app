@@ -45,7 +45,7 @@ const queryClient = new QueryClient({
 });
 
 const ROLE_GROUPS = ["(athlete)", "(pro)", "(club)", "(admin)"] as const;
-const UNAUTHENTICATED_SCREENS = ["index", "login", "signup"] as const;
+const UNAUTHENTICATED_SCREENS = ["index", "login", "signup", "forgot-password"] as const;
 
 const ROLE_ROUTES: Record<UserRole, string> = {
   athlete: "/(athlete)/home",
@@ -106,6 +106,12 @@ const RootLayoutNav = () => {
       <Stack.Screen name="index" options={{ headerShown: false, title: "" }} />
       <Stack.Screen name="login" options={{ headerBackTitle: "" }} />
       <Stack.Screen name="signup" options={{ headerBackTitle: "" }} />
+      <Stack.Screen name="forgot-password" options={{ headerBackTitle: "" }} />
+      {/* Deep link target of the recovery email. Deliberately absent from
+          UNAUTHENTICATED_SCREENS: the recovery link creates a session, and the
+          guard would otherwise bounce the user to their role home before they
+          can set a new password. */}
+      <Stack.Screen name="reset-password" options={{ headerBackTitle: "" }} />
       <Stack.Screen
         name="(athlete)"
         options={{ headerShown: false, gestureEnabled: false }}

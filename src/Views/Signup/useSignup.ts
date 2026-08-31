@@ -1,5 +1,11 @@
 import { signup } from "@/processes/auth";
 import { ClubHistoryEntry } from "@/processes/types/profileTypes";
+import {
+  formatBirthDateInput,
+  getAgeInYears,
+  parseDDMMYYYY,
+  toYYYYMMDD,
+} from "@/utils/birthDate";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -10,44 +16,6 @@ import { UseSignupReturn } from "./Signup.types";
 type ProfileRole = 'athlete' | 'pro' | 'club';
 type AthleteFoot = "right" | "left" | "both";
 type AthleteContactVisibility = "clubs_agents" | "public";
-
-// Auto-insert slashes so the user sees DD/MM/YYYY while typing digits.
-const formatBirthDateInput = (raw: string): string => {
-  const digits = raw.replace(/\D/g, '').slice(0, 8);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
-};
-
-// Parse DD/MM/YYYY string into a Date. Returns null when incomplete or invalid.
-const parseDDMMYYYY = (text: string): Date | null => {
-  if (text.length !== 10) return null;
-  const [dd, mm, yyyy] = text.split('/').map(Number);
-  if (!dd || !mm || !yyyy) return null;
-  const date = new Date(yyyy, mm - 1, dd);
-  // Guard against invalid dates like 31/02/2000.
-  if (
-    date.getDate() !== dd ||
-    date.getMonth() !== mm - 1 ||
-    date.getFullYear() !== yyyy
-  ) return null;
-  return date;
-};
-
-const getAgeInYears = (date: Date): number => {
-  const today = new Date();
-  let age = today.getFullYear() - date.getFullYear();
-  const m = today.getMonth() - date.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < date.getDate())) age -= 1;
-  return age;
-};
-
-const toYYYYMMDD = (date: Date): string => {
-  const yyyy = date.getFullYear();
-  const mm = `${date.getMonth() + 1}`.padStart(2, '0');
-  const dd = `${date.getDate()}`.padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-};
 
 const parseCommaSeparatedItems = (value: string): string[] => {
   return value
