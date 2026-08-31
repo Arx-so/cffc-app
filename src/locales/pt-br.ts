@@ -99,7 +99,8 @@ export default {
       'Toque em "+" para criar um espaço e organizar suas gravações',
   },
   welcome: {
-    title: 'Bem-vindo ao CFFC',
+    title: 'Bem-vindo ao BIG EYE',
+    brandName: 'BIG EYE',
     signIn: 'Entrar',
     signUp: 'Cadastrar',
     heroSubtitle: 'JUNTE-SE À ELITE',

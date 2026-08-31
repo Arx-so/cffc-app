@@ -3,7 +3,7 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles as S } from "./Welcome.styles";
 import { useWelcome } from "./useWelcome";
@@ -24,14 +24,12 @@ const Welcome = () => {
 
       <View style={S.content}>
         <View style={S.logoRow}>
-          <View style={S.iconWrapper}>
-            <View style={S.logoRingOuter}>
-              <View style={S.logoRingInner}>
-                <Ionicons name="football" size={24} color={Brand.green} />
-              </View>
-            </View>
-          </View>
-          <Text style={S.logoText}>BIGEYE</Text>
+          <Image
+            source={require("@/assets/images/logo-mark.png")}
+            style={S.logoMark}
+            resizeMode="contain"
+          />
+          <Text style={S.logoText}>{t("welcome.brandName")}</Text>
         </View>
 
         <Text style={S.heroSubtitle}>{t("welcome.heroSubtitle")}</Text>
