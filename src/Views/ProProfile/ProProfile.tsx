@@ -266,7 +266,6 @@ const ProProfile = () => {
                 style={styles.docUploadButton}
                 size="medium"
                 appearance="outline"
-                status="success"
                 onPress={handlePickVerifierDocument}
                 disabled={isUploadingVerifier || isSaving}
               >
