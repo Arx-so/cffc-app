@@ -45,3 +45,6 @@ app-example
 
 .cursor/mcp.json
 .mcp.json
+
+# testes
+coverage/
