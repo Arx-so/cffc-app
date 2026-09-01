@@ -97,6 +97,7 @@ jest.mock("react-native-keyboard-controller", () => {
   return {
     KeyboardAwareScrollView: passthrough("KeyboardAwareScrollView"),
     KeyboardStickyView: passthrough("KeyboardStickyView"),
+    KeyboardAvoidingView: passthrough("KeyboardAvoidingView"),
     KeyboardProvider: passthrough("KeyboardProvider"),
     useReanimatedKeyboardAnimation: () => ({ height: { value: 0 }, progress: { value: 0 } }),
     useKeyboardHandler: jest.fn(),
@@ -190,5 +191,11 @@ jest.mock("@expo/vector-icons", () => {
   );
 });
 
-// Silence the RN animation-frame warning that fires on unmount during tests.
-global.requestAnimationFrame = global.requestAnimationFrame ?? ((cb: any) => setTimeout(cb, 0));
+// RN agenda animation frames em Pressable/Animated. Sem `unref` esses timers
+// seguram o event loop e o worker do jest não encerra ao fim da suíte.
+global.requestAnimationFrame = ((cb: any) => {
+  const timer: any = setTimeout(cb, 0);
+  timer?.unref?.();
+  return timer;
+}) as typeof global.requestAnimationFrame;
+global.cancelAnimationFrame = ((timer: any) => clearTimeout(timer)) as typeof global.cancelAnimationFrame;

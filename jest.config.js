@@ -1,6 +1,11 @@
 /** @type {import('jest').Config} */
 module.exports = {
   preset: "jest-expo",
+  // PENDENTE: o worker não encerra sozinho ao fim da suíte. `--detectOpenHandles`
+  // não acusa handle algum; unref nos timers de requestAnimationFrame e mock
+  // síncrono de @expo/vector-icons não resolveram. Todos os testes passam — é
+  // teardown do ambiente RN, não teste vazando estado. Vale investigar antes de CI.
+  forceExit: true,
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testMatch: ["<rootDir>/src/**/*.test.{ts,tsx}"],
   moduleNameMapper: {
