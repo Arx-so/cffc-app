@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { KeyboardStickyFooter } from "@/components/KeyboardStickyFooter";
 import { Brand } from "@/constants/theme";
@@ -35,6 +36,13 @@ const AddVideo = () => {
     handleCaptionChange,
     handlePost,
     handleClose,
+    discardConfirmVisible,
+    discardTitle,
+    discardMessage,
+    discardCancelLabel,
+    discardConfirmLabel,
+    confirmDiscard,
+    cancelDiscard,
   } = useAddVideo();
 
   const headerOptions = {
@@ -212,6 +220,17 @@ const AddVideo = () => {
           </TouchableOpacity>
         </KeyboardStickyFooter>
       </View>
+
+      <ConfirmDialog
+        visible={discardConfirmVisible}
+        title={discardTitle}
+        message={discardMessage}
+        cancelLabel={discardCancelLabel}
+        confirmLabel={discardConfirmLabel}
+        destructive
+        onCancel={cancelDiscard}
+        onConfirm={confirmDiscard}
+      />
     </>
   );
 };

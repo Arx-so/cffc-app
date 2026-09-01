@@ -1,4 +1,5 @@
 import { HeaderBar } from "@/components/HeaderBar";
+import { ReportBlockMenu } from "@/components/ReportBlockMenu";
 import { VisitorProfile } from "@/Views/VisitorProfile";
 import { Brand } from "@/constants/theme";
 import { useAuthStore } from "@/stores/authStore";
@@ -21,6 +22,15 @@ export default function VisitorProfileScreen() {
         title={headerTitle}
         leftIcon="arrow-back-outline"
         onLeftPress={() => router.back()}
+        rightIcon={
+          userId ? (
+            <ReportBlockMenu
+              reportedUserId={userId}
+              iconColor={Brand.green}
+              onBlocked={() => router.back()}
+            />
+          ) : undefined
+        }
       />
       <VisitorProfile
         userId={userId ?? ""}

@@ -124,6 +124,44 @@ export const styles = StyleSheet.create({
   minorBanner:    { flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 4 },
   minorBannerText:{ color: Brand.green, fontSize: 12, fontWeight: '700', letterSpacing: 1.2, marginLeft: 8 },
 
+  // Chips (positions / strengths)
+  chipsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  chipsGroup: {
+    marginBottom: 16,
+  },
+  chipsGroupLabel: {
+    color: Brand.gray,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.2,
+    marginBottom: 8,
+  },
+  chip: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Brand.formControlBorder,
+    backgroundColor: Brand.formControlBg,
+  },
+  chipActive: {
+    borderColor: Brand.formControlActiveBorder,
+    backgroundColor: Brand.formControlActiveBg,
+  },
+  chipText: {
+    color: Brand.formControlText,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 0.5,
+  },
+  chipTextActive: {
+    color: Brand.formControlActiveText,
+  },
+
   // Custom checkboxes
   checkboxRow:       { flexDirection: 'row', alignItems: 'center', marginTop: 18 },
   checkboxBox:       { width: 20, height: 20, borderRadius: 4, borderWidth: 1.5, borderColor: Brand.formControlBorder, alignItems: 'center', justifyContent: 'center', marginRight: 10, backgroundColor: Brand.formControlBg },

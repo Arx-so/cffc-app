@@ -147,4 +147,8 @@ export const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
+  headerMoreButton: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

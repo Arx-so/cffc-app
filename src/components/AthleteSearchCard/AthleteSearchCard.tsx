@@ -14,8 +14,11 @@ import { styles } from "./AthleteSearchCard.styles";
 import { AthleteSearchCardProps } from "./AthleteSearchCard.types";
 
 function getInitials(name: string): string {
-  return name
+  const trimmed = name.trim();
+  if (!trimmed) return "?";
+  return trimmed
     .split(" ")
+    .filter(Boolean)
     .slice(0, 2)
     .map((n) => n[0])
     .join("")
@@ -35,6 +38,10 @@ export function AthleteSearchCard({
   const { t } = useTranslation();
   const position = athlete.positions[0] ? positionLabel(t, athlete.positions[0]) : "";
   const isShortlistVariant = variant === "shortlist";
+  const displayName =
+    athlete.name.trim() ||
+    (athlete.username ? `@${athlete.username}` : t("search.unnamedProfile"));
+  const initialsSource = athlete.name.trim() || athlete.username?.trim() || "";
 
   if (variant === "compact") {
     return (
@@ -48,13 +55,13 @@ export function AthleteSearchCard({
           {athlete.avatarUrl ? (
             <Image source={{ uri: athlete.avatarUrl }} style={styles.compactAvatarImage} />
           ) : (
-            <Text style={styles.compactInitials}>{getInitials(athlete.name)}</Text>
+            <Text style={styles.compactInitials}>{getInitials(initialsSource)}</Text>
           )}
         </View>
         <View style={styles.compactInfo}>
           <View style={styles.compactNameRow}>
             <Text style={styles.compactName} numberOfLines={1}>
-              {athlete.name}
+              {displayName}
             </Text>
             <View style={styles.compactDot} />
             <Text style={styles.compactVideos}>
@@ -95,13 +102,13 @@ export function AthleteSearchCard({
             />
           ) : (
             <Text style={styles.avatarInitials}>
-              {getInitials(athlete.name)}
+              {getInitials(initialsSource)}
             </Text>
           )}
         </View>
         <View style={styles.cardInfo}>
           <View style={styles.cardNameRow}>
-            <Text style={styles.athleteName}>{athlete.name}</Text>
+            <Text style={styles.athleteName}>{displayName}</Text>
             {athlete.verified && (
               <View style={styles.verifiedBadge}>
                 <Text style={styles.verifiedText}>{t("search.verified")}</Text>

@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     backgroundColor: Brand.welcomeOverlay,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 48,
     paddingTop: 56,
     paddingBottom: 24,
@@ -103,6 +103,12 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     letterSpacing: 0,
+  },
+  appleButtonWrap: {
+    minHeight: 56,
+  },
+  appleButton: {
+    height: 56,
   },
   secondaryButton: {
     minHeight: 56,

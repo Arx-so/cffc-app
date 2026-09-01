@@ -10,7 +10,7 @@ import { useProValidationHistory } from "./useProValidationHistory";
 const STATUS_COLORS: Record<ValidationStatus, string> = {
   pending: Brand.amber,
   approved: Brand.green,
-  rejected: Brand.error,
+  rejected: Brand.danger,
 };
 
 function StatusPill({ status }: { status: ValidationStatus }) {

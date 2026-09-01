@@ -23,6 +23,7 @@ export const useProfile = (): UseProfileReturn => {
   const userId = currentUser?.id ?? "";
   const { t } = useTranslation();
   const isAthlete = role === "athlete";
+  const isClub = role === "club";
 
   const handleAddVideoPress = useCallback(async () => {
     const permResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -65,7 +66,7 @@ export const useProfile = (): UseProfileReturn => {
   const { data: personalFields, isLoading: personalLoading } = useQuery({
     queryKey: ["profilePersonal", userId],
     queryFn: () => fetchProfilePersonalFields(userId),
-    enabled: !!userId && isAthlete,
+    enabled: !!userId && (isAthlete || isClub),
     staleTime: OWN_PROFILE_STALE,
     gcTime: OWN_PROFILE_GC,
   });
@@ -116,6 +117,15 @@ export const useProfile = (): UseProfileReturn => {
         }
       : null;
 
+  const clubOwnProfileExtra =
+    isClub
+      ? {
+          isLoading: personalLoading,
+          foundingDate: personalFields?.birth_date ?? null,
+          phone: personalFields?.phone ?? null,
+        }
+      : null;
+
   return {
     profileData: profileDataWithVideoCount,
     videos,
@@ -124,5 +134,6 @@ export const useProfile = (): UseProfileReturn => {
     handleAddVideoPress,
     handleVideoPress,
     athleteOwnProfileExtra,
+    clubOwnProfileExtra,
   };
 };

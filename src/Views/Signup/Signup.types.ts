@@ -15,8 +15,8 @@ export type UseSignupReturn = {
   athleteHeight: string;
   athleteWeight: string;
   athleteDominantFoot: "right" | "left" | "both" | null;
-  athletePositionsText: string;
-  athleteStrengthsText: string;
+  athletePositions: string[];
+  athleteStrengths: string[];
   athleteCurrentCategory: string;
   athleteAvailability: string;
   athleteClubHistory: ClubHistoryEntry[];
@@ -42,8 +42,8 @@ export type UseSignupReturn = {
   setAthleteHeight: (value: string) => void;
   setAthleteWeight: (value: string) => void;
   setAthleteDominantFoot: (value: "right" | "left" | "both") => void;
-  setAthletePositionsText: (value: string) => void;
-  setAthleteStrengthsText: (value: string) => void;
+  toggleAthletePosition: (position: string) => void;
+  toggleAthleteStrength: (strength: string) => void;
   setAthleteCurrentCategory: (value: string) => void;
   setAthleteAvailability: (value: string) => void;
   setAthleteIsSearchable: (value: boolean) => void;

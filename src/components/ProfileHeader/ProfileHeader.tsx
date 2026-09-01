@@ -25,8 +25,8 @@ const formatStat = (value: number): string => {
 };
 
 const getInitials = (name: string): string => {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 0) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 };
@@ -44,7 +44,10 @@ export const ProfileHeader = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const initials = getInitials(profile.name);
+  const displayName =
+    profile.name.trim() ||
+    (profile.username ? `@${profile.username}` : t("search.unnamedProfile"));
+  const initials = getInitials(profile.name.trim() || profile.username || "");
   const secondaryText =
     subtitle?.trim() ||
     (profile.username ? `@${profile.username}` : t(`roles.${profile.role}`));
@@ -105,7 +108,7 @@ export const ProfileHeader = ({
 
         <View style={styles.infoSection}>
           <Text style={styles.nameText} numberOfLines={1}>
-            {profile.name}
+            {displayName}
           </Text>
           <Text style={styles.metaText} numberOfLines={1}>
             {secondaryText}

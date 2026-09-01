@@ -17,13 +17,6 @@ type ProfileRole = 'athlete' | 'pro' | 'club';
 type AthleteFoot = "right" | "left" | "both";
 type AthleteContactVisibility = "clubs_agents" | "public";
 
-const parseCommaSeparatedItems = (value: string): string[] => {
-  return value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-};
-
 // Auto-format input as Brazilian phone while restricting to digits.
 const formatPhonePtBrInput = (raw: string): string => {
   const digits = raw.replace(/\D/g, "").slice(0, 11);
@@ -50,8 +43,8 @@ export const useSignup = (): UseSignupReturn => {
   const [athleteWeight, setAthleteWeight] = useState("");
   const [athleteDominantFoot, setAthleteDominantFoot] =
     useState<AthleteFoot | null>(null);
-  const [athletePositionsText, setAthletePositionsText] = useState("");
-  const [athleteStrengthsText, setAthleteStrengthsText] = useState("");
+  const [athletePositions, setAthletePositions] = useState<string[]>([]);
+  const [athleteStrengths, setAthleteStrengths] = useState<string[]>([]);
   const [athleteCurrentCategory, setAthleteCurrentCategory] = useState("");
   const [athleteAvailability, setAthleteAvailability] = useState("");
   const [athleteIsSearchable, setAthleteIsSearchable] = useState(true);
@@ -140,9 +133,11 @@ export const useSignup = (): UseSignupReturn => {
   );
 
   const isMinor = useMemo(() => {
-    if (!parsedBirthDate) return false;
+    // Clubs are organizations, not individuals — minor protection only applies
+    // to a real person's birth date (athlete/pro).
+    if (!parsedBirthDate || selectedRole === "club") return false;
     return getAgeInYears(parsedBirthDate) < 18;
-  }, [parsedBirthDate]);
+  }, [parsedBirthDate, selectedRole]);
 
   const onAddAthleteClub = useCallback(() => {
     const trimmedClub = athleteClubDraft.club.trim();
@@ -166,6 +161,22 @@ export const useSignup = (): UseSignupReturn => {
 
   const onRemoveAthleteClub = useCallback((index: number) => {
     setAthleteClubHistory((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const toggleAthletePosition = useCallback((position: string) => {
+    setAthletePositions((prev) =>
+      prev.includes(position)
+        ? prev.filter((item) => item !== position)
+        : [...prev, position],
+    );
+  }, []);
+
+  const toggleAthleteStrength = useCallback((strength: string) => {
+    setAthleteStrengths((prev) =>
+      prev.includes(strength)
+        ? prev.filter((item) => item !== strength)
+        : [...prev, strength],
+    );
   }, []);
 
   const onSignupPress = useCallback(async () => {
@@ -231,12 +242,8 @@ export const useSignup = (): UseSignupReturn => {
             ? Number(athleteWeight.trim())
             : undefined,
         athleteDominantFoot: isAthlete ? athleteDominantFoot ?? undefined : undefined,
-        athletePositions: isAthlete
-          ? parseCommaSeparatedItems(athletePositionsText)
-          : undefined,
-        athleteStrengths: isAthlete
-          ? parseCommaSeparatedItems(athleteStrengthsText)
-          : undefined,
+        athletePositions: isAthlete ? athletePositions : undefined,
+        athleteStrengths: isAthlete ? athleteStrengths : undefined,
         athleteCurrentCategory: isAthlete
           ? athleteCurrentCategory.trim() || undefined
           : undefined,
@@ -268,8 +275,8 @@ export const useSignup = (): UseSignupReturn => {
     athleteDominantFoot,
     athleteHeight,
     athleteIsSearchable,
-    athletePositionsText,
-    athleteStrengthsText,
+    athletePositions,
+    athleteStrengths,
     athleteWeight,
     guardianEmail,
     isMinor,
@@ -300,8 +307,8 @@ export const useSignup = (): UseSignupReturn => {
     athleteHeight,
     athleteWeight,
     athleteDominantFoot,
-    athletePositionsText,
-    athleteStrengthsText,
+    athletePositions,
+    athleteStrengths,
     athleteCurrentCategory,
     athleteAvailability,
     athleteClubHistory,
@@ -325,8 +332,8 @@ export const useSignup = (): UseSignupReturn => {
     setAthleteHeight,
     setAthleteWeight,
     setAthleteDominantFoot,
-    setAthletePositionsText,
-    setAthleteStrengthsText,
+    toggleAthletePosition,
+    toggleAthleteStrength,
     setAthleteCurrentCategory,
     setAthleteAvailability,
     setAthleteIsSearchable,

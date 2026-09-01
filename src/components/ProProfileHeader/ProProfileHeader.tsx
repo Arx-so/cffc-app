@@ -46,8 +46,8 @@ const formatReputationDisplay = (score: number | null | undefined): string => {
 };
 
 const getInitials = (name: string): string => {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 0) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 };
@@ -67,7 +67,8 @@ export const ProProfileHeader = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const initials = getInitials(name);
+  const displayName = name.trim() || (username ? `@${username}` : t("search.unnamedProfile"));
+  const initials = getInitials(name.trim() || username || "");
 
   return (
     <View>
@@ -120,7 +121,7 @@ export const ProProfileHeader = ({
       </View>
 
       <View style={styles.infoSection}>
-        <Text category="h5">{name}</Text>
+        <Text category="h5">{displayName}</Text>
         {username && (
           <Text category="s2" appearance="hint">
             @{username}

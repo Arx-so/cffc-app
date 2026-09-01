@@ -1,4 +1,9 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
+import {
+  ATHLETE_STRENGTHS,
+  POSITIONS_BY_SECTOR,
+  POSITION_SECTORS,
+} from "@/constants/athleteAttributes";
 import { LegalUrls } from "@/constants/legal";
 import { Brand } from "@/constants/theme";
 import { authStyles as A } from "@/styles/auth";
@@ -60,8 +65,8 @@ const Signup = () => {
     athleteHeight,
     athleteWeight,
     athleteDominantFoot,
-    athletePositionsText,
-    athleteStrengthsText,
+    athletePositions,
+    athleteStrengths,
     athleteCurrentCategory,
     athleteAvailability,
     athleteClubHistory,
@@ -85,8 +90,8 @@ const Signup = () => {
     setAthleteHeight,
     setAthleteWeight,
     setAthleteDominantFoot,
-    setAthletePositionsText,
-    setAthleteStrengthsText,
+    toggleAthletePosition,
+    toggleAthleteStrength,
     setAthleteCurrentCategory,
     setAthleteAvailability,
     setAthleteIsSearchable,
@@ -288,8 +293,11 @@ const Signup = () => {
           </TouchableOpacity>
         </View>
 
-        {/* ── Date of birth ── */}
-        <Text style={A.fieldLabel}>{t("editProfile.birthDate")} <Text style={A.requiredMark}>*</Text></Text>
+        {/* ── Date of birth (or founding date, for a club) ── */}
+        <Text style={A.fieldLabel}>
+          {t(selectedRole === "club" ? "signup.foundingDateLabel" : "editProfile.birthDate")}{" "}
+          <Text style={A.requiredMark}>*</Text>
+        </Text>
         <View style={[S.dateRow, birthDateError && A.inputError]}>
           <TextInput
             style={S.dateInput}
@@ -425,25 +433,52 @@ const Signup = () => {
                   })}
                 </View>
 
-                <Text style={A.fieldLabel}>{t("signup.positionsCsvLabel")}</Text>
-                <TextInput
-                  style={A.input}
-                  value={athletePositionsText}
-                  onChangeText={setAthletePositionsText}
-                  placeholder={t("signup.positionsPlaceholder")}
-                  placeholderTextColor={Brand.formInputPlaceholder}
-                  editable={!isLoading}
-                />
+                <Text style={A.fieldLabel}>{t("signup.positionsLabel")}</Text>
+                {POSITION_SECTORS.map((sector) => (
+                  <View key={sector} style={S.chipsGroup}>
+                    <Text style={S.chipsGroupLabel}>
+                      {t(`athlete.positionSectors.${sector}`)}
+                    </Text>
+                    <View style={S.chipsContainer}>
+                      {POSITIONS_BY_SECTOR[sector].map((position) => {
+                        const active = athletePositions.includes(position);
+                        return (
+                          <TouchableOpacity
+                            key={position}
+                            style={[S.chip, active && S.chipActive]}
+                            onPress={() => toggleAthletePosition(position)}
+                            disabled={isLoading}
+                          >
+                            <Text
+                              style={[S.chipText, active && S.chipTextActive]}
+                            >
+                              {t(`athlete.positions.${position}`)}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </View>
+                ))}
 
-                <Text style={A.fieldLabel}>{t("signup.strengthsCsvLabel")}</Text>
-                <TextInput
-                  style={A.input}
-                  value={athleteStrengthsText}
-                  onChangeText={setAthleteStrengthsText}
-                  placeholder={t("signup.strengthsPlaceholder")}
-                  placeholderTextColor={Brand.formInputPlaceholder}
-                  editable={!isLoading}
-                />
+                <Text style={A.fieldLabel}>{t("signup.strengthsLabel")}</Text>
+                <View style={S.chipsContainer}>
+                  {ATHLETE_STRENGTHS.map((strength) => {
+                    const active = athleteStrengths.includes(strength);
+                    return (
+                      <TouchableOpacity
+                        key={strength}
+                        style={[S.chip, active && S.chipActive]}
+                        onPress={() => toggleAthleteStrength(strength)}
+                        disabled={isLoading}
+                      >
+                        <Text style={[S.chipText, active && S.chipTextActive]}>
+                          {t(`athlete.strengths.${strength}`)}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
 
                 <Text style={A.fieldLabel}>{t("editProfile.currentCategory")}</Text>
                 <TextInput

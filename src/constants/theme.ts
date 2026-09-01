@@ -76,7 +76,8 @@ export const Brand = {
   graySurfaceDark: '#131716',
   border: '#455450',
   white:  '#FFFFFF',
-  gray:   '#8FA39E',
+  // Lightened from #8FA39E — the original failed AA (4.17:1) on card surfaces.
+  gray:   '#9EB2AD',
   grayDark:'#5C706B',
   black:  '#131517',
 
@@ -94,8 +95,14 @@ export const Brand = {
   success:   '#2D5109',
   warningBg: '#F5E7A3',
   warning:   '#5C4E0A',
+  // errorBg: pale error red — inline form-validation text on dark surfaces (matches the
+  // muted successBg/warningBg family). error: dark red border for invalid fields on
+  // light surfaces. Never use `error` as text on a dark background — fails contrast (~1.4:1).
   errorBg:   '#F5B1A3',
   error:     '#5C180A',
+  // Saturated red for destructive actions/status (delete, block, rejected) on dark
+  // surfaces — reads clearly as "danger" and clears AA (4.5:1+) on bg/card/cardAlt.
+  danger:    '#FF8787',
 
   buttonPrimaryBg: '#D4FF00',
   buttonPrimaryText: '#131517',
@@ -107,7 +114,8 @@ export const Brand = {
   inputBorder: '#ABB3BA',
   formInputBg: '#F1F3F3',
   formInputText: '#131517',
-  formInputPlaceholder: '#838D95',
+  // Darkened from #838D95 — the original only reached 3.04:1 on the light form background.
+  formInputPlaceholder: '#656F77',
   formInputBorder: '#ABB3BA',
   positionChipBg: '#2A3300',
   formControlBg: '#F1F3F3',

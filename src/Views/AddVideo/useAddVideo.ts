@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import { UseAddVideoReturn } from "./AddVideo.types";
 
@@ -25,6 +24,8 @@ export const useAddVideo = (): UseAddVideoReturn => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const isSavedRef = useRef(false);
+  const pendingNavActionRef = useRef<(() => void) | null>(null);
+  const [discardConfirmVisible, setDiscardConfirmVisible] = useState(false);
 
   const player = useVideoPlayer(videoUri || null, (instance) => {
     instance.loop = true;
@@ -118,22 +119,12 @@ export const useAddVideo = (): UseAddVideoReturn => {
 
   const handleClose = useCallback(() => {
     if (isDirty) {
-      Alert.alert(
-        t("addVideo.discardTitle"),
-        t("addVideo.discardMessage"),
-        [
-          { text: t("addVideo.discardCancel"), style: "cancel" },
-          {
-            text: t("addVideo.discardConfirm"),
-            style: "destructive",
-            onPress: () => router.back(),
-          },
-        ]
-      );
+      pendingNavActionRef.current = () => router.back();
+      setDiscardConfirmVisible(true);
     } else {
       router.back();
     }
-  }, [isDirty, t]);
+  }, [isDirty]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -141,23 +132,23 @@ export const useAddVideo = (): UseAddVideoReturn => {
       if (!isDirty) return;
 
       e.preventDefault();
-
-      Alert.alert(
-        t("addVideo.discardTitle"),
-        t("addVideo.discardMessage"),
-        [
-          { text: t("addVideo.discardCancel"), style: "cancel" },
-          {
-            text: t("addVideo.discardConfirm"),
-            style: "destructive",
-            onPress: () => navigation.dispatch(e.data.action),
-          },
-        ]
-      );
+      pendingNavActionRef.current = () => navigation.dispatch(e.data.action);
+      setDiscardConfirmVisible(true);
     });
 
     return unsubscribe;
-  }, [navigation, isDirty, t]);
+  }, [navigation, isDirty]);
+
+  const confirmDiscard = useCallback(() => {
+    setDiscardConfirmVisible(false);
+    pendingNavActionRef.current?.();
+    pendingNavActionRef.current = null;
+  }, []);
+
+  const cancelDiscard = useCallback(() => {
+    setDiscardConfirmVisible(false);
+    pendingNavActionRef.current = null;
+  }, []);
 
   return {
     videoUri,
@@ -175,5 +166,12 @@ export const useAddVideo = (): UseAddVideoReturn => {
     handleCaptionChange,
     handlePost,
     handleClose,
+    discardConfirmVisible,
+    discardTitle: t("addVideo.discardTitle"),
+    discardMessage: t("addVideo.discardMessage"),
+    discardCancelLabel: t("addVideo.discardCancel"),
+    discardConfirmLabel: t("addVideo.discardConfirm"),
+    confirmDiscard,
+    cancelDiscard,
   };
 };

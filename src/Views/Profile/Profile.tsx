@@ -1,4 +1,5 @@
 import { AthleteOwnDetailsCard } from "@/components/AthleteOwnDetailsCard/AthleteOwnDetailsCard";
+import { ClubOwnDetailsCard } from "@/components/ClubOwnDetailsCard/ClubOwnDetailsCard";
 import { TAB_BAR_BOTTOM_INSET } from "@/components/KeyboardAwareScreen";
 import { VideosSection } from "@/components/VideosSection";
 import { ProfileHeader } from "@/components/ProfileHeader";
@@ -21,6 +22,7 @@ const Profile = () => {
     handleAddVideoPress,
     handleVideoPress,
     athleteOwnProfileExtra,
+    clubOwnProfileExtra,
   } = useProfile();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -72,6 +74,15 @@ const Profile = () => {
             phone={athleteOwnProfileExtra.phone}
             athleteRow={athleteOwnProfileExtra.athleteProfile}
             isLoading={athleteOwnProfileExtra.isLoading}
+          />
+        ) : null}
+        {profileData.role === "club" && clubOwnProfileExtra !== null ? (
+          <ClubOwnDetailsCard
+            city={profileData.city}
+            state={profileData.state}
+            foundingDate={clubOwnProfileExtra.foundingDate}
+            phone={clubOwnProfileExtra.phone}
+            isLoading={clubOwnProfileExtra.isLoading}
           />
         ) : null}
         {profileData.role === "athlete" && (

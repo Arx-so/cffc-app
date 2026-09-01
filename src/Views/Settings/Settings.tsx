@@ -1,3 +1,5 @@
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { OptionsSheet } from "@/components/OptionsSheet";
 import { Brand } from "@/constants/theme";
 import { Icon, useTheme } from "@ui-kitten/components";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -7,8 +9,8 @@ import { useSettings } from "./useSettings";
 
 const SettingRow = ({ item, isLast }: { item: SettingItem; isLast: boolean }) => {
   const theme = useTheme();
-  const iconColor = item.destructive ? Brand.error : theme["color-primary-500"];
-  const labelColor = item.destructive ? Brand.error : Brand.white;
+  const iconColor = item.destructive ? Brand.danger : theme["color-primary-500"];
+  const labelColor = item.destructive ? Brand.danger : Brand.white;
 
   return (
     <>
@@ -32,7 +34,23 @@ const SettingRow = ({ item, isLast }: { item: SettingItem; isLast: boolean }) =>
 };
 
 const Settings = () => {
-  const { items } = useSettings();
+  const {
+    items,
+    isLanguageSheetOpen,
+    languageSheetTitle,
+    languageOptions,
+    languageSheetCancelLabel,
+    closeLanguageSheet,
+    selectLanguage,
+    isDeleteConfirmOpen,
+    isDeletingAccount,
+    deleteConfirmTitle,
+    deleteConfirmMessage,
+    deleteConfirmCancelLabel,
+    deleteConfirmButtonLabel,
+    closeDeleteConfirm,
+    confirmDeleteAccount,
+  } = useSettings();
 
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
@@ -41,6 +59,27 @@ const Settings = () => {
           <SettingRow key={item.label} item={item} isLast={index === items.length - 1} />
         ))}
       </View>
+
+      <OptionsSheet
+        visible={isLanguageSheetOpen}
+        title={languageSheetTitle}
+        options={languageOptions}
+        cancelLabel={languageSheetCancelLabel}
+        onSelect={selectLanguage}
+        onClose={closeLanguageSheet}
+      />
+
+      <ConfirmDialog
+        visible={isDeleteConfirmOpen}
+        title={deleteConfirmTitle}
+        message={deleteConfirmMessage}
+        cancelLabel={deleteConfirmCancelLabel}
+        confirmLabel={deleteConfirmButtonLabel}
+        destructive
+        isLoading={isDeletingAccount}
+        onCancel={closeDeleteConfirm}
+        onConfirm={confirmDeleteAccount}
+      />
     </ScrollView>
   );
 };

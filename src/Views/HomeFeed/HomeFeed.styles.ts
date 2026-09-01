@@ -84,6 +84,10 @@ export const styles = StyleSheet.create({
     color: Brand.white,
     textAlign: "center",
   },
+  moreButtonWrap: {
+    position: "absolute",
+    right: 12,
+  },
   captionContainer: {
     position: "absolute",
     left: 24,

@@ -1,5 +1,7 @@
 import { supabase } from "@/config/supabase";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { makeRedirectUri } from "expo-auth-session";
+import * as Crypto from "expo-crypto";
 import * as WebBrowser from "expo-web-browser";
 import { applySignupRoleFromClient } from "@/processes/profile";
 import { ClubHistoryEntry } from "./types/profileTypes";
@@ -198,6 +200,74 @@ export const signInWithGoogle = async (): Promise<LoginResponse | null> => {
       id: user.id,
       email: user.email ?? '',
       name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? '',
+    },
+  };
+};
+
+// --- Sign in with Apple -------------------------------------------------------
+
+// Native Apple Sign In returns an identity token directly (no browser redirect),
+// which Supabase exchanges for a session via signInWithIdToken. The raw/hashed
+// nonce pair is required by Apple and lets Supabase verify the token wasn't replayed.
+export const signInWithApple = async (): Promise<LoginResponse | null> => {
+  const rawNonce = Crypto.randomUUID();
+  const hashedNonce = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    rawNonce,
+  );
+
+  let credential;
+  try {
+    credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+      nonce: hashedNonce,
+    });
+  } catch (error: unknown) {
+    // ERR_REQUEST_CANCELED is thrown when the user dismisses the Apple sheet.
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      (error as { code?: string }).code === "ERR_REQUEST_CANCELED"
+    ) {
+      return null;
+    }
+    throw error;
+  }
+
+  if (!credential.identityToken) {
+    throw new Error("No identity token returned from Apple");
+  }
+
+  const { data, error } = await supabase.auth.signInWithIdToken({
+    provider: "apple",
+    token: credential.identityToken,
+    nonce: rawNonce,
+  });
+
+  if (error) throw error;
+  if (!data.session || !data.user) throw new Error("Apple sign in failed");
+
+  // Apple only returns the user's name on the very first authorization ever
+  // granted to this app — persist it now since we won't see it again.
+  const appleFullName = [credential.fullName?.givenName, credential.fullName?.familyName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  return {
+    token: data.session.access_token,
+    user: {
+      id: data.user.id,
+      email: data.user.email ?? "",
+      name:
+        appleFullName ||
+        (data.user.user_metadata?.full_name as string) ||
+        (data.user.user_metadata?.name as string) ||
+        "",
     },
   };
 };

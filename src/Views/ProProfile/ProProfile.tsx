@@ -14,7 +14,7 @@ import { styles } from "./ProProfile.styles";
 import { useProProfile } from "./useProProfile";
 
 const getInitials = (name: string): string => {
-  const parts = name.trim().split(/\s+/);
+  const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
@@ -31,7 +31,7 @@ const statusColor = (
   status: ProIssuedValidationRow["status"]
 ): string => {
   if (status === "approved") return Brand.green;
-  if (status === "rejected") return Brand.error;
+  if (status === "rejected") return Brand.danger;
   return Brand.gray;
 };
 

@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import {
   ATHLETE_STRENGTHS,
@@ -151,6 +152,13 @@ const EditProfile = () => {
     handleClose,
     isDirty,
     requiredFieldErrors,
+    discardConfirmVisible,
+    discardTitle,
+    discardMessage,
+    discardCancelLabel,
+    discardConfirmLabel,
+    confirmDiscard,
+    cancelDiscard,
   } = useEditProfile();
 
   const [availabilityModalVisible, setAvailabilityModalVisible] =
@@ -784,6 +792,17 @@ const EditProfile = () => {
             onSelect={(v) => setAthleteField("availability", v)}
           />
         )}
+
+        <ConfirmDialog
+          visible={discardConfirmVisible}
+          title={discardTitle}
+          message={discardMessage}
+          cancelLabel={discardCancelLabel}
+          confirmLabel={discardConfirmLabel}
+          destructive
+          onCancel={cancelDiscard}
+          onConfirm={confirmDiscard}
+        />
       </KeyboardAwareScreen>
     </>
   );

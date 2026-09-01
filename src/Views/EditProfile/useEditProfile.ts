@@ -18,7 +18,6 @@ import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import {
   AthleteFormState,
@@ -67,6 +66,8 @@ export const useEditProfile = (): UseEditProfileReturn => {
   const originalProfileRef = useRef<ProfileFormState>(INITIAL_PROFILE);
   const originalAthleteRef = useRef<AthleteFormState>(INITIAL_ATHLETE);
   const isSavedRef = useRef(false);
+  const pendingNavActionRef = useRef<(() => void) | null>(null);
+  const [discardConfirmVisible, setDiscardConfirmVisible] = useState(false);
   const navigation = useNavigation();
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
@@ -336,23 +337,23 @@ export const useEditProfile = (): UseEditProfileReturn => {
       if (!hasUnsavedChanges()) return;
 
       e.preventDefault();
-
-      Alert.alert(
-        t("editProfile.discardTitle"),
-        t("editProfile.discardMessage"),
-        [
-          { text: t("editProfile.discardCancel"), style: "cancel" },
-          {
-            text: t("editProfile.discardConfirm"),
-            style: "destructive",
-            onPress: () => navigation.dispatch(e.data.action),
-          },
-        ]
-      );
+      pendingNavActionRef.current = () => navigation.dispatch(e.data.action);
+      setDiscardConfirmVisible(true);
     });
 
     return unsubscribe;
-  }, [navigation, hasUnsavedChanges, t]);
+  }, [navigation, hasUnsavedChanges]);
+
+  const confirmDiscard = useCallback(() => {
+    setDiscardConfirmVisible(false);
+    pendingNavActionRef.current?.();
+    pendingNavActionRef.current = null;
+  }, []);
+
+  const cancelDiscard = useCallback(() => {
+    setDiscardConfirmVisible(false);
+    pendingNavActionRef.current = null;
+  }, []);
 
   const isDirty = hasUnsavedChanges();
   const requiredFieldErrors = {
@@ -383,5 +384,12 @@ export const useEditProfile = (): UseEditProfileReturn => {
     handleRemoveClub,
     handleSave,
     handleClose,
+    discardConfirmVisible,
+    discardTitle: t("editProfile.discardTitle"),
+    discardMessage: t("editProfile.discardMessage"),
+    discardCancelLabel: t("editProfile.discardCancel"),
+    discardConfirmLabel: t("editProfile.discardConfirm"),
+    confirmDiscard,
+    cancelDiscard,
   };
 };

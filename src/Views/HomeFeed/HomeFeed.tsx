@@ -1,3 +1,4 @@
+import { ReportBlockMenu } from "@/components/ReportBlockMenu";
 import { Brand } from "@/constants/theme";
 import { FeedVideo } from "@/processes/types/feedTypes";
 import { useAuthStore } from "@/stores/authStore";
@@ -10,6 +11,7 @@ import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ListRenderItemInfo, Pressable, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./HomeFeed.styles";
 import { useHomeFeed } from "./useHomeFeed";
 
@@ -18,6 +20,7 @@ interface FeedVideoSlideProps {
   isActive: boolean;
   isScreenFocused: boolean;
   height: number;
+  isOwnVideo: boolean;
   onUsernamePress: () => void;
 }
 
@@ -26,8 +29,10 @@ const FeedVideoSlide = ({
   isActive,
   isScreenFocused,
   height,
+  isOwnVideo,
   onUsernamePress,
 }: FeedVideoSlideProps) => {
+  const insets = useSafeAreaInsets();
   const player = useVideoPlayer(video.url, (currentPlayer) => {
     currentPlayer.loop = true;
     currentPlayer.timeUpdateEventInterval = 0.25;
@@ -138,6 +143,15 @@ const FeedVideoSlide = ({
           </View>
         )}
       </Pressable>
+      {!isOwnVideo && (
+        <View style={[styles.moreButtonWrap, { top: insets.top + 12 }]}>
+          <ReportBlockMenu
+            reportedUserId={video.athleteUserId}
+            mediaId={video.id}
+            iconColor={Brand.white}
+          />
+        </View>
+      )}
       <View
         style={styles.progressTrack}
         onLayout={(event) => setProgressTrackWidth(event.nativeEvent.layout.width)}
@@ -221,6 +235,7 @@ const HomeFeed = () => {
         isActive={index === activeIndex}
         isScreenFocused={isScreenFocused}
         height={height}
+        isOwnVideo={isOwnVideo}
         onUsernamePress={handleUsernamePress}
       />
     );

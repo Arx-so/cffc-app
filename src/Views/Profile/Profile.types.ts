@@ -13,6 +13,12 @@ export interface AthleteOwnProfileExtraSlice {
   athleteProfile: AthleteProfile | null;
 }
 
+export interface ClubOwnProfileExtraSlice {
+  isLoading: boolean;
+  foundingDate: string | null;
+  phone: string | null;
+}
+
 export interface UseProfileReturn {
   profileData: AthleteProfileHeader | null;
   videos: ProfileVideo[];
@@ -21,4 +27,5 @@ export interface UseProfileReturn {
   handleAddVideoPress: () => Promise<void>;
   handleVideoPress: (item: ProfileVideo) => void;
   athleteOwnProfileExtra: AthleteOwnProfileExtraSlice | null;
+  clubOwnProfileExtra: ClubOwnProfileExtraSlice | null;
 }

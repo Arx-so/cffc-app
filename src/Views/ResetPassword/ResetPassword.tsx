@@ -63,7 +63,7 @@ const ResetPassword = () => {
       <View style={S.container}>
         {screenOptions}
         <View style={R.centered}>
-          <Ionicons name="alert-circle-outline" size={48} color={Brand.error} />
+          <Ionicons name="alert-circle-outline" size={48} color={Brand.danger} />
           <Text style={R.invalidTitle}>{t("resetPassword.invalidTitle")}</Text>
           <Text style={R.invalidText}>
             {errorMessage || t("resetPassword.invalidDescription")}

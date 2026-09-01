@@ -1,5 +1,7 @@
+import { ReportBlockMenu } from "@/components/ReportBlockMenu";
 import { Brand } from "@/constants/theme";
 import { FeedVideo } from "@/processes/types/feedTypes";
+import { useAuthStore } from "@/stores/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { useEvent } from "expo";
@@ -165,6 +167,8 @@ export const UserFeed = ({ userId, username, initialIndex }: UserFeedProps) => {
   const { height } = useWindowDimensions();
   const isScreenFocused = useIsFocused();
   const insets = useSafeAreaInsets();
+  const currentUserId = useAuthStore((state) => state.user?.id);
+  const isOwnFeed = userId === currentUserId;
   const {
     videos,
     isLoading,
@@ -271,7 +275,17 @@ export const UserFeed = ({ userId, username, initialIndex }: UserFeedProps) => {
         <Text category="s1" style={styles.headerTitle}>
           {username ? `@${username}` : t("userFeed.headerTitle")}
         </Text>
-        <View style={styles.headerSpacer} />
+        {isOwnFeed ? (
+          <View style={styles.headerSpacer} />
+        ) : (
+          <View style={[styles.headerSpacer, styles.headerMoreButton]}>
+            <ReportBlockMenu
+              reportedUserId={userId}
+              iconColor={Brand.white}
+              onBlocked={() => router.back()}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

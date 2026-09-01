@@ -5,7 +5,6 @@ import { Language, useLanguageStore } from "@/stores/languageStore";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
-import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import { SettingItem, UseSettingsReturn } from "./Settings.types";
@@ -16,6 +15,8 @@ export const useSettings = (): UseSettingsReturn => {
   const language = useLanguageStore((state) => state.language);
   const setLanguage = useLanguageStore((state) => state.setLanguage);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [isLanguageSheetOpen, setIsLanguageSheetOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const languageLabelMap: Record<Language, string> = {
     en: t("settings.langEn"),
@@ -29,48 +30,48 @@ export const useSettings = (): UseSettingsReturn => {
     router.replace("/login")
   }, [signOut]);
 
-  const handleLanguageSelect = useCallback(() => {
-    Alert.alert(t("settings.language"), undefined, [
-      {
-        text: t("settings.langEn"),
-        onPress: () => setLanguage("en"),
-      },
-      {
-        text: t("settings.langPtBr"),
-        onPress: () => setLanguage("pt-BR"),
-      },
-      {
-        text: t("settings.langJa"),
-        onPress: () => setLanguage("ja"),
-      },
-      { text: t("common.cancel"), style: "cancel" },
-    ]);
-  }, [setLanguage, t]);
+  const openLanguageSheet = useCallback(() => {
+    setIsLanguageSheetOpen(true);
+  }, []);
 
-  const handleDeleteAccount = useCallback(() => {
-    Alert.alert(
-      t("settings.deleteAccountConfirmTitle"),
-      t("settings.deleteAccountConfirmMessage"),
-      [
-        { text: t("common.cancel"), style: "cancel" },
-        {
-          text: t("settings.deleteAccountConfirmButton"),
-          style: "destructive",
-          onPress: async () => {
-            setIsDeletingAccount(true);
-            try {
-              await deleteAccount();
-              await signOut();
-              router.replace("/login");
-            } catch {
-              Toast.show({ type: "error", text1: t("settings.deleteAccountError") });
-            } finally {
-              setIsDeletingAccount(false);
-            }
-          },
-        },
-      ]
-    );
+  const closeLanguageSheet = useCallback(() => {
+    setIsLanguageSheetOpen(false);
+  }, []);
+
+  const languageOptions = (["en", "pt-BR", "ja"] as const).map((key) => ({
+    key,
+    label: languageLabelMap[key],
+    selected: key === language,
+  }));
+
+  const selectLanguage = useCallback(
+    (key: string) => {
+      setLanguage(key as Language);
+      setIsLanguageSheetOpen(false);
+    },
+    [setLanguage],
+  );
+
+  const openDeleteConfirm = useCallback(() => {
+    setIsDeleteConfirmOpen(true);
+  }, []);
+
+  const closeDeleteConfirm = useCallback(() => {
+    setIsDeleteConfirmOpen(false);
+  }, []);
+
+  const confirmDeleteAccount = useCallback(async () => {
+    setIsDeletingAccount(true);
+    try {
+      await deleteAccount();
+      await signOut();
+      router.replace("/login");
+    } catch {
+      Toast.show({ type: "error", text1: t("settings.deleteAccountError") });
+    } finally {
+      setIsDeletingAccount(false);
+      setIsDeleteConfirmOpen(false);
+    }
   }, [signOut, t]);
 
   const items: SettingItem[] = [
@@ -78,7 +79,7 @@ export const useSettings = (): UseSettingsReturn => {
       icon: "globe-2-outline",
       label: t("settings.language"),
       value: languageLabelMap[language],
-      onPress: handleLanguageSelect,
+      onPress: openLanguageSheet,
     },
     {
       icon: "shield-outline",
@@ -106,10 +107,26 @@ export const useSettings = (): UseSettingsReturn => {
       label: isDeletingAccount
         ? t("settings.deleteAccountInProgress")
         : t("settings.deleteAccount"),
-      onPress: isDeletingAccount ? () => {} : handleDeleteAccount,
+      onPress: isDeletingAccount ? () => {} : openDeleteConfirm,
       destructive: true,
     },
   ];
 
-  return { items };
+  return {
+    items,
+    isLanguageSheetOpen,
+    languageSheetTitle: t("settings.language"),
+    languageOptions,
+    closeLanguageSheet,
+    selectLanguage,
+    isDeleteConfirmOpen,
+    isDeletingAccount,
+    deleteConfirmTitle: t("settings.deleteAccountConfirmTitle"),
+    deleteConfirmMessage: t("settings.deleteAccountConfirmMessage"),
+    deleteConfirmCancelLabel: t("common.cancel"),
+    deleteConfirmButtonLabel: t("settings.deleteAccountConfirmButton"),
+    closeDeleteConfirm,
+    confirmDeleteAccount,
+    languageSheetCancelLabel: t("common.cancel"),
+  };
 };

@@ -1,13 +1,16 @@
 import { KeyboardAwareScreen } from "@/components/KeyboardAwareScreen";
 import { Brand } from "@/constants/theme";
+import { useAppleAuth } from "@/hooks/useAppleAuth";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { authStyles as S } from "@/styles/auth";
 import { Ionicons } from "@expo/vector-icons";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { Stack, router } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -21,7 +24,8 @@ const Login = () => {
   const { email, password, setEmail, setPassword, onLoginPress, isLoading } =
     useLogin();
   const { onGoogleSignIn, isLoading: googleLoading } = useGoogleAuth();
-  const busy = isLoading || googleLoading;
+  const { onAppleSignIn, isLoading: appleLoading } = useAppleAuth();
+  const busy = isLoading || googleLoading || appleLoading;
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -124,6 +128,22 @@ const Login = () => {
           <View style={ls.dividerLine} />
         </View>
 
+        {/* Apple sign-in */}
+        {Platform.OS === "ios" && (
+          <View
+            style={[ls.appleButtonWrap, appleLoading && S.submitButtonDisabled]}
+            pointerEvents={busy ? "none" : "auto"}
+          >
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+              buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
+              cornerRadius={12}
+              style={ls.appleButton}
+              onPress={onAppleSignIn}
+            />
+          </View>
+        )}
+
         {/* Google sign-in */}
         <TouchableOpacity
           style={[ls.googleButton, busy && S.submitButtonDisabled]}
@@ -192,6 +212,8 @@ const ls = StyleSheet.create({
   },
   dividerLine: { flex: 1, height: 1, backgroundColor: "#2A2A2A" },
   dividerText: { color: "#555", fontSize: 12, marginHorizontal: 12 },
+  appleButtonWrap: { minHeight: 48, marginBottom: 12 },
+  appleButton: { height: 48 },
   googleButton: {
     flexDirection: "row",
     alignItems: "center",

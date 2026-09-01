@@ -16,4 +16,11 @@ export interface UseAddVideoReturn {
   handleCaptionChange: (text: string) => void;
   handlePost: () => void;
   handleClose: () => void;
+  discardConfirmVisible: boolean;
+  discardTitle: string;
+  discardMessage: string;
+  discardCancelLabel: string;
+  discardConfirmLabel: string;
+  confirmDiscard: () => void;
+  cancelDiscard: () => void;
 }
