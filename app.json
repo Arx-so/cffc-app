@@ -11,7 +11,7 @@
       "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.cffc.app",
       "buildNumber": "1",
-      "supportsTablet": true,
+      "supportsTablet": false,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
