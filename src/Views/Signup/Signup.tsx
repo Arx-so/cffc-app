@@ -123,8 +123,6 @@ const Signup = () => {
   const confirmPasswordError = showRequiredErrors && !confirmPassword;
   const birthDateError = showRequiredErrors && !birthDateText.trim();
   const cityError = showRequiredErrors && !city.trim();
-  const stateError = showRequiredErrors && !state.trim();
-  const phoneError = showRequiredErrors && !phone.trim();
 
   const handleCreateAccountPress = () => {
     setSubmitAttempted(true);
@@ -329,9 +327,9 @@ const Signup = () => {
 
         <View style={S.inlineRow}>
           <View style={S.inlineItem}>
-            <Text style={A.fieldLabel}>{t("editProfile.stateProv")} <Text style={A.requiredMark}>*</Text></Text>
+            <Text style={A.fieldLabel}>{t("editProfile.stateProv")}</Text>
             <TextInput
-              style={[A.input, stateError && A.inputError]}
+              style={A.input}
               value={state}
               onChangeText={setState}
               placeholder={t("editProfile.statePlaceholder")}
@@ -342,9 +340,9 @@ const Signup = () => {
             />
           </View>
           <View style={S.inlineItem}>
-            <Text style={A.fieldLabel}>{t("editProfile.phone")} <Text style={A.requiredMark}>*</Text></Text>
+            <Text style={A.fieldLabel}>{t("editProfile.phone")}</Text>
             <TextInput
-              style={[A.input, phoneError && A.inputError]}
+              style={A.input}
               value={phone}
               onChangeText={onPhoneChange}
               placeholder={t("editProfile.phonePlaceholder")}

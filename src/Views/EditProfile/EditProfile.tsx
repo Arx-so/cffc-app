@@ -357,10 +357,7 @@ const EditProfile = () => {
                 {t("editProfile.stateProv")}
               </Text>
               <TextInput
-                style={[
-                  styles.input,
-                  requiredFieldErrors.state && styles.inputError,
-                ]}
+                style={styles.input}
                 value={profileForm.state}
                 onChangeText={(v) => setProfileField("state", v)}
                 placeholder={t("editProfile.statePlaceholder")}
@@ -387,10 +384,7 @@ const EditProfile = () => {
 
           <Text style={styles.fieldLabel}>{t("editProfile.phone")}</Text>
           <TextInput
-            style={[
-              styles.input,
-              requiredFieldErrors.phone && styles.inputError,
-            ]}
+            style={styles.input}
             value={profileForm.phone}
             onChangeText={(v) => setProfileField("phone", v)}
             placeholder={t("editProfile.phonePlaceholder")}

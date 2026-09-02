@@ -186,9 +186,7 @@ export const useSignup = (): UseSignupReturn => {
       !email.trim() ||
       !password ||
       !confirmPassword ||
-      !city.trim() ||
-      !state.trim() ||
-      !phone.trim()
+      !city.trim()
     ) {
       Toast.show({ type: "error", text1: t("signup.toasts.requiredFields"), autoHide: true });
       return;

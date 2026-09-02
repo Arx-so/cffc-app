@@ -264,9 +264,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
       !profileForm.name.trim() ||
       !profileForm.username.trim() ||
       !profileForm.city.trim() ||
-      !profileForm.state.trim() ||
-      !profileForm.birthDate.trim() ||
-      !profileForm.phone.trim();
+      !profileForm.birthDate.trim();
 
     if (hasRequiredFieldError) {
       Toast.show({
@@ -360,9 +358,7 @@ export const useEditProfile = (): UseEditProfileReturn => {
     name: saveAttempted && !profileForm.name.trim(),
     username: saveAttempted && !profileForm.username.trim(),
     city: saveAttempted && !profileForm.city.trim(),
-    state: saveAttempted && !profileForm.state.trim(),
     birthDate: saveAttempted && !profileForm.birthDate.trim(),
-    phone: saveAttempted && !profileForm.phone.trim(),
   };
 
   return {

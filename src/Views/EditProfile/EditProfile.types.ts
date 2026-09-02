@@ -34,9 +34,7 @@ export interface UseEditProfileReturn {
     name: boolean;
     username: boolean;
     city: boolean;
-    state: boolean;
     birthDate: boolean;
-    phone: boolean;
   };
 
   setProfileField: <K extends keyof ProfileFormState>(
