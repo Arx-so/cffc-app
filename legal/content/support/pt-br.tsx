@@ -4,10 +4,9 @@ import {
   IOS_BUNDLE_ID,
   SUPPORT_EMAIL,
 } from "@/lib/site";
+import { ROUTES } from "@/lib/i18n";
 
-export const metadata = { title: "Suporte" };
-
-export default function SupportPage() {
+export default function SupportPtBr() {
   return (
     <main className="page">
       <span className="tag">Suporte</span>
@@ -38,7 +37,7 @@ export default function SupportPage() {
         <br />
         Acesse <em>Configurações → Excluir conta</em> dentro do app, ou veja
         o passo a passo em{" "}
-        <a href="/exclusao-de-conta">Exclusão de Conta e Dados</a>.
+        <a href={`/pt-br/${ROUTES.deleteAccount}`}>Exclusão de Conta e Dados</a>.
       </p>
 
       <p>
@@ -58,8 +57,8 @@ export default function SupportPage() {
       <p>
         <strong>Onde vejo a Política de Privacidade e os Termos de Uso?</strong>
         <br />
-        Em <a href="/privacidade">Política de Privacidade</a> e{" "}
-        <a href="/termos">Termos de Uso</a>.
+        Em <a href={`/pt-br/${ROUTES.privacy}`}>Política de Privacidade</a> e{" "}
+        <a href={`/pt-br/${ROUTES.terms}`}>Termos de Uso</a>.
       </p>
     </main>
   );

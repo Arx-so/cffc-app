@@ -1,8 +1,6 @@
 import { APP_NAME, SUPPORT_EMAIL } from "@/lib/site";
 
-export const metadata = { title: "Exclusão de Conta e Dados" };
-
-export default function DeleteAccountPage() {
+export default function DeleteAccountPtBr() {
   return (
     <main className="page">
       <span className="tag">Dados</span>

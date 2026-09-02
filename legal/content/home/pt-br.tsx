@@ -1,6 +1,7 @@
 import { APP_NAME, SUPPORT_EMAIL } from "@/lib/site";
+import { ROUTES } from "@/lib/i18n";
 
-export default function HomePage() {
+export default function HomePtBr() {
   return (
     <main className="page">
       <span className="tag">Central Legal</span>
@@ -11,10 +12,10 @@ export default function HomePage() {
       </p>
 
       <div className="home-links">
-        <a href="/privacidade">Política de Privacidade →</a>
-        <a href="/termos">Termos de Uso →</a>
-        <a href="/suporte">Suporte →</a>
-        <a href="/exclusao-de-conta">Exclusão de Conta e Dados →</a>
+        <a href={`/pt-br/${ROUTES.privacy}`}>Política de Privacidade →</a>
+        <a href={`/pt-br/${ROUTES.terms}`}>Termos de Uso →</a>
+        <a href={`/pt-br/${ROUTES.support}`}>Suporte →</a>
+        <a href={`/pt-br/${ROUTES.deleteAccount}`}>Exclusão de Conta e Dados →</a>
       </div>
 
       <footer>

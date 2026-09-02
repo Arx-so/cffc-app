@@ -1,19 +1,18 @@
-import { APP_NAME, LAST_UPDATED, LEGAL_ENTITY, SUPPORT_EMAIL } from "@/lib/site";
+import { APP_NAME, LEGAL_ENTITY, SUPPORT_EMAIL } from "@/lib/site";
+import { LAST_UPDATED, ROUTES } from "@/lib/i18n";
 
-export const metadata = { title: "Termos de Uso" };
-
-export default function TermsPage() {
+export default function TermsPtBr() {
   return (
     <main className="page">
       <span className="tag">Documento Legal</span>
       <h1>Termos de Uso</h1>
-      <p className="updated">Última atualização: {LAST_UPDATED}</p>
+      <p className="updated">Última atualização: {LAST_UPDATED["pt-br"]}</p>
 
       <p>
         Estes Termos de Uso regem o acesso e uso do aplicativo {APP_NAME},
         operado por {LEGAL_ENTITY}. Ao criar uma conta, você concorda com
         estes termos e com a nossa{" "}
-        <a href="/privacidade">Política de Privacidade</a>.
+        <a href={`/pt-br/${ROUTES.privacy}`}>Política de Privacidade</a>.
       </p>
 
       <h2>1. O que é o app</h2>
@@ -74,7 +73,7 @@ export default function TermsPage() {
         Podemos suspender ou encerrar contas que violem estes termos. Você
         pode encerrar sua conta a qualquer momento em{" "}
         <em>Configurações → Excluir conta</em>, conforme descrito na página{" "}
-        <a href="/exclusao-de-conta">Exclusão de Conta e Dados</a>.
+        <a href={`/pt-br/${ROUTES.deleteAccount}`}>Exclusão de Conta e Dados</a>.
       </p>
 
       <h2>6. Isenção de responsabilidade</h2>

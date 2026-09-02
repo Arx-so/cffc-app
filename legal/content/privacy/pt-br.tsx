@@ -1,13 +1,12 @@
-import { APP_NAME, LAST_UPDATED, LEGAL_ENTITY, SUPPORT_EMAIL } from "@/lib/site";
+import { APP_NAME, LEGAL_ENTITY, SUPPORT_EMAIL } from "@/lib/site";
+import { LAST_UPDATED, ROUTES } from "@/lib/i18n";
 
-export const metadata = { title: "Política de Privacidade" };
-
-export default function PrivacyPage() {
+export default function PrivacyPtBr() {
   return (
     <main className="page">
       <span className="tag">Documento Legal</span>
       <h1>Política de Privacidade</h1>
-      <p className="updated">Última atualização: {LAST_UPDATED}</p>
+      <p className="updated">Última atualização: {LAST_UPDATED["pt-br"]}</p>
 
       <p>
         Esta Política de Privacidade descreve como o {APP_NAME}{" "}
@@ -35,9 +34,9 @@ export default function PrivacyPage() {
       <ul>
         <li>Nome completo e nome de usuário</li>
         <li>E-mail e senha (a senha é gerida com segurança pelo provedor de autenticação)</li>
-        <li>Telefone</li>
+        <li>Telefone (opcional)</li>
         <li>Data de nascimento</li>
-        <li>Cidade e estado</li>
+        <li>Cidade e estado (opcional)</li>
         <li>Papel no app: atleta, profissional (ex: preparador, olheiro), clube ou administrador</li>
         <li>Foto de perfil</li>
         <li>
@@ -134,7 +133,7 @@ export default function PrivacyPage() {
         <em>Configurações → Excluir conta</em>, ou solicitando por e-mail em{" "}
         <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. Veja detalhes
         na página{" "}
-        <a href="/exclusao-de-conta">Exclusão de Conta e Dados</a>.
+        <a href={`/pt-br/${ROUTES.deleteAccount}`}>Exclusão de Conta e Dados</a>.
       </p>
 
       <h2>5. Segurança</h2>
