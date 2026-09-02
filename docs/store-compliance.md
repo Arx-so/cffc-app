@@ -14,14 +14,17 @@ Depois de publicar `/legal` na Vercel:
 
 | URL | Uso |
 |---|---|
-| `/privacidade` | Privacy Policy URL — Play Console e App Store Connect |
-| `/suporte` | Support URL — App Store Connect |
-| `/termos` | Terms of Use (EULA) — App Store Connect (opcional, se não usar a EULA padrão da Apple) |
+| `/privacy` | Privacy Policy URL — Play Console e App Store Connect |
+| `/support` | Support URL — App Store Connect |
+| `/terms` | Terms of Use (EULA) — App Store Connect (opcional, se não usar a EULA padrão da Apple) |
 | `/exclusao-de-conta` | Link de exclusão de conta/dados — pode ser referenciado no Data Safety Form da Play |
+
+As URLs acima são as em português (locale padrão, sem prefixo). O site
+também serve `/en/...` e `/ja/...` — ver `legal/README.md`.
 
 ## 1. Google Play — Política de Privacidade
 
-- Play Console → **Presença na loja → Política de Privacidade** → cole a URL de `/privacidade`.
+- Play Console → **Presença na loja → Política de Privacidade** → cole a URL de `/privacy`.
 - Precisa estar acessível publicamente sem login (confirmado: página estática Next.js, sem auth).
 
 ## 2. Google Play — Data Safety Form
@@ -50,10 +53,10 @@ Marque:
 ## 3. Apple App Store Connect
 
 ### 3.1 Privacy Policy URL
-App Store Connect → **App Information → Privacy Policy URL** → `/privacidade`.
+App Store Connect → **App Information → Privacy Policy URL** → `/privacy`.
 
 ### 3.2 Support URL
-App Store Connect → **App Information → Support URL** → `/suporte`.
+App Store Connect → **App Information → Support URL** → `/support`.
 Confirmado que a página:
 - Identifica claramente o app (nome + bundle ID)
 - Tem contato por e-mail (`casafortefc@gmail.com`)

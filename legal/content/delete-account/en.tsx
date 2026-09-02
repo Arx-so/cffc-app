@@ -17,10 +17,12 @@ export default function DeleteAccountEn() {
         <ol>
           <li>Open the {APP_NAME} app and log in</li>
           <li>
-            Go to <strong>Profile → Settings</strong>
+            Tap the <strong>Profile</strong> tab, then the menu icon in the
+            top-right corner to open <strong>Settings</strong>
           </li>
           <li>
-            Tap <strong>Delete account</strong> and confirm
+            Tap <strong>Delete account</strong> and confirm with{" "}
+            <strong>Delete permanently</strong>
           </li>
         </ol>
         <p>Deletion is immediate and cannot be undone.</p>

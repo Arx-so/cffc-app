@@ -17,10 +17,12 @@ export default function DeleteAccountPtBr() {
         <ol>
           <li>Abra o app {APP_NAME} e faça login</li>
           <li>
-            Vá em <strong>Perfil → Configurações</strong>
+            Toque na aba <strong>Perfil</strong> e depois no ícone de menu no
+            canto superior direito para abrir <strong>Configurações</strong>
           </li>
           <li>
-            Toque em <strong>Excluir conta</strong> e confirme
+            Toque em <strong>Excluir conta</strong> e confirme em{" "}
+            <strong>Excluir permanentemente</strong>
           </li>
         </ol>
         <p>A exclusão é imediata e não pode ser desfeita.</p>

@@ -32,9 +32,9 @@ checkboxes de Termos/Privacidade no cadastro do app usam essas URLs.
 
 | Rota | Uso |
 |---|---|
-| `/privacidade` | Privacy Policy — obrigatória na Google Play e na App Store |
-| `/termos` | Terms of Use |
-| `/suporte` | Support URL — obrigatória na App Store Connect |
+| `/privacy` | Privacy Policy — obrigatória na Google Play e na App Store |
+| `/terms` | Terms of Use |
+| `/support` | Support URL — obrigatória na App Store Connect |
 | `/exclusao-de-conta` | Account & data deletion — referenciada no Data Safety Form da Google Play |
 
 ## Idiomas (pt-BR / en / ja)
@@ -43,11 +43,11 @@ O site tem suporte às 3 línguas do app (`src/locales/en.ts`, `pt-br.ts`,
 `ja.ts`). A implementação usa um segmento dinâmico `app/[locale]/...`:
 
 - `/en/...` e `/ja/...` servem conteúdo em inglês e japonês.
-- As URLs sem prefixo (`/suporte`, `/privacidade`, `/termos`,
-  `/exclusao-de-conta`) continuam funcionando sem mudança — são as URLs já
-  registradas no App Store Connect e usadas em `src/constants/legal.ts`.
-  O `middleware.ts` reescreve essas rotas internamente para `/pt-br/...`
-  sem alterar a URL visível.
+- As URLs sem prefixo (`/support`, `/privacy`, `/terms`,
+  `/exclusao-de-conta`) continuam funcionando sem mudança — são as URLs
+  usadas em `src/constants/legal.ts` (e as que devem ser registradas no
+  App Store Connect / Google Play). O `middleware.ts` reescreve essas
+  rotas internamente para `/pt-br/...` sem alterar a URL visível.
 
 O texto de cada página vive em `content/<página>/<locale>.tsx` (um
 componente por idioma, sem biblioteca de i18n) e as rotas em

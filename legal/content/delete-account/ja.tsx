@@ -16,10 +16,12 @@ export default function DeleteAccountJa() {
         <ol>
           <li>{APP_NAME} アプリを開き、ログインします</li>
           <li>
-            <strong>プロフィール → 設定</strong> に移動します
+            <strong>プロフィール</strong>タブを開き、右上のメニューアイコンをタップして
+            <strong>設定</strong>を開きます
           </li>
           <li>
-            <strong>アカウントを削除</strong> をタップして確認します
+            <strong>アカウントを削除</strong>をタップし、
+            <strong>完全に削除する</strong>で確認します
           </li>
         </ol>
         <p>削除は即時に行われ、取り消すことはできません。</p>

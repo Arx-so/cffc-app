@@ -59,8 +59,8 @@ export const PAGE_TITLES: Record<
 // changes) so the language switcher can swap the first path segment without
 // needing a slug-translation map.
 export const ROUTES = {
-  privacy: "privacidade",
-  terms: "termos",
-  support: "suporte",
+  privacy: "privacy",
+  terms: "terms",
+  support: "support",
   deleteAccount: "exclusao-de-conta",
 } as const;
